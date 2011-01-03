@@ -207,16 +207,16 @@ ALTER TABLE {databaseOwner}[{objectQualifier}Ladder_GamePlayer] DROP CONSTRAINT 
 GO
 
 
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}Ladder_GamePlayer]') AND type in (N'U'))
-DROP TABLE {databaseOwner}[{objectQualifier}Ladder_GamePlayer]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}Ladder_GamePlayerSettings]') AND type in (N'U'))
+DROP TABLE {databaseOwner}[{objectQualifier}Ladder_GamePlayerSettings]
 GO
 
-CREATE TABLE {databaseOwner}[{objectQualifier}Ladder_GamePlayer](
+CREATE TABLE {databaseOwner}[{objectQualifier}Ladder_GamePlayerSettings](
 	[gameid] [int] NOT NULL,
 	[playerid] [int] NOT NULL,
 	[setting] [nvarchar](50) NOT NULL,
 	[value] [nvarchar](50) NOT NULL,
- CONSTRAINT [PK_{objectQualifier}Ladder_GamePlayer] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_{objectQualifier}Ladder_GamePlayerSettings] PRIMARY KEY CLUSTERED 
 (
 	[gameid] ASC,
 	[playerid] ASC,
@@ -226,18 +226,18 @@ CREATE TABLE {databaseOwner}[{objectQualifier}Ladder_GamePlayer](
 
 GO
 
-ALTER TABLE {databaseOwner}[{objectQualifier}Ladder_GamePlayer]  WITH CHECK ADD  CONSTRAINT [FK_{objectQualifier}Ladder_GamePlayer_{objectQualifier}Ladder_Game] FOREIGN KEY([gameid])
+ALTER TABLE {databaseOwner}[{objectQualifier}Ladder_GamePlayerSettings]  WITH CHECK ADD  CONSTRAINT [FK_{objectQualifier}Ladder_GamePlayerSettings_{objectQualifier}Ladder_Game] FOREIGN KEY([gameid])
 REFERENCES {databaseOwner}[{objectQualifier}Ladder_Game] ([gameid])
 GO
 
-ALTER TABLE {databaseOwner}[{objectQualifier}Ladder_GamePlayer] CHECK CONSTRAINT [FK_{objectQualifier}Ladder_GamePlayer_{objectQualifier}Ladder_Game]
+ALTER TABLE {databaseOwner}[{objectQualifier}Ladder_GamePlayerSettings] CHECK CONSTRAINT [FK_{objectQualifier}Ladder_GamePlayer_{objectQualifier}Ladder_Game]
 GO
 
-ALTER TABLE {databaseOwner}[{objectQualifier}Ladder_GamePlayer]  WITH CHECK ADD  CONSTRAINT [FK_{objectQualifier}Ladder_GamePlayer_{objectQualifier}Ladder_Player] FOREIGN KEY([playerid])
+ALTER TABLE {databaseOwner}[{objectQualifier}Ladder_GamePlayerSettings]  WITH CHECK ADD  CONSTRAINT [FK_{objectQualifier}Ladder_GamePlayerSettings_{objectQualifier}Ladder_Player] FOREIGN KEY([playerid])
 REFERENCES {databaseOwner}[{objectQualifier}Ladder_Player] ([playerid])
 GO
 
-ALTER TABLE {databaseOwner}[{objectQualifier}Ladder_GamePlayer] CHECK CONSTRAINT [FK_{objectQualifier}Ladder_GamePlayer_{objectQualifier}Ladder_Player]
+ALTER TABLE {databaseOwner}[{objectQualifier}Ladder_GamePlayerSettings] CHECK CONSTRAINT [FK_{objectQualifier}Ladder_GamePlayerSettings_{objectQualifier}Ladder_Player]
 GO
 
 
