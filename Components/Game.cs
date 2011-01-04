@@ -48,11 +48,9 @@ namespace DotNetNuke.Modules.ladder.Components
         void IHydratable.Fill(System.Data.IDataReader dr)
         {
             GameId = Null.SetNullInteger(dr["GameId"]);
-            ModuleId = Null.SetNullInteger(dr["ModuleId"]);
             PlayedDate = Null.SetNullDateTime(dr["PlayedDate"]);
             CreatedDate = Null.SetNullDateTime(dr["CreatedDate"]);
             LastUpdatedDate = Null.SetNullDateTime(dr["LastUpdatedDate"]);
-
             CreatedByUserId = Null.SetNullInteger(dr["CreatedByUserId"]);
             LastUpdatedByUserId = Null.SetNullInteger(dr["LastUpdatedByUserId"]);
         }
