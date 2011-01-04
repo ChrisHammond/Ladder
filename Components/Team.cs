@@ -12,9 +12,6 @@ namespace DotNetNuke.Modules.ladder.Components
         public DateTime LastPlayed { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime LastUpdatedDate { get; set; }
-        public int PortalId { get; set; }
-        public int ModuleId { get; set; }
-
 
         public int CreatedByUserId { get; set; }
         public int LastUpdatedByUserId { get; set; }
@@ -47,7 +44,6 @@ namespace DotNetNuke.Modules.ladder.Components
         void IHydratable.Fill(System.Data.IDataReader dr)
         {
             TeamId = Null.SetNullInteger(dr["TeamId"]);
-            ModuleId = Null.SetNullInteger(dr["ModuleId"]);
             Name = Null.SetNullString(dr["Name"]);
             FirstPlayed = Null.SetNullDateTime(dr["FirstPlayed"]);
             LastPlayed = Null.SetNullDateTime(dr["LastPlayed"]);
