@@ -14,35 +14,32 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using com.christoc.modules.ladder.Data;
 using DotNetNuke.Common.Utilities;
+using com.christoc.modules.ladder.Data;
 
 namespace DotNetNuke.Modules.ladder.Components
 {
-    public class TeamController
+    public class GamePlayerSettingController
     {
 
-        //create team
+        
+        //add player setting
 
-        //update team
+        //update player setting
 
-        public Team GetTeam(int teamId)
+        //get settings for game
+
+        public List<GamePlayerSetting> GetSettingsForGameByGame(int gameId)
         {
-            var t = CBO.FillObject<Team>(DataProvider.Instance().GetTeam(teamId));
-
-            //populate collection of players for team
-            return null;
+            return CBO.FillCollection<GamePlayerSetting>(DataProvider.Instance().GetGamePlayerSettingsByGame(gameId));
         }
 
-        //get all teams
-        public List<Team> GetTeams()
+        //get settings for player
+
+        public List<GamePlayerSetting> GetSettingsForGameByPlayerId(int playerId)
         {
-
+            return CBO.FillCollection<GamePlayerSetting>(DataProvider.Instance().GetGamePlayerSettingsByPlayer(playerId));
         }
-
-        //get players for a team
-
-        //get record for a team
 
 
 

@@ -81,6 +81,12 @@ namespace com.christoc.modules.ladder.Data
 
         public abstract IDataReader GetGame(int gameId);
 
+        public abstract IDataReader GetGame(int gameId);
+        
+
+        /*game player settings*/
+        public abstract IDataReader GetGamePlayerSettingsByGame(int gameId);
+        public abstract IDataReader GetGamePlayerSettingsByPlayer(int gameId);
 
         #endregion
 

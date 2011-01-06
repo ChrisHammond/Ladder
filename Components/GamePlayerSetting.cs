@@ -10,41 +10,25 @@
 ' 
 */
 
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using com.christoc.modules.ladder.Data;
 using DotNetNuke.Common.Utilities;
+using DotNetNuke.Entities.Modules;
+
 
 namespace DotNetNuke.Modules.ladder.Components
 {
-    public class TeamController
+    public class GamePlayerSetting
     {
 
-        //create team
+        public int GameId { get; set; }
+        public int PlayerId { get; set; }
 
-        //update team
-
-        public Team GetTeam(int teamId)
-        {
-            var t = CBO.FillObject<Team>(DataProvider.Instance().GetTeam(teamId));
-
-            //populate collection of players for team
-            return null;
-        }
-
-        //get all teams
-        public List<Team> GetTeams()
-        {
-
-        }
-
-        //get players for a team
-
-        //get record for a team
-
-
+        public string Setting { get; set; }
+        public string Value { get; set; }
 
     }
 }
