@@ -109,12 +109,47 @@
     <Import Include="System.Web.UI.HtmlControls" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\GameController.cs" />
+    <Compile Include="Components\GamePlayerSetting.cs" />
+    <Compile Include="Components\GamePlayerSettingController.cs" />
     <Compile Include="Components\Player.cs" />
     <Compile Include="Components\Team.cs" />
     <Compile Include="Components\FeatureController.cs" />
     <Compile Include="Components\Game.cs" />
     <Compile Include="Components\TeamController.cs" />
+    <Compile Include="Controls\ManageGame.ascx.cs">
+      <DependentUpon>ManageGame.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\ManageGame.ascx.designer.cs">
+      <DependentUpon>ManageGame.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ManagePlayer.ascx.cs">
+      <DependentUpon>ManagePlayer.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\ManagePlayer.ascx.designer.cs">
+      <DependentUpon>ManagePlayer.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ManageSettings.ascx.cs">
+      <DependentUpon>ManageSettings.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\ManageSettings.ascx.designer.cs">
+      <DependentUpon>ManageSettings.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ManageTeam.ascx.cs">
+      <DependentUpon>ManageTeam.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\ManageTeam.ascx.designer.cs">
+      <DependentUpon>ManageTeam.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Data\DataProvider.cs" />
+    <Content Include="Controls\ManageGame.ascx" />
+    <Content Include="Controls\ManagePlayer.ascx" />
+    <Content Include="Controls\ManageSettings.ascx" />
+    <Content Include="Controls\ManageTeam.ascx" />
     <Content Include="Documentation\Documentation.css" />
     <Content Include="Documentation\Documentation.html" />
     <Compile Include="Properties\AssemblyInfo.cs" />

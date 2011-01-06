@@ -14,37 +14,31 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using com.christoc.modules.ladder.Data;
-using DotNetNuke.Common.Utilities;
 
 namespace DotNetNuke.Modules.ladder.Components
 {
-    public class TeamController
+    public class GameController
     {
 
-        //create team
+        //create game
 
-        //update team
+        //update game
 
-        public Team GetTeam(int teamId)
-        {
-            var t = CBO.FillObject<Team>(DataProvider.Instance().GetTeam(teamId));
+        //get game
+        // gameId
+        // populate game data, populate collection of teams
+        
 
-            //populate collection of players for team
-            return null;
-        }
+        //get games by date
 
-        //get all teams
-        public List<Team> GetTeams()
-        {
+        //get games by team
 
-        }
+        //get games by player
 
-        //get players for a team
-
-        //get record for a team
+        //get games by....
 
 
-
+        
+    
     }
 }
