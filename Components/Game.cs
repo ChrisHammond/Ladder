@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using DotNetNuke.Common.Utilities;
 using DotNetNuke.Entities.Modules;
 
@@ -13,6 +14,7 @@ namespace DotNetNuke.Modules.ladder.Components
         public int PortalId { get; set; }
         public int ModuleId { get; set; }
 
+        public List<Team> Teams { get; set; }
 
         public int CreatedByUserId { get; set; }
         public int LastUpdatedByUserId { get; set; }

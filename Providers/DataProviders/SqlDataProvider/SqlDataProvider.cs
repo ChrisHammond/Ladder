@@ -48,7 +48,7 @@ namespace com.christoc.modules.ladder.Data
         {
 
             // Read the configuration specific information for this provider
-            Provider objProvider = (Provider)(_providerConfiguration.Providers[_providerConfiguration.DefaultProvider]);
+            var objProvider = (Provider)(_providerConfiguration.Providers[_providerConfiguration.DefaultProvider]);
 
             // Read the attributes for this provider
 
@@ -124,7 +124,7 @@ namespace com.christoc.modules.ladder.Data
 
         private static object GetNull(object Field)
         {
-            return DotNetNuke.Common.Utilities.Null.GetNull(Field, DBNull.Value);
+            return Null.GetNull(Field, DBNull.Value);
         }
 
         #endregion

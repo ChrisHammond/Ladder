@@ -12,8 +12,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using com.christoc.modules.ladder.Data;
 using DotNetNuke.Common.Utilities;
 
@@ -37,14 +35,13 @@ namespace DotNetNuke.Modules.ladder.Components
             DataProvider.Instance().UpdateTeam(t);
         }
 
-        //get players
-
+        //get players for a team
         public List<Player> GetPlayers(int teamId)
         {
             var pl = new List<Player>();
             var dr = DataProvider.Instance().GetTeamPlayers(teamId);
-            
-            while(dr.Read())
+
+            while (dr.Read())
             {
                 var pc = new PlayerController();
                 pl.Add(pc.GetPlayer(Convert.ToInt32(dr["PlayerId"])));
@@ -55,10 +52,21 @@ namespace DotNetNuke.Modules.ladder.Components
         //add player
         public void AddPlayer(int teamId, int playerId)
         {
+            //the SQL makes sure not to add the same player twice
             DataProvider.Instance().AddTeamPlayer(teamId, playerId);
         }
 
-        //delete team player
+        public void AddPlayers(Team t)
+        {
+            
+            foreach (Player p in t.Players)
+            {
+                AddPlayer(t.TeamId,p.PlayerId);
+            }
+        }
+
+
+        //todo: delete team player
 
         public Team GetTeam(int teamId)
         {
@@ -76,7 +84,5 @@ namespace DotNetNuke.Modules.ladder.Components
         }
 
         //get record for a team
-
-
     }
 }
