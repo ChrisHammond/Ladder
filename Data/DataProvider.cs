@@ -14,6 +14,7 @@ using System.Data;
 using System;
 using DotNetNuke.Common.Utilities;
 using DotNetNuke.Framework.Providers;
+using DotNetNuke.Modules.ladder.Components;
 
 
 namespace com.christoc.modules.ladder.Data
@@ -73,6 +74,15 @@ namespace com.christoc.modules.ladder.Data
 
         #region Abstract methods
 
+        /*teams*/
+        public abstract int CreateTeam(Team t);
+        public abstract void UpdateTeam(Team t);
+
+
+        public abstract void AddTeamPlayer(int teamId, int playerId);
+
+        public abstract IDataReader GetTeamPlayers(int teamId);
+
         public abstract IDataReader GetTeams();
 
         public abstract IDataReader GetTeam(int teamId);
@@ -81,12 +91,21 @@ namespace com.christoc.modules.ladder.Data
 
         public abstract IDataReader GetGame(int gameId);
 
-        public abstract IDataReader GetGame(int gameId);
         
-
         /*game player settings*/
         public abstract IDataReader GetGamePlayerSettingsByGame(int gameId);
         public abstract IDataReader GetGamePlayerSettingsByPlayer(int gameId);
+
+
+        /* player */
+        //add player
+        public abstract int CreatePlayer(int userId);
+        //update player
+        public abstract void UpdatePlayer(Player p);
+
+        public abstract IDataReader GetPlayer(int playerId);
+        
+
 
         #endregion
 

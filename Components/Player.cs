@@ -6,24 +6,24 @@ namespace DotNetNuke.Modules.ladder.Components
 {
     public class Player : IHydratable
     {
-        public int playerId { get; set; }
-        public int userId { get; set; }
-        public int rank { get; set; }
-        public int games { get; set; }
-        public int wins { get; set; }
-        public int losses { get; set; }
+        public int PlayerId { get; set; }
+        public int UserId { get; set; }
+        public int Rank { get; set; }
+        public int Games { get; set; }
+        public int Wins { get; set; }
+        public int Losses { get; set; }
                 
 
         #region IHydratable Members
 
         void IHydratable.Fill(System.Data.IDataReader dr)
         {
-            playerId = Null.SetNullInteger(dr["playerId"]);
-            userId = Null.SetNullInteger(dr["userId"]);
-            rank = Null.SetNullInteger(dr["rank"]);
-            games = Null.SetNullInteger(dr["games"]);
-            wins = Null.SetNullInteger(dr["wins"]);
-            losses = Null.SetNullInteger(dr["losses"]);
+            PlayerId = Null.SetNullInteger(dr["playerId"]);
+            UserId = Null.SetNullInteger(dr["userId"]);
+            Rank = Null.SetNullInteger(dr["rank"]);
+            Games = Null.SetNullInteger(dr["games"]);
+            Wins = Null.SetNullInteger(dr["wins"]);
+            Losses = Null.SetNullInteger(dr["losses"]);
 
         }
 
@@ -31,11 +31,11 @@ namespace DotNetNuke.Modules.ladder.Components
         {
             get
             {
-                return playerId;
+                return PlayerId;
             }
             set
             {
-                playerId = value;
+                PlayerId = value;
             }
         }
 
