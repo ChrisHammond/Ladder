@@ -10,21 +10,23 @@
 ' 
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
 namespace DotNetNuke.Modules.ladder.Components
 {
     public class GameController
     {
 
-        //create game
+        
 
-        //update game
+        //todo: create game
 
-        //get game
+        //todo: update game
+
+        //todo: get game
+
+        //todo: add teams to game
+
+        
+
         // gameId
         // populate game data, populate collection of teams
         

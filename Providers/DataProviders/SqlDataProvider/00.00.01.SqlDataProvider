@@ -32,7 +32,7 @@ IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwne
 
 	CREATE TABLE {databaseOwner}{objectQualifier}Ladder_Team
 		(
-		teamid int NOT NULL,
+		teamid int NOT NULL IDENTITY (1, 1),
 		name nvarchar(100) NOT NULL,
 		games int NULL,
 		wins int NULL,
@@ -308,10 +308,6 @@ CREATE PROCEDURE {databaseOwner}[{objectQualifier}Ladder_AddTeam]
        ,@lastplayed datetime
        ,@createdbyuserid int
        ,@lastupdatedbyuserid int
-		,@Games int
-		,@Wins int
-		@Losses int
-
 AS
 
 INSERT INTO {databaseOwner}[{objectQualifier}Ladder_Team]
@@ -355,7 +351,7 @@ CREATE PROCEDURE {databaseOwner}[{objectQualifier}Ladder_UpdateTeam]
 	, @lastupdatedbyuserid int
 	,@Games int
 		,@Wins int
-		@Losses int
+		,@Losses int
 AS
 
 Update {databaseOwner}[{objectQualifier}Ladder_Team]
@@ -366,7 +362,7 @@ Update {databaseOwner}[{objectQualifier}Ladder_Team]
            ,[lastupdateddate] = GetDate()
 		   ,[games]=@games
 		   ,[wins]=@wins
-		   ,[losses=@losses
+		   ,[losses]=@losses
 
 where teamid = @teamid
 GO
@@ -382,6 +378,10 @@ CREATE PROCEDURE {databaseOwner}[{objectQualifier}Ladder_AddTeamPlayer]
 	@TeamId int
 	, @PlayerId int
 AS
+
+declare @alreadyin int
+select @alreadyin = playerid from {databaseOwner}[{objectQualifier}Ladder_TeamPlayer] where TeamId = @TeamId and PlayerId = @PlayerId 
+if @alreadyin IS NULL BEGIN
 INSERT INTO {databaseOwner}[{objectQualifier}Ladder_TeamPlayer]
            ([teamId]
            ,[playerId])
@@ -389,7 +389,7 @@ INSERT INTO {databaseOwner}[{objectQualifier}Ladder_TeamPlayer]
            (@TeamId
            ,@PlayerId)
            
-
+END
 GO
 
 
