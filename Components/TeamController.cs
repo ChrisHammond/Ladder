@@ -23,27 +23,59 @@ namespace DotNetNuke.Modules.ladder.Components
     {
 
         //create team
+        public Team CreateTeam(Team t)
+        {
+            //create the team and updated with the new TeamId
+            t.TeamId = DataProvider.Instance().CreateTeam(t);
+            return t;
+        }
 
         //update team
+
+        public void UpdateTeam(Team t)
+        {
+            DataProvider.Instance().UpdateTeam(t);
+        }
+
+        //get players
+
+        public List<Player> GetPlayers(int teamId)
+        {
+            var pl = new List<Player>();
+            var dr = DataProvider.Instance().GetTeamPlayers(teamId);
+            
+            while(dr.Read())
+            {
+                var pc = new PlayerController();
+                pl.Add(pc.GetPlayer(Convert.ToInt32(dr["PlayerId"])));
+            }
+            return pl;
+        }
+
+        //add player
+        public void AddPlayer(int teamId, int playerId)
+        {
+            DataProvider.Instance().AddTeamPlayer(teamId, playerId);
+        }
+
+        //delete team player
 
         public Team GetTeam(int teamId)
         {
             var t = CBO.FillObject<Team>(DataProvider.Instance().GetTeam(teamId));
 
             //populate collection of players for team
-            return null;
+            t.Players = GetPlayers(t.TeamId);
+            return t;
         }
 
         //get all teams
         public List<Team> GetTeams()
         {
-
+            return null;
         }
 
-        //get players for a team
-
         //get record for a team
-
 
 
     }

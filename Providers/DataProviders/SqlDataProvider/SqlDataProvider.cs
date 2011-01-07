@@ -11,8 +11,12 @@
 */
 
 using System;
+using System.Data;
+using System.Data.SqlClient;
 using DotNetNuke.Common.Utilities;
 using DotNetNuke.Framework.Providers;
+using DotNetNuke.Modules.ladder.Components;
+using Microsoft.ApplicationBlocks.Data;
 
 namespace com.christoc.modules.ladder.Data
 {
@@ -140,6 +144,96 @@ namespace com.christoc.modules.ladder.Data
 
         #endregion
 
+        #region Overrides of DataProvider
+
+        public override int CreateTeam(Team t)
+        {
+            return Convert.ToInt32(SqlHelper.ExecuteScalar(ConnectionString, NamePrefix + "AddTeam",
+                 new SqlParameter("@Name", t.Name)
+                , new SqlParameter("@firstplayed", t.FirstPlayed)
+                , new SqlParameter("@lastplayed", t.Name)
+                , new SqlParameter("@createdbyuserid", t.Name)
+                , new SqlParameter("@lastupdatedbyuserid", t.Name)
+                ));
+        }
+
+        public override void UpdateTeam(Team t)
+        {
+            SqlHelper.ExecuteNonQuery(ConnectionString, NamePrefix + "UpdateTeam",
+                new SqlParameter("@TeamId", t.TeamId)
+                  , new SqlParameter("@Name", t.Name)
+                 , new SqlParameter("@firstplayed", t.FirstPlayed)
+                 , new SqlParameter("@lastplayed", t.Name)
+                 , new SqlParameter("@lastupdatedbyuserid", t.Name)
+                 , new SqlParameter("@Games", t.Games)
+                 , new SqlParameter("@Wins", t.Wins)
+                 , new SqlParameter("@Losses", t.Losses)
+                 );
+        }
+
+        public override void AddTeamPlayer(int teamId, int playerId)
+        {
+            SqlHelper.ExecuteNonQuery(ConnectionString, NamePrefix + "AddTeamPlayer",
+                                      new SqlParameter("@TeamId", teamId)
+                                      , new SqlParameter("@PlayerId", playerId));
+        }
+
+        public override IDataReader GetTeamPlayers(int teamId)
+        {
+            return SqlHelper.ExecuteReader(ConnectionString, NamePrefix + "GetTeamPlayers", new SqlParameter("@TeamId", teamId));
+        }
+
+        public override IDataReader GetTeams()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IDataReader GetTeam(int teamId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IDataReader GetGames()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IDataReader GetGame(int gameId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IDataReader GetGamePlayerSettingsByGame(int gameId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IDataReader GetGamePlayerSettingsByPlayer(int gameId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override int CreatePlayer(int userId)
+        {
+            return Convert.ToInt32(SqlHelper.ExecuteScalar(ConnectionString, NamePrefix + "AddPlayer", new SqlParameter("@UserId", userId)));
+        }
+
+        public override void UpdatePlayer(Player p)
+        {
+            SqlHelper.ExecuteNonQuery(ConnectionString, NamePrefix + "UpdatePlayer"
+                , new SqlParameter("@UserId", p.UserId)
+                , new SqlParameter("@Games", p.Games)
+                , new SqlParameter("@Games", p.Wins)
+                , new SqlParameter("@Games", p.Losses)
+               );
+        }
+
+        public override IDataReader GetPlayer(int playerId)
+        {
+            return SqlHelper.ExecuteReader(ConnectionString, NamePrefix + "GetPlayer", new SqlParameter("@PlayerId", playerId));
+        }
+
+        #endregion
     }
 
 }
