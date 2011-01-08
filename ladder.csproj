@@ -114,7 +114,6 @@
     <Compile Include="Components\GamePlayerSettingController.cs" />
     <Compile Include="Components\Player.cs" />
     <Compile Include="Components\Team.cs" />
-    <Compile Include="Components\FeatureController.cs" />
     <Compile Include="Components\Game.cs" />
     <Compile Include="Components\TeamController.cs" />
     <Compile Include="Controls\ManageGame.ascx.cs">

@@ -93,6 +93,8 @@ namespace com.christoc.modules.ladder.Data
 
         
         /*game player settings*/
+        public abstract void AddGamePlayerSetting(GamePlayerSetting gps);
+        public abstract void UpdateGamePlayerSetting(GamePlayerSetting gps);
         public abstract IDataReader GetGamePlayerSettingsByGame(int gameId);
         public abstract IDataReader GetGamePlayerSettingsByPlayer(int gameId);
 
@@ -106,6 +108,9 @@ namespace com.christoc.modules.ladder.Data
         public abstract IDataReader GetPlayer(int playerId);
         
 
+        /* game */
+        public abstract int AddGame(Game g);
+        public abstract void UpdateGame(Game g);
 
         #endregion
 
