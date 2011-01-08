@@ -10,26 +10,54 @@
 ' 
 */
 
+using com.christoc.modules.ladder.Data;
+
 namespace DotNetNuke.Modules.ladder.Components
 {
     public class GameController
     {
 
-        
+        /* create game workflow */
 
-        //todo: create game
+        //save game
+        public Game SaveGame(Game g)
+        {
+            g = g.GameId > 0 ? UpdateGame(g) : CreateGame(g);
 
-        //todo: update game
+            foreach (var t in g.Teams)
+            {
+                var tc = new TeamController();
+                tc.Save(t);
+            }
+
+            return g;
+        }
+
+        private static Game CreateGame(Game g)
+        {
+            g.GameId = DataProvider.Instance().AddGame(g);
+
+            return g;
+
+        }
+
+        //update game
+        private static Game UpdateGame(Game g)
+        {
+            DataProvider.Instance().UpdateGame(g);
+            return g;
+        }
+
 
         //todo: get game
 
         //todo: add teams to game
 
-        
+
 
         // gameId
         // populate game data, populate collection of teams
-        
+
 
         //get games by date
 
@@ -40,7 +68,7 @@ namespace DotNetNuke.Modules.ladder.Components
         //get games by....
 
 
-        
-    
+
+
     }
 }

@@ -10,10 +10,6 @@
 ' 
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using com.christoc.modules.ladder.Data;
 using DotNetNuke.Common.Utilities;
 
@@ -21,6 +17,17 @@ namespace DotNetNuke.Modules.ladder.Components
 {
     public class PlayerController
     {
+
+        public Player Save(Player p)
+        {
+            if (p.PlayerId < 0)
+                p = CreatePlayer(p.UserId);
+            else
+            {
+                UpdatePlayer(p);
+            }
+            return p;
+        }
 
         //create player
         public Player CreatePlayer(int playerId)

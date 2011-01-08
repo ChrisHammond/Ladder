@@ -55,7 +55,7 @@
           <desktopModule>
             <moduleName>ladder</moduleName>
             <foldername>ladder</foldername>
-            <businessControllerClass>com.christoc.modules.ladder.Components.FeatureController</businessControllerClass>
+            <businessControllerClass />
             <supportedFeatures />
             <moduleDefinitions>
               <moduleDefinition>

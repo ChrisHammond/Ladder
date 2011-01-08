@@ -233,7 +233,45 @@ namespace com.christoc.modules.ladder.Data
             return SqlHelper.ExecuteReader(ConnectionString, NamePrefix + "GetPlayer", new SqlParameter("@PlayerId", playerId));
         }
 
+        public override int AddGame(Game g)
+        {
+            return Convert.ToInt32(SqlHelper.ExecuteScalar(ConnectionString, NamePrefix + "AddGame"
+                                                           , new SqlParameter("@PlayedDate", g.PlayedDate)
+                                                           , new SqlParameter("@CreatedByUserId", g.CreatedByUserId)
+                                                           , new SqlParameter("@LastUpdatedByUserId", g.LastUpdatedByUserId)
+                                       ));
+        }
+
+        public override void UpdateGame(Game g)
+        {
+            SqlHelper.ExecuteNonQuery(ConnectionString, NamePrefix + "Update"
+                , new SqlParameter("@GameId", g.GameId)
+                                                           , new SqlParameter("@PlayedDate", g.PlayedDate)
+                                                           , new SqlParameter("@LastUpdatedByUserId", g.LastUpdatedByUserId)
+                                       );
+        }
+
         #endregion
+
+        public override void AddGamePlayerSetting(GamePlayerSetting gps)
+        {
+            SqlHelper.ExecuteNonQuery(ConnectionString, NamePrefix + "AddGamePlayerSetting"
+                , new SqlParameter("@GameId", gps.GameId)
+                , new SqlParameter("@PlayerId", gps.PlayerId)
+                , new SqlParameter("@Setting", gps.Setting)
+                , new SqlParameter("@Value", gps.Value)
+                );
+        }
+
+        public override void UpdateGamePlayerSetting(GamePlayerSetting gps)
+        {
+            SqlHelper.ExecuteScalar(ConnectionString, NamePrefix + "UpdateGamePlayerSetting"
+                , new SqlParameter("@GameId", gps.GameId)
+                , new SqlParameter("@PlayerId", gps.PlayerId)
+                , new SqlParameter("@Setting", gps.Setting)
+                , new SqlParameter("@Value", gps.Value)
+                );
+        }
     }
 
 }

@@ -20,11 +20,23 @@ namespace DotNetNuke.Modules.ladder.Components
     public class TeamController
     {
 
+        public Team Save(Team t)
+        {
+            if(t.TeamId>0)
+                UpdateTeam(t);
+            else
+            {
+                t = CreateTeam(t);
+            }
+            return t;
+        }
         //create team
-        public Team CreateTeam(Team t)
+        private Team CreateTeam(Team t)
         {
             //create the team and updated with the new TeamId
             t.TeamId = DataProvider.Instance().CreateTeam(t);
+            //since Team is created add the players
+            AddPlayers(t);
             return t;
         }
 
@@ -33,6 +45,7 @@ namespace DotNetNuke.Modules.ladder.Components
         public void UpdateTeam(Team t)
         {
             DataProvider.Instance().UpdateTeam(t);
+            AddPlayers(t);
         }
 
         //get players for a team
@@ -50,18 +63,17 @@ namespace DotNetNuke.Modules.ladder.Components
         }
 
         //add player
-        public void AddPlayer(int teamId, int playerId)
+        public void AddTeamPlayer(int teamId, int playerId)
         {
             //the SQL makes sure not to add the same player twice
             DataProvider.Instance().AddTeamPlayer(teamId, playerId);
         }
 
         public void AddPlayers(Team t)
-        {
-            
+        {            
             foreach (Player p in t.Players)
             {
-                AddPlayer(t.TeamId,p.PlayerId);
+                AddTeamPlayer(t.TeamId,p.PlayerId);
             }
         }
 

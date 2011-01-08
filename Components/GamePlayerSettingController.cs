@@ -25,6 +25,12 @@ namespace DotNetNuke.Modules.ladder.Components
         
         //add player setting
 
+        public void AddGamePlayerSetting(GamePlayerSetting gps)
+        {
+
+            DataProvider.Instance().AddGamePlayerSetting(gps);
+        }
+
         //update player setting
 
         //get settings for game
