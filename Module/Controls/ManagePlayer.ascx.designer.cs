@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DotNetNuke.Modules.ladder.Controls
+namespace com.christoc.modules.ladder.Controls
 {
 
 

@@ -14,7 +14,7 @@ using System.Data;
 using System;
 using DotNetNuke.Common.Utilities;
 using DotNetNuke.Framework.Providers;
-using DotNetNuke.Modules.ladder.Components;
+using com.christoc.modules.ladder.Components;
 
 
 namespace com.christoc.modules.ladder.Data
@@ -96,9 +96,8 @@ namespace com.christoc.modules.ladder.Data
         public abstract void AddGamePlayerSetting(GamePlayerSetting gps);
         public abstract void UpdateGamePlayerSetting(GamePlayerSetting gps);
         public abstract IDataReader GetGamePlayerSettingsByGame(int gameId);
-        public abstract IDataReader GetGamePlayerSettingsByPlayer(int gameId);
-
-
+        public abstract IDataReader GetGamePlayerSettingsByPlayer(int gameId, int playerId);
+        
         /* player */
         //add player
         public abstract int CreatePlayer(int userId);

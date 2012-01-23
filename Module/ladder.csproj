@@ -9,7 +9,7 @@
     <ProjectGuid>{62EEF20C-8C85-46F2-89F8-4F898903E66B}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
-    <RootNamespace>DotNetNuke.Modules.ladder</RootNamespace>
+    <RootNamespace>com.christoc.modules.ladder</RootNamespace>
     <AssemblyName>ladder</AssemblyName>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -149,8 +149,6 @@
     <Content Include="Controls\ManagePlayer.ascx" />
     <Content Include="Controls\ManageSettings.ascx" />
     <Content Include="Controls\ManageTeam.ascx" />
-    <Content Include="Documentation\Documentation.css" />
-    <Content Include="Documentation\Documentation.html" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\DataProviders\SqlDataProvider\SqlDataProvider.cs" />
     <Compile Include="Edit.ascx.designer.cs">

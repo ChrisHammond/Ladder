@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using com.christoc.modules.ladder.Data;
 using DotNetNuke.Common.Utilities;
 
-namespace DotNetNuke.Modules.ladder.Components
+namespace com.christoc.modules.ladder.Components
 {
     public class TeamController
     {
@@ -90,7 +90,7 @@ namespace DotNetNuke.Modules.ladder.Components
         //get all teams
         public List<Team> GetTeams()
         {
-            return null;
+            return CBO.FillCollection<Team>(DataProvider.Instance().GetTeams());
         }
 
         //get record for a team

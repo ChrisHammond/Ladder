@@ -12,7 +12,7 @@ using System;
 using DotNetNuke.Common.Utilities;
 using DotNetNuke.Entities.Modules;
 
-namespace DotNetNuke.Modules.ladder.Components
+namespace com.christoc.modules.ladder.Components
 {
     public class Player : IHydratable
     {

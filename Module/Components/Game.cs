@@ -12,8 +12,9 @@ using System;
 using System.Collections.Generic;
 using DotNetNuke.Common.Utilities;
 using DotNetNuke.Entities.Modules;
+using DotNetNuke.Entities.Users;
 
-namespace DotNetNuke.Modules.ladder.Components
+namespace com.christoc.modules.ladder.Components
 {
     public class Game : IHydratable
     {
@@ -37,7 +38,7 @@ namespace DotNetNuke.Modules.ladder.Components
         {
             get
             {
-                return CreatedByUserId != 0 ? Entities.Users.UserController.GetUserById(PortalId, CreatedByUserId).Username : Null.NullString;
+                return CreatedByUserId != 0 ? UserController.GetUserById(PortalId, CreatedByUserId).Username : Null.NullString;
             }
         }
 
@@ -48,7 +49,7 @@ namespace DotNetNuke.Modules.ladder.Components
         {
             get
             {
-                return LastUpdatedByUserId != 0 ? Entities.Users.UserController.GetUserById(PortalId, LastUpdatedByUserId).Username : Null.NullString;
+                return LastUpdatedByUserId != 0 ? UserController.GetUserById(PortalId, LastUpdatedByUserId).Username : Null.NullString;
             }
         }
 
