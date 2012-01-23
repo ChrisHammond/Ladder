@@ -15,7 +15,7 @@ using System.Web;
 using DotNetNuke.Common.Utilities;
 using com.christoc.modules.ladder.Data;
 
-namespace DotNetNuke.Modules.ladder.Components
+namespace com.christoc.modules.ladder.Components
 {
     public class GamePlayerSettingController
     {
@@ -40,12 +40,10 @@ namespace DotNetNuke.Modules.ladder.Components
 
         //get settings for player
 
-        public List<GamePlayerSetting> GetSettingsForGameByPlayerId(int playerId)
+        public List<GamePlayerSetting> GetSettingsForGameByPlayerId(int gameId, int playerId)
         {
-            return CBO.FillCollection<GamePlayerSetting>(DataProvider.Instance().GetGamePlayerSettingsByPlayer(playerId));
+            return CBO.FillCollection<GamePlayerSetting>(DataProvider.Instance().GetGamePlayerSettingsByPlayer(gameId,playerId));
         }
-
-
 
     }
 }

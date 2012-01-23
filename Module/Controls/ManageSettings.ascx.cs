@@ -17,7 +17,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using com.christoc.modules.ladder;
 
-namespace DotNetNuke.Modules.ladder.Controls
+namespace com.christoc.modules.ladder.Controls
 {
     public partial class ManageSettings : ladderModuleBase
     {

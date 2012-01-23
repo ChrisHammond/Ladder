@@ -155,7 +155,8 @@ IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwne
 			gameid int NOT NULL,
 			teamid int NOT NULL,
 			score float NOT NULL,
-			win bit NOT NULL
+			win bit NOT NULL,
+			home bit NOT NULL
 			)  ON [PRIMARY]
 	END
 GO
@@ -536,6 +537,7 @@ CREATE PROCEDURE {databaseOwner}[{objectQualifier}Ladder_AddGameTeam]
 	, @teamid int
 	, @score float
 	, @win bit
+	, @home bit
 	
 AS
 
@@ -543,12 +545,142 @@ INSERT INTO {databaseOwner}[{objectQualifier}Ladder_GameTeam]
            ([gameid]
            ,[teamid]
            ,[score]
-           ,[win])
+           ,[win]
+		   ,[home])
      VALUES
            (@gameid
            ,@teamid
            ,@score
-           ,@win)
+           ,@win
+		   ,@home)
 GO
+
+
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwner}[{objectQualifier}Ladder_GetTeams]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	DROP PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetTeams]
+GO
+
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetTeams]
+		
+AS
+
+SELECT [teamid]
+      ,[name]
+      ,[games]
+      ,[wins]
+      ,[losses]
+      ,[firstplayed]
+      ,[lastplayed]
+      ,[createdbyuserid]
+      ,[createddate]
+      ,[lastupdatedbyuserid]
+      ,[lastupdateddate]
+  FROM {databaseOwner}[{objectQualifier}Ladder_Team]
+GO
+
+
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwner}[{objectQualifier}Ladder_GetTeam]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	DROP PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetTeam]
+GO
+
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetTeam]
+		@teamid int
+AS
+
+SELECT [teamid]
+      ,[name]
+      ,[games]
+      ,[wins]
+      ,[losses]
+      ,[firstplayed]
+      ,[lastplayed]
+      ,[createdbyuserid]
+      ,[createddate]
+      ,[lastupdatedbyuserid]
+      ,[lastupdateddate]
+  FROM {databaseOwner}[{objectQualifier}Ladder_Team]
+  WHERE
+		[teamid] = @teamid
+GO
+
+
+
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwner}[{objectQualifier}Ladder_GetGames]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	DROP PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetGames]
+GO
+
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetGames]
+		
+AS
+
+SELECT [gameid]
+      ,[createddate]
+      ,[playeddate]
+      ,[lastupdateddate]
+      ,[createdbyuserid]
+      ,[lastupdatedbyuserid]
+  FROM {databaseOwner}[{objectQualifier}Ladder_Game]
+GO
+
+
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwner}[{objectQualifier}Ladder_GetGame]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	DROP PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetGame]
+GO
+
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetGame]
+		@gameid int
+AS
+
+SELECT [gameid]
+      ,[createddate]
+      ,[playeddate]
+      ,[lastupdateddate]
+      ,[createdbyuserid]
+      ,[lastupdatedbyuserid]
+  FROM {databaseOwner}[{objectQualifier}Ladder_Game]
+  WHERE
+	[gameid] = @gameid
+
+GO
+
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwner}[{objectQualifier}Ladder_GetGamePlayerSettingsByGame]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	DROP PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetGamePlayerSettingsByGame]
+GO
+
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetGamePlayerSettingsByGame]
+		@gameid int
+AS
+
+SELECT [gameid]
+      ,[playerid]
+      ,[setting]
+      ,[value]
+  FROM {databaseOwner}[{objectQualifier}Ladder_GamePlayerSetting]
+  WHERE
+	[gameid] = @gameid
+GO
+
+
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwner}[{objectQualifier}Ladder_GetGamePlayerSettingsByPlayer]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	DROP PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetGamePlayerSettingsByPlayer]
+GO
+
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetGamePlayerSettingsByPlayer]
+		@gameid int
+		, @playerid int
+AS
+
+SELECT [gameid]
+      ,[playerid]
+      ,[setting]
+      ,[value]
+  FROM {databaseOwner}[{objectQualifier}Ladder_GamePlayerSetting]
+  WHERE
+	[gameid] = @gameid
+	AND [playerid] = @playerid
+GO
+
+
+
 
 

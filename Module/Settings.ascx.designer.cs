@@ -11,5 +11,23 @@ namespace com.christoc.modules.ladder {
     
     
     public partial class Settings {
+        
+        /// <summary>
+        /// Setting1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UserControl Setting1;
+        
+        /// <summary>
+        /// txtSetting1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtSetting1;
     }
 }

@@ -13,7 +13,7 @@ using System.Data;
 using System.Data.SqlClient;
 using DotNetNuke.Common.Utilities;
 using DotNetNuke.Framework.Providers;
-using DotNetNuke.Modules.ladder.Components;
+using com.christoc.modules.ladder.Components;
 using Microsoft.ApplicationBlocks.Data;
 
 namespace com.christoc.modules.ladder.Data
@@ -183,32 +183,32 @@ namespace com.christoc.modules.ladder.Data
 
         public override IDataReader GetTeams()
         {
-            throw new NotImplementedException();
+            return SqlHelper.ExecuteReader(ConnectionString, NamePrefix + "GetTeams");
         }
 
         public override IDataReader GetTeam(int teamId)
         {
-            throw new NotImplementedException();
+            return SqlHelper.ExecuteReader(ConnectionString, NamePrefix + "GetTeam", new SqlParameter("@TeamId", teamId));
         }
 
         public override IDataReader GetGames()
         {
-            throw new NotImplementedException();
+            return SqlHelper.ExecuteReader(ConnectionString, NamePrefix + "GetGames");
         }
 
         public override IDataReader GetGame(int gameId)
         {
-            throw new NotImplementedException();
+            return SqlHelper.ExecuteReader(ConnectionString, NamePrefix + "GetGame", new SqlParameter("@GameId", gameId));
         }
 
         public override IDataReader GetGamePlayerSettingsByGame(int gameId)
         {
-            throw new NotImplementedException();
+            return SqlHelper.ExecuteReader(ConnectionString, NamePrefix + "GetGamePlayerSettingsByGame", new SqlParameter("@GameId", gameId));
         }
 
-        public override IDataReader GetGamePlayerSettingsByPlayer(int gameId)
+        public override IDataReader GetGamePlayerSettingsByPlayer(int gameId, int playerId)
         {
-            throw new NotImplementedException();
+            return SqlHelper.ExecuteReader(ConnectionString, NamePrefix + "GetGamePlayerSettingsByPlayer", new SqlParameter("@GameId", gameId), new SqlParameter("@PlayerId", playerId));
         }
 
         public override int CreatePlayer(int userId)

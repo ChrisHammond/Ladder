@@ -10,7 +10,7 @@
 */
 using com.christoc.modules.ladder.Data;
 
-namespace DotNetNuke.Modules.ladder.Components
+namespace com.christoc.modules.ladder.Components
 {
     public class GameController
     {
