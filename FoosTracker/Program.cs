@@ -10,12 +10,7 @@
 */
 
 using System;
-using System.Net;
-using System.Net.Sockets;
-using System.Threading;
-using Microsoft.SPOT;
 using Microsoft.SPOT.Hardware;
-using SecretLabs.NETMF.Hardware;
 using SecretLabs.NETMF.Hardware.NetduinoPlus;
 
 namespace FoosTracker
@@ -23,97 +18,101 @@ namespace FoosTracker
     public class Program
     {
 
-        //create two teams (red/blue)
-        private static Team redTeam = Team.CreateTeam(1, "Red");
-        private static Team blueTeam = Team.CreateTeam(2, "Blue");
+        //create two teams (away/home)
+        private static Team awayTeam = Team.CreateTeam(1, "Away");
+        private static Team homeTeam = Team.CreateTeam(2, "Home");
 
-        static OutputPort redLed = new OutputPort(Pins.GPIO_PIN_D12, false);
-        static OutputPort blueLed = new OutputPort(Pins.GPIO_PIN_D13, false);
+        private const int WinningScore = 10;
+
+        static readonly OutputPort awayLed = new OutputPort(Pins.GPIO_PIN_D12, false);
+        static readonly OutputPort homeLed = new OutputPort(Pins.GPIO_PIN_D13, false);
 
         public static void Main()
         {
-            // write your code here
-
-            //keep track of the scores
-
-           
-
-            var redTeamAdd = new InterruptPort(Pins.GPIO_PIN_D2, true, Port.ResistorMode.PullUp,
+            //configure the buttons for scoring
+            var awayTeamAdd = new InterruptPort(Pins.GPIO_PIN_D2, true, Port.ResistorMode.PullUp,
                                                Port.InterruptMode.InterruptEdgeLow);
-            var redTeamSubtract = new InterruptPort(Pins.GPIO_PIN_D3, true, Port.ResistorMode.PullUp,
+            var awayTeamSubtract = new InterruptPort(Pins.GPIO_PIN_D3, true, Port.ResistorMode.PullUp,
                                                Port.InterruptMode.InterruptEdgeLow);
-            var blueTeamAdd = new InterruptPort(Pins.GPIO_PIN_D4, true, Port.ResistorMode.PullUp,
+            var homeTeamAdd = new InterruptPort(Pins.GPIO_PIN_D4, true, Port.ResistorMode.PullUp,
                                                Port.InterruptMode.InterruptEdgeLow);
-            var blueTeamSubtract = new InterruptPort(Pins.GPIO_PIN_D5, true, Port.ResistorMode.PullUp,
+            var homeTeamSubtract = new InterruptPort(Pins.GPIO_PIN_D5, true, Port.ResistorMode.PullUp,
                                                Port.InterruptMode.InterruptEdgeLow);
 
-            redTeamAdd.OnInterrupt+=new NativeEventHandler(redTeamAdd_OnInterrupt);
-            redTeamSubtract.OnInterrupt += new NativeEventHandler(redTeamSubtract_OnInterrupt);
-            blueTeamAdd.OnInterrupt += new NativeEventHandler(blueTeamAdd_OnInterrupt);
-            blueTeamSubtract.OnInterrupt += new NativeEventHandler(blueTeamSubtract_OnInterrupt);
+            //register the interrupts to keep track of button presses
+            awayTeamAdd.OnInterrupt+=awayTeamAdd_OnInterrupt;
+            awayTeamSubtract.OnInterrupt += awayTeamSubtract_OnInterrupt;
+            homeTeamAdd.OnInterrupt += homeTeamAdd_OnInterrupt;
+            homeTeamSubtract.OnInterrupt += homeTeamSubtract_OnInterrupt;
+
+
+            //todo: use the mac address as the identifier
+            
 
             while(true)
             {
                 //todo: check for Max score/win
                 CheckTeamScores();
             }
+// ReSharper disable FunctionNeverReturns
         }
+// ReSharper restore FunctionNeverReturns
 
-        private static void redTeamAdd_OnInterrupt(uint data1, uint data2, DateTime time)
+        private static void awayTeamAdd_OnInterrupt(uint data1, uint data2, DateTime time)
         {
-            redTeam.AddScore();
-            redLed.Write(true);
+            awayTeam.AddScore();
+            awayLed.Write(true);
         }
-        private static void redTeamSubtract_OnInterrupt(uint data1, uint data2, DateTime time)
+        private static void awayTeamSubtract_OnInterrupt(uint data1, uint data2, DateTime time)
         {
-            redTeam.SubtractScore();
-            redLed.Write(false);
+            awayTeam.SubtractScore();
+            awayLed.Write(false);
         }
-        private static void blueTeamAdd_OnInterrupt(uint data1, uint data2, DateTime time)
+        private static void homeTeamAdd_OnInterrupt(uint data1, uint data2, DateTime time)
         {
-            blueTeam.AddScore();
-            blueLed.Write(true);
+            homeTeam.AddScore();
+            homeLed.Write(true);
         }
-        private static void blueTeamSubtract_OnInterrupt(uint data1, uint data2, DateTime time)
+        private static void homeTeamSubtract_OnInterrupt(uint data1, uint data2, DateTime time)
         {
-            blueTeam.SubtractScore();
-            blueLed.Write(false);
+            homeTeam.SubtractScore();
+            homeLed.Write(false);
         }
 
         private static void CheckTeamScores()
         {
-            if(redTeam.Score>9 || blueTeam.Score>9)
+            if (awayTeam.Score < WinningScore && homeTeam.Score < WinningScore) return;
+            
+            //game over someone got 10
+
+            if (awayTeam.Score >= WinningScore)
             {
-                //game over someone got 10
-                var gameOver = true;
-
-                if (redTeam.Score > 9)
-                {
-                    redTeam.Wins++;
-                    blueTeam.Losses++;
-                }
-                else
-                {//red team lost, blue team won
-                    redTeam.Losses++;
-                    blueTeam.Wins++;
-                }
-                //todo: play game over audio
-
-                //call NewGame to reset the teams
-                NewGame();
+                awayTeam.Wins++;
+                homeTeam.Losses++;
             }
+            else
+            {//away team lost, home team won
+                awayTeam.Losses++;
+                homeTeam.Wins++;
+            }
+            //todo: play game over audio
+
+            //todo: send the game information out to web service
+
+            //call NewGame to reset the teams
+            NewGame();
         }
 
 
         private static void NewGame()
         {
             //reset the scores
-            redTeam.Score = 0;
-            blueTeam.Score = 0;
+            awayTeam.Score = 0;
+            homeTeam.Score = 0;
         }
 
         //todo: record the temperature measurement at start of game, end of game
-        //todo: 
+        //todo: allow user selection for teams
 
     }
 }
