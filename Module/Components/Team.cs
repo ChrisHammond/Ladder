@@ -28,7 +28,7 @@ namespace com.christoc.modules.ladder.Components
         public int Games { get; set; }
         public int Wins { get; set; }
         public int Losses { get; set; }
-
+        public int ModuleId { get; set; }
 
         public int CreatedByUserId { get; set; }
         public int LastUpdatedByUserId { get; set; }
@@ -59,6 +59,14 @@ namespace com.christoc.modules.ladder.Components
             }
         }
 
+
+        public Team Save()
+        {
+            var tc = new TeamController();
+            return tc.SaveTeam(this);
+        }
+
+
         #region IHydratable Members
 
         void IHydratable.Fill(System.Data.IDataReader dr)
@@ -75,6 +83,7 @@ namespace com.christoc.modules.ladder.Components
 
             CreatedByUserId = Null.SetNullInteger(dr["CreatedByUserId"]);
             LastUpdatedByUserId = Null.SetNullInteger(dr["LastUpdatedByUserId"]);
+            ModuleId = Null.SetNullInteger(dr["ModuleId"]);
         }
 
         int IHydratable.KeyID

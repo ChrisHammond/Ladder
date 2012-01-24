@@ -8,29 +8,27 @@
 ' THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ' 
 */
-using System;
-using System.Collections.Generic;
-using DotNetNuke.Common.Utilities;
-using DotNetNuke.Entities.Modules;
-using DotNetNuke.Entities.Users;
 
 namespace com.christoc.modules.ladder.Components
 {
-    public class Game : IHydratable
+    using System;
+    using DotNetNuke.Common.Utilities;
+    using DotNetNuke.Entities.Modules;
+    using DotNetNuke.Entities.Users;
+
+    public class Field : IHydratable
     {
-        public int GameId { get; set; }
-        public DateTime PlayedDate { get; set; }
+        public int FieldId { get; set; }
+        public string FieldName { get; set; }
+        public string FieldIdentifier { get; set; }
+        
         public DateTime CreatedDate { get; set; }
         public DateTime LastUpdatedDate { get; set; }
         public int PortalId { get; set; }
         public int ModuleId { get; set; }
 
-        public List<Team> Teams { get; set; }
-
         public int CreatedByUserId { get; set; }
         public int LastUpdatedByUserId { get; set; }
-
-        public int FieldId { get; set; }
 
         //Read Only Props
         ///<summary>
@@ -56,25 +54,23 @@ namespace com.christoc.modules.ladder.Components
         }
 
 
-        public Game Save()
+        public Field Save()
         {
-            var gc = new GameController();
-            return gc.SaveGame(this);
+            var fc = new FieldController();
+            return fc.SaveField(this);
         }
-
-
-
+        
         #region IHydratable Members
 
         void IHydratable.Fill(System.Data.IDataReader dr)
         {
-            GameId = Null.SetNullInteger(dr["GameId"]);
-            PlayedDate = Null.SetNullDateTime(dr["PlayedDate"]);
+            FieldId = Null.SetNullInteger(dr["FieldId"]);
+            FieldName = Null.SetNullString(dr["FieldName"]);
+            FieldIdentifier = Null.SetNullString(dr["FieldIdentifier"]);
             CreatedDate = Null.SetNullDateTime(dr["CreatedDate"]);
             LastUpdatedDate = Null.SetNullDateTime(dr["LastUpdatedDate"]);
             CreatedByUserId = Null.SetNullInteger(dr["CreatedByUserId"]);
             LastUpdatedByUserId = Null.SetNullInteger(dr["LastUpdatedByUserId"]);
-            FieldId = Null.SetNullInteger(dr["FieldId"]);
             ModuleId = Null.SetNullInteger(dr["ModuleId"]);
         }
 
@@ -82,11 +78,11 @@ namespace com.christoc.modules.ladder.Components
         {
             get
             {
-                return GameId;
+                return FieldId;
             }
             set
             {
-                GameId = value;
+                FieldId = value;
             }
         }
 

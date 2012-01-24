@@ -18,7 +18,7 @@ namespace com.christoc.modules.ladder.Components
     public class TeamController
     {
 
-        public Team Save(Team t)
+        public Team SaveTeam(Team t)
         {
             if(t.TeamId>0)
                 UpdateTeam(t);
