@@ -152,6 +152,7 @@ namespace com.christoc.modules.ladder.Data
                 , new SqlParameter("@lastplayed", t.Name)
                 , new SqlParameter("@createdbyuserid", t.Name)
                 , new SqlParameter("@lastupdatedbyuserid", t.Name)
+                , new SqlParameter("@moduleid", t.ModuleId)
                 ));
         }
 
@@ -191,6 +192,7 @@ namespace com.christoc.modules.ladder.Data
             return SqlHelper.ExecuteReader(ConnectionString, NamePrefix + "GetTeam", new SqlParameter("@TeamId", teamId));
         }
 
+        /* games */
         public override IDataReader GetGames()
         {
             return SqlHelper.ExecuteReader(ConnectionString, NamePrefix + "GetGames");
@@ -200,6 +202,26 @@ namespace com.christoc.modules.ladder.Data
         {
             return SqlHelper.ExecuteReader(ConnectionString, NamePrefix + "GetGame", new SqlParameter("@GameId", gameId));
         }
+
+        public override int AddGame(Game g)
+        {
+            return Convert.ToInt32(SqlHelper.ExecuteScalar(ConnectionString, NamePrefix + "AddGame"
+                                                           , new SqlParameter("@PlayedDate", g.PlayedDate)
+                                                           , new SqlParameter("@CreatedByUserId", g.CreatedByUserId)
+                                                           , new SqlParameter("@LastUpdatedByUserId", g.LastUpdatedByUserId)
+                                                           , new SqlParameter("@moduleid", g.ModuleId)
+                                       ));
+        }
+
+        public override void UpdateGame(Game g)
+        {
+            SqlHelper.ExecuteNonQuery(ConnectionString, NamePrefix + "UpdateGame"
+                , new SqlParameter("@GameId", g.GameId)
+                                                           , new SqlParameter("@PlayedDate", g.PlayedDate)
+                                                           , new SqlParameter("@LastUpdatedByUserId", g.LastUpdatedByUserId)
+                                       );
+        }
+
 
         public override IDataReader GetGamePlayerSettingsByGame(int gameId)
         {
@@ -221,8 +243,8 @@ namespace com.christoc.modules.ladder.Data
             SqlHelper.ExecuteNonQuery(ConnectionString, NamePrefix + "UpdatePlayer"
                 , new SqlParameter("@UserId", p.UserId)
                 , new SqlParameter("@Games", p.Games)
-                , new SqlParameter("@Games", p.Wins)
-                , new SqlParameter("@Games", p.Losses)
+                , new SqlParameter("@Wins", p.Wins)
+                , new SqlParameter("@Losses", p.Losses)
                );
         }
 
@@ -231,23 +253,6 @@ namespace com.christoc.modules.ladder.Data
             return SqlHelper.ExecuteReader(ConnectionString, NamePrefix + "GetPlayer", new SqlParameter("@PlayerId", playerId));
         }
 
-        public override int AddGame(Game g)
-        {
-            return Convert.ToInt32(SqlHelper.ExecuteScalar(ConnectionString, NamePrefix + "AddGame"
-                                                           , new SqlParameter("@PlayedDate", g.PlayedDate)
-                                                           , new SqlParameter("@CreatedByUserId", g.CreatedByUserId)
-                                                           , new SqlParameter("@LastUpdatedByUserId", g.LastUpdatedByUserId)
-                                       ));
-        }
-
-        public override void UpdateGame(Game g)
-        {
-            SqlHelper.ExecuteNonQuery(ConnectionString, NamePrefix + "Update"
-                , new SqlParameter("@GameId", g.GameId)
-                                                           , new SqlParameter("@PlayedDate", g.PlayedDate)
-                                                           , new SqlParameter("@LastUpdatedByUserId", g.LastUpdatedByUserId)
-                                       );
-        }
 
         #endregion
 
@@ -270,6 +275,46 @@ namespace com.christoc.modules.ladder.Data
                 , new SqlParameter("@Value", gps.Value)
                 );
         }
+
+
+
+        /* field */
+        public override IDataReader GetFields()
+        {
+            return SqlHelper.ExecuteReader(ConnectionString, NamePrefix + "GetFields");
+        }
+
+        public override IDataReader GetField(int fieldId)
+        {
+            return SqlHelper.ExecuteReader(ConnectionString, NamePrefix + "GetField", new SqlParameter("@FieldId", fieldId));
+        }
+
+        public override IDataReader GetField(string fieldIdentifier)
+        {
+            return SqlHelper.ExecuteReader(ConnectionString, NamePrefix + "GetFieldByIdentifier", new SqlParameter("@FieldIdentifier", fieldIdentifier));
+        }
+        public override int AddField(Field f)
+        {
+            return Convert.ToInt32(SqlHelper.ExecuteScalar(ConnectionString, NamePrefix + "AddField"
+                                                           , new SqlParameter("@FieldName", f.FieldName)
+                                                           , new SqlParameter("@FieldIdentifier", f.FieldIdentifier)
+                                                           , new SqlParameter("@CreatedByUserId", f.CreatedByUserId)
+                                                           , new SqlParameter("@LastUpdatedByUserId", f.LastUpdatedByUserId)
+                                                           , new SqlParameter("@moduleid", f.ModuleId)
+                                       ));
+        }
+
+        public override void UpdateField(Field f)
+        {
+            SqlHelper.ExecuteNonQuery(ConnectionString, NamePrefix + "UpdateField"
+                , new SqlParameter("@FieldId", f.FieldId)
+                                                       , new SqlParameter("@FieldName", f.FieldName)
+                                                           , new SqlParameter("@FieldIdentifier", f.FieldIdentifier)
+                                                           , new SqlParameter("@LastUpdatedByUserId", f.LastUpdatedByUserId)
+                                       );
+        }
+
+
     }
 
 }

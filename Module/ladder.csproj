@@ -108,6 +108,8 @@
     <Import Include="System.Web.UI.HtmlControls" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\FieldController.cs" />
+    <Compile Include="Components\Field.cs" />
     <Compile Include="Components\PlayerController.cs" />
     <Compile Include="Components\GameController.cs" />
     <Compile Include="Components\GamePlayerSetting.cs" />
@@ -168,6 +170,8 @@
     <Compile Include="ladderSettingsBase.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="svc\Configuration.cs" />
+    <Compile Include="svc\PostHandler.cs" />
     <Compile Include="View.ascx.designer.cs">
       <DependentUpon>View.ascx</DependentUpon>
     </Compile>

@@ -9,65 +9,47 @@
 ' 
 */
 using com.christoc.modules.ladder.Data;
+using DotNetNuke.Common.Utilities;
 
 namespace com.christoc.modules.ladder.Components
 {
-    public class GameController
+    public class FieldController
     {
 
-        /* create game workflow */
+        /* create field workflow */
 
-        //save game
-        public Game SaveGame(Game g)
+        //save field
+        public Field SaveField(Field f)
         {
-            g = g.GameId > 0 ? UpdateGame(g) : CreateGame(g);
+            f = f.FieldId > 0 ? UpdateField(f) : CreateField(f);
+            return f;
+        }
 
-            foreach (var t in g.Teams)
+        private static Field CreateField(Field f)
+        {
+            f.FieldId = DataProvider.Instance().AddField(f);
+            return f;
+        }
+
+        //update field
+        private static Field UpdateField(Field f)
+        {
+            DataProvider.Instance().UpdateField(f);
+            return f;
+        }
+
+        public static Field GetField(string fieldIdentifier)
+        {
+            var f = CBO.FillObject<Field>(DataProvider.Instance().GetField(fieldIdentifier));
+            if(f!=null)
             {
-                var tc = new TeamController();
-                tc.SaveTeam(t);
+                return f;
             }
-            
-
-            return g;
-        }
-
-        private Game CreateGame(Game g)
-        {
-            g.GameId = DataProvider.Instance().AddGame(g);
-
-            return g;
+            else
+            {
+                return null;
+            }
 
         }
-
-        //update game
-        private Game UpdateGame(Game g)
-        {
-            DataProvider.Instance().UpdateGame(g);
-            return g;
-        }
-
-
-        //todo: get game
-
-        //todo: add teams to game
-
-
-
-        // gameId
-        // populate game data, populate collection of teams
-
-
-        //get games by date
-
-        //get games by team
-
-        //get games by player
-
-        //get games by....
-
-
-
-
     }
 }

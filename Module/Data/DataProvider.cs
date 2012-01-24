@@ -87,10 +87,7 @@ namespace com.christoc.modules.ladder.Data
 
         public abstract IDataReader GetTeam(int teamId);
 
-        public abstract IDataReader GetGames();
-
-        public abstract IDataReader GetGame(int gameId);
-
+       
         
         /*game player settings*/
         public abstract void AddGamePlayerSetting(GamePlayerSetting gps);
@@ -105,11 +102,21 @@ namespace com.christoc.modules.ladder.Data
         public abstract void UpdatePlayer(Player p);
 
         public abstract IDataReader GetPlayer(int playerId);
+
+        /* field */
+        public abstract IDataReader GetFields();
+        public abstract IDataReader GetField(int fieldId);
+        public abstract IDataReader GetField(string fieldIdentifier);
+        public abstract int AddField(Field f);
+        public abstract void UpdateField(Field f);
         
+
 
         /* game */
         public abstract int AddGame(Game g);
         public abstract void UpdateGame(Game g);
+        public abstract IDataReader GetGames();
+        public abstract IDataReader GetGame(int gameId);
 
         #endregion
 
