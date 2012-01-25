@@ -23,7 +23,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Christoc.com")]
 [assembly: AssemblyProduct("")]
-[assembly: AssemblyCopyright("2010 Christoc.com")]
+[assembly: AssemblyCopyright("2012 Christoc.com")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]

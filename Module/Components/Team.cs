@@ -25,6 +25,7 @@ namespace com.christoc.modules.ladder.Components
         public DateTime LastPlayed { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime LastUpdatedDate { get; set; }
+        public int Score { get; set; }
         public int Games { get; set; }
         public int Wins { get; set; }
         public int Losses { get; set; }
