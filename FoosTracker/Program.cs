@@ -11,21 +11,24 @@
 
 using System;
 using Microsoft.SPOT.Hardware;
+using Microsoft.SPOT.Net.NetworkInformation;
 using SecretLabs.NETMF.Hardware.NetduinoPlus;
 
-namespace FoosTracker
+namespace com.christoc.netduino.FoosTracker
 {
     public class Program
     {
 
         //create two teams (away/home)
-        private static Team awayTeam = Team.CreateTeam(1, "Away");
-        private static Team homeTeam = Team.CreateTeam(2, "Home");
+
+        private static Team awayTeam;
+        private static Team homeTeam;
+        private static Game _currentGame;
 
         private const int WinningScore = 10;
 
-        static readonly OutputPort awayLed = new OutputPort(Pins.GPIO_PIN_D12, false);
-        static readonly OutputPort homeLed = new OutputPort(Pins.GPIO_PIN_D13, false);
+        static readonly OutputPort AwayLed = new OutputPort(Pins.GPIO_PIN_D12, false);
+        static readonly OutputPort HomeLed = new OutputPort(Pins.GPIO_PIN_D13, false);
 
         public static void Main()
         {
@@ -45,6 +48,7 @@ namespace FoosTracker
             homeTeamAdd.OnInterrupt += homeTeamAdd_OnInterrupt;
             homeTeamSubtract.OnInterrupt += homeTeamSubtract_OnInterrupt;
 
+            _currentGame.FieldIdentifier = Mac();
 
             //todo: use the mac address as the identifier
             
@@ -60,23 +64,25 @@ namespace FoosTracker
 
         private static void awayTeamAdd_OnInterrupt(uint data1, uint data2, DateTime time)
         {
-            awayTeam.AddScore();
-            awayLed.Write(true);
+            awayTeam.Score++;
+            AwayLed.Write(true);
+
+            //call the update webservice?
         }
         private static void awayTeamSubtract_OnInterrupt(uint data1, uint data2, DateTime time)
         {
-            awayTeam.SubtractScore();
-            awayLed.Write(false);
+            awayTeam.Score--;
+            AwayLed.Write(false);
         }
         private static void homeTeamAdd_OnInterrupt(uint data1, uint data2, DateTime time)
         {
-            homeTeam.AddScore();
-            homeLed.Write(true);
+            homeTeam.Score++;
+            HomeLed.Write(true);
         }
         private static void homeTeamSubtract_OnInterrupt(uint data1, uint data2, DateTime time)
         {
-            homeTeam.SubtractScore();
-            homeLed.Write(false);
+            homeTeam.Score--;
+            HomeLed.Write(false);
         }
 
         private static void CheckTeamScores()
@@ -87,13 +93,12 @@ namespace FoosTracker
 
             if (awayTeam.Score >= WinningScore)
             {
-                awayTeam.Wins++;
-                homeTeam.Losses++;
+                //todo: does the Netduino need to keep track of wins/losses?
+                
             }
             else
             {//away team lost, home team won
-                awayTeam.Losses++;
-                homeTeam.Wins++;
+                
             }
             //todo: play game over audio
 
@@ -106,13 +111,46 @@ namespace FoosTracker
 
         private static void NewGame()
         {
+            
             //reset the scores
             awayTeam.Score = 0;
             homeTeam.Score = 0;
+
+            _currentGame = new Game();
+            _currentGame.FieldIdentifier = Mac();
+            _currentGame.Teams.Add(awayTeam);
+            _currentGame.Teams.Add(homeTeam);
+            //todo: call the webservice to initialize the new game
         }
 
         //todo: record the temperature measurement at start of game, end of game
         //todo: allow user selection for teams
 
+
+        //http://snipt.net/Evotodi/get-netduino-plus-mac-address/
+        public static string Mac()
+        {
+            NetworkInterface[] netIf = NetworkInterface.GetAllNetworkInterfaces();
+
+            string macAddress = "";
+
+            // Create a character array for hexidecimal conversion.
+            const string hexChars = "0123456789ABCDEF";
+
+            // Loop through the bytes.
+            for (int b = 0; b < 6; b++)
+            {
+                // Grab the top 4 bits and append the hex equivalent to the return string.
+                macAddress += hexChars[netIf[0].PhysicalAddress[b] >> 4];
+
+                // Mask off the upper 4 bits to get the rest of it.
+                macAddress += hexChars[netIf[0].PhysicalAddress[b] & 0x0F];
+
+                // Add the dash only if the MAC address is not finished.
+                if (b < 5) macAddress += "-";
+            }
+
+            return macAddress;
+        }
     }
 }
