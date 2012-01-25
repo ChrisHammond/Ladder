@@ -30,7 +30,7 @@ namespace com.christoc.modules.ladder.Components
         public int CreatedByUserId { get; set; }
         public int LastUpdatedByUserId { get; set; }
 
-        public int FieldId { get; set; }
+        public string FieldIdentifier { get; set; }
 
         //Read Only Props
         ///<summary>
@@ -74,8 +74,8 @@ namespace com.christoc.modules.ladder.Components
             LastUpdatedDate = Null.SetNullDateTime(dr["LastUpdatedDate"]);
             CreatedByUserId = Null.SetNullInteger(dr["CreatedByUserId"]);
             LastUpdatedByUserId = Null.SetNullInteger(dr["LastUpdatedByUserId"]);
-            FieldId = Null.SetNullInteger(dr["FieldId"]);
-            ModuleId = Null.SetNullInteger(dr["ModuleId"]);
+            FieldIdentifier = Null.SetNullString(dr["FieldIdentifier"]);
+            PortalId = Null.SetNullInteger(dr["PortalId"]);
         }
 
         int IHydratable.KeyID

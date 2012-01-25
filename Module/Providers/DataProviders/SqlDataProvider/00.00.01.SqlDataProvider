@@ -137,9 +137,9 @@ IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwne
 	BEGIN
 CREATE TABLE {databaseOwner}{objectQualifier}Ladder_Field
 	(
-	fieldid int NOT NULL IDENTITY (1, 1),
+	fieldid int NOT NULL IDENTITY (1,1),
 	fieldname nvarchar(100) NULL,
-	fieldidentifier binary(50) NULL,
+	fieldidentifier binary(50) NOT NULL,
 	createddate datetime NOT NULL,
 	lastupdateddate datetime NOT NULL,
 	createdbyuserid int NOT NULL,
@@ -153,7 +153,7 @@ GO
 ALTER TABLE {databaseOwner}{objectQualifier}Ladder_Field ADD CONSTRAINT
 	PK_{objectQualifier}Ladder_Field PRIMARY KEY CLUSTERED 
 	(
-	fieldid
+	fieldidentifier
 	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 
 GO
@@ -173,7 +173,7 @@ IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwne
 			lastupdateddate datetime NOT NULL,
 			createdbyuserid int NOT NULL,
 			lastupdatedbyuserid int NOT NULL,
-			fieldid int NULL,
+			fieldidentifier binary(50) NULL,
 			portalid int NOT NULL
 			)  ON [PRIMARY]
 	END
@@ -190,10 +190,10 @@ GO
 ALTER TABLE {databaseOwner}{objectQualifier}Ladder_Game ADD CONSTRAINT
 	FK_{objectQualifier}Ladder_Game_{objectQualifier}Ladder_Field FOREIGN KEY
 	(
-	fieldid
+	fieldidentifier
 	) REFERENCES {databaseOwner}{objectQualifier}Ladder_Field
 	(
-	fieldid
+	fieldidentifier
 	) ON UPDATE  NO ACTION 
 	 ON DELETE  NO ACTION 
 	
@@ -684,7 +684,7 @@ SELECT [gameid]
       ,[lastupdateddate]
       ,[createdbyuserid]
       ,[lastupdatedbyuserid]
-	  ,[fieldid]
+	  ,[fieldidentifier]
 	  ,[portalId]
   FROM {databaseOwner}[{objectQualifier}Ladder_Game]
   WHERE
@@ -706,7 +706,7 @@ SELECT [gameid]
       ,[lastupdateddate]
       ,[createdbyuserid]
       ,[lastupdatedbyuserid]
-	  ,[fieldid]
+	  ,[fieldidentifier]
 	  ,[portalid]
   FROM {databaseOwner}[{objectQualifier}Ladder_Game]
   WHERE
@@ -823,7 +823,6 @@ SELECT [fieldid]
       ,[lastupdateddate]
       ,[createdbyuserid]
       ,[lastupdatedbyuserid]
-	  ,[fieldid]
 	  ,[portalId]
   FROM {databaseOwner}[{objectQualifier}Ladder_Field]
   WHERE 
@@ -845,7 +844,6 @@ SELECT [fieldid]
       ,[lastupdateddate]
       ,[createdbyuserid]
       ,[lastupdatedbyuserid]
-	  ,[fieldid]
 	  ,[portalId]
   FROM {databaseOwner}[{objectQualifier}Ladder_Field]
   WHERE
@@ -868,7 +866,6 @@ SELECT [fieldid]
       ,[lastupdateddate]
       ,[createdbyuserid]
       ,[lastupdatedbyuserid]
-	  ,[fieldid]
 	  ,[portalid]
   FROM {databaseOwner}[{objectQualifier}Ladder_Field]
   WHERE
