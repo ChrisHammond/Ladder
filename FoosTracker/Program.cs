@@ -10,7 +10,12 @@
 */
 
 using System;
+using System.Net;
+using System.Text;
+using System.Net.Sockets;
+using Microsoft.SPOT;
 using Microsoft.SPOT.Hardware;
+
 using Microsoft.SPOT.Net.NetworkInformation;
 using SecretLabs.NETMF.Hardware.NetduinoPlus;
 
@@ -42,8 +47,16 @@ namespace com.christoc.netduino.FoosTracker
             var homeTeamSubtract = new InterruptPort(Pins.GPIO_PIN_D5, true, Port.ResistorMode.PullUp,
                                                Port.InterruptMode.InterruptEdgeLow);
 
+            //initialize the game and teams
+            _currentGame = new Game();
+            homeTeam = new Team { Name = "home", Score = 0, TeamId = 1 };
+            awayTeam = new Team { Name = "away", Score = 0, TeamId = 1 };
+            //_currentGame.Teams.Add(homeTeam);
+            //_currentGame.Teams.Add(awayTeam);
+
+
             //register the interrupts to keep track of button presses
-            awayTeamAdd.OnInterrupt+=awayTeamAdd_OnInterrupt;
+            awayTeamAdd.OnInterrupt += awayTeamAdd_OnInterrupt;
             awayTeamSubtract.OnInterrupt += awayTeamSubtract_OnInterrupt;
             homeTeamAdd.OnInterrupt += homeTeamAdd_OnInterrupt;
             homeTeamSubtract.OnInterrupt += homeTeamSubtract_OnInterrupt;
@@ -51,16 +64,16 @@ namespace com.christoc.netduino.FoosTracker
             _currentGame.FieldIdentifier = Mac();
 
             //todo: use the mac address as the identifier
-            
 
-            while(true)
+
+            while (true)
             {
                 //todo: check for Max score/win
                 CheckTeamScores();
             }
-// ReSharper disable FunctionNeverReturns
+            // ReSharper disable FunctionNeverReturns
         }
-// ReSharper restore FunctionNeverReturns
+        // ReSharper restore FunctionNeverReturns
 
         private static void awayTeamAdd_OnInterrupt(uint data1, uint data2, DateTime time)
         {
@@ -88,21 +101,32 @@ namespace com.christoc.netduino.FoosTracker
         private static void CheckTeamScores()
         {
             if (awayTeam.Score < WinningScore && homeTeam.Score < WinningScore) return;
-            
+
             //game over someone got 10
 
             if (awayTeam.Score >= WinningScore)
             {
                 //todo: does the Netduino need to keep track of wins/losses?
-                
+
             }
             else
             {//away team lost, home team won
-                
+
             }
             //todo: play game over audio
 
             //todo: send the game information out to web service
+
+            //build json
+            var jsonString = BuildJson();
+
+            // convert sample to byte array
+            byte[] contentBuffer = Encoding.UTF8.GetBytes(jsonString);
+            // produce request
+            using (Socket connection = Connect("192.168.1.9", 5000))
+            {
+                SendRequest(connection, jsonString);
+            }
 
             //call NewGame to reset the teams
             NewGame();
@@ -111,20 +135,79 @@ namespace com.christoc.netduino.FoosTracker
 
         private static void NewGame()
         {
-            
+
             //reset the scores
             awayTeam.Score = 0;
             homeTeam.Score = 0;
 
             _currentGame = new Game();
             _currentGame.FieldIdentifier = Mac();
-            _currentGame.Teams.Add(awayTeam);
-            _currentGame.Teams.Add(homeTeam);
+            //_currentGame.Teams.Add(awayTeam);
+            //_currentGame.Teams.Add(homeTeam);
             //todo: call the webservice to initialize the new game
+
+
+            //reset the LEDs
+
+            HomeLed.Write(false);
+            AwayLed.Write(false);
+        }
+
+
+
+        public static string BuildJson()
+        {
+            //sample json for GAME
+            //"{\"GameId\":0,\"PlayedDate\":\"\\/Date(1327561544141)\\/\",\"CreatedDate\":\"\\/Date(-62135568000000)\\/\",\"LastUpdatedDate\":\"\\/Date(-62135568000000)\\/\",\"PortalId\":0,\"ModuleId\":0,\"Teams\":[{\"TeamId\":0,\"Name\":\"Home\",\"FirstPlayed\":\"\\/Date(-62135568000000)\\/\",\"LastPlayed\":\"\\/Date(-62135568000000)\\/\",\"CreatedDate\":\"\\/Date(-62135568000000)\\/\",\"LastUpdatedDate\":\"\\/Date(-62135568000000)\\/\",\"Score\":4,\"Games\":0,\"Wins\":1,\"Losses\":0,\"ModuleId\":0,\"CreatedByUserId\":0,\"LastUpdatedByUserId\":0,\"PortalId\":0,\"Players\":[],\"CreatedByUser\":\"\",\"LastUpdatedByUser\":\"\"},{\"TeamId\":0,\"Name\":\"Away\",\"FirstPlayed\":\"\\/Date(-62135568000000)\\/\",\"LastPlayed\":\"\\/Date(-62135568000000)\\/\",\"CreatedDate\":\"\\/Date(-62135568000000)\\/\",\"LastUpdatedDate\":\"\\/Date(-62135568000000)\\/\",\"Score\":2,\"Games\":1,\"Wins\":1,\"Losses\":0,\"ModuleId\":0,\"CreatedByUserId\":0,\"LastUpdatedByUserId\":0,\"PortalId\":0,\"Players\":[],\"CreatedByUser\":\"\",\"LastUpdatedByUser\":\"\"}],\"CreatedByUserId\":0,\"LastUpdatedByUserId\":0,\"FieldIdentifier\":\"Test\",\"CreatedByUser\":\"\",\"LastUpdatedByUser\":\"\"}";
+
+            var sb = string.Empty;
+            sb =
+                "{\"Teams\":[{\"TeamId\":0,\"Name\":\"Home\",\"Score\":\"" + homeTeam.Score + "\",\"Games\":0,\"Wins\":0,\"Losses\":0},{\"TeamId\":1,\"Name\":\"Away\",\"Score\":\"" + awayTeam.Score + "\",\"Games\":0,\"Wins\":0,\"Losses\":0}],\"FieldIdentifier\":\"" + _currentGame.FieldIdentifier + "\"}";
+            return sb;
+
         }
 
         //todo: record the temperature measurement at start of game, end of game
         //todo: allow user selection for teams
+
+
+
+        static Socket Connect(string host, int timeout)
+        {
+            // look up host’s domain name to find IP address(es)
+            IPHostEntry hostEntry = Dns.GetHostEntry(host);
+            // extract a returned address
+            IPAddress hostAddress = hostEntry.AddressList[0];
+            IPEndPoint remoteEndPoint = new IPEndPoint(hostAddress, 80);
+            // connect!
+            Debug.Print("connect...");
+            var connection = new Socket(AddressFamily.InterNetwork,
+            SocketType.Stream, ProtocolType.Tcp);
+            connection.Connect(remoteEndPoint);
+            connection.SetSocketOption(SocketOptionLevel.Tcp,
+            SocketOptionName.NoDelay, true);
+            connection.SendTimeout = timeout;
+            return connection;
+        }
+
+        static void SendRequest(Socket s, string content)
+        {
+            byte[] contentBuffer = Encoding.UTF8.GetBytes(content);
+            const string CRLF = "\r\n";
+            var requestLine = "PUT /svc/ladder/NewGame HTTP/1.1" + CRLF;
+            byte[] requestLineBuffer = Encoding.UTF8.
+            GetBytes(requestLine);
+            var headers =
+            "Host: dnndev" + CRLF +
+            "Content-Type: application/json" + CRLF +
+            "Content-Length: " + contentBuffer.Length + CRLF +
+            CRLF;
+            byte[] headersBuffer = Encoding.UTF8.GetBytes(headers);
+            s.Send(requestLineBuffer);
+            s.Send(headersBuffer);
+            s.Send(contentBuffer);
+        }
+
 
 
         //http://snipt.net/Evotodi/get-netduino-plus-mac-address/
