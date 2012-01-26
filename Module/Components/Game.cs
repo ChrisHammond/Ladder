@@ -56,6 +56,11 @@ namespace com.christoc.modules.ladder.Components
         }
 
 
+        public Game()
+        {
+            Teams = new List<Team>();
+        }
+
         public Game Save()
         {
             var gc = new GameController();

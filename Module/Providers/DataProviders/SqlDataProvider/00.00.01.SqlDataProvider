@@ -139,7 +139,7 @@ CREATE TABLE {databaseOwner}{objectQualifier}Ladder_Field
 	(
 	fieldid int NOT NULL IDENTITY (1,1),
 	fieldname nvarchar(100) NULL,
-	fieldidentifier binary(50) NOT NULL,
+	fieldidentifier nvarchar(50) NOT NULL,
 	createddate datetime NOT NULL,
 	lastupdateddate datetime NOT NULL,
 	createdbyuserid int NOT NULL,
@@ -173,7 +173,7 @@ IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwne
 			lastupdateddate datetime NOT NULL,
 			createdbyuserid int NOT NULL,
 			lastupdatedbyuserid int NOT NULL,
-			fieldidentifier binary(50) NULL,
+			fieldidentifier nvarchar(50) NULL,
 			portalid int NOT NULL
 			)  ON [PRIMARY]
 	END
@@ -759,7 +759,7 @@ GO
 
 CREATE PROCEDURE {databaseOwner}[{objectQualifier}Ladder_AddField]
 	@fieldName nvarchar(100)
-	, @fieldIdentifier binary(50)
+	, @fieldIdentifier nvarchar(50)
 	, @createdbyuserid int
 	, @lastupdatedbyuserid int
 	, @portalid int
@@ -795,7 +795,7 @@ GO
 CREATE PROCEDURE {databaseOwner}[{objectQualifier}Ladder_UpdateField]
 	@fieldId int
 	, @fieldName nvarchar(100)
-	, @fieldIdentifier binary(50)
+	, @fieldIdentifier nvarchar(50)
 	, @lastupdatedbyuserid int
 AS
 
@@ -856,7 +856,7 @@ IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwner}[{
 GO
 
 CREATE PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetFieldByIdentifier]
-		@fieldidentifier binary
+		@fieldidentifier nvarchar
 AS
 
 SELECT [fieldid]
