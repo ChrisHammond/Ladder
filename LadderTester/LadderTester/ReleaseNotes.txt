@@ -1,0 +1,15 @@
+﻿<h3>LadderTester</h3>
+<p class="Contributor">
+	Christoc.com <br />
+	<a href="mailto:modules@christoc.com">modules@christoc.com</a><br />
+	<a href=http://www.christoc.com>http://www.christoc.com</a><br />
+</p>
+<hr/>
+<div class="License">
+	<h3>About the LadderTester</h3>
+	<p class="Owner">
+		<b>Version 00.00.01</b><br /><br />
+	</p>
+	<p>The module is only used to test the web services for the Ladder module, part of the #DNNFoos project.</p>
+	
+</div>
