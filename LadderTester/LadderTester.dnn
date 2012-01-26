@@ -1,0 +1,67 @@
+<dotnetnuke type="Package" version="5.0">
+  <packages>
+    <package name="LadderTester" type="Module" version="00.00.01">
+      <friendlyName>LadderTester</friendlyName>
+      <description>This module is only used to test out the web services for the Ladder module for #DNNFoos</description>
+      <iconFile>Images/icon_extensions.gif</iconFile>
+      <owner>
+        <name>Christoc.com</name>
+        <organization>Christoc.com</organization>
+        <url>http://www.christoc.com</url>
+        <email>modules@christoc.com</email>
+      </owner>
+      <license src="License.txt"></license>
+      <releaseNotes src="ReleaseNotes.txt"></releaseNotes>
+      <dependencies>
+        <dependency type="CoreVersion">06.00.00</dependency>
+      </dependencies>
+
+      <components>
+        <component type="ResourceFile">
+          <resourceFiles>
+            <basePath>DesktopModules/LadderTester</basePath>
+            <resourceFile>
+              <name>Resources.zip</name>
+            </resourceFile>
+          </resourceFiles>
+        </component>
+
+        <component type="Module">
+          <desktopModule>
+            <moduleName>LadderTester</moduleName>
+            <foldername>LadderTester</foldername>
+            <businessControllerClass>com.christoc.modules.LadderTester.Components.FeatureController</businessControllerClass>
+            <supportedFeatures />
+            <moduleDefinitions>
+              <moduleDefinition>
+                <friendlyName>LadderTester</friendlyName>
+                <defaultCacheTime>0</defaultCacheTime>
+                <moduleControls>
+                  <moduleControl>
+                    <controlKey />
+                    <controlSrc>DesktopModules/LadderTester/View.ascx</controlSrc>
+                    <supportsPartialRendering>False</supportsPartialRendering>
+                    <controlTitle />
+                    <controlType>View</controlType>
+                    <iconFile />
+                    <helpUrl />
+                    <viewOrder>0</viewOrder>
+                  </moduleControl>
+
+                </moduleControls>
+              </moduleDefinition>
+            </moduleDefinitions>
+          </desktopModule>
+        </component>
+        <component type="Assembly">
+          <assemblies>
+            <basePath>bin</basePath>
+            <assembly>
+              <name>LadderTester.dll</name>
+            </assembly>
+          </assemblies>
+        </component>
+      </components>
+    </package>
+  </packages>
+</dotnetnuke>
