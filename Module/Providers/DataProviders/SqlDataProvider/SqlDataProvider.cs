@@ -205,6 +205,8 @@ namespace com.christoc.modules.ladder.Data
 
         public override int AddGame(Game g)
         {
+
+            //TODO: something failed here
             return Convert.ToInt32(SqlHelper.ExecuteScalar(ConnectionString, NamePrefix + "AddGame"
                                                            , new SqlParameter("@PlayedDate", g.PlayedDate)
                                                            , new SqlParameter("@CreatedByUserId", g.CreatedByUserId)

@@ -60,6 +60,11 @@ namespace com.christoc.modules.ladder.Components
             }
         }
 
+        public Team()
+        {
+            Players = new List<Player>();
+            
+        }
 
         public Team Save()
         {
