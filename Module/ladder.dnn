@@ -11,7 +11,7 @@
       </owner>
       <license>
 /*
-' Copyright (c) 2010  Christoc.com
+' Copyright (c) 2012  Christoc.com
 '  All rights reserved.
 ' 
 ' THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -115,7 +115,7 @@
                     <add verb="GET" path="svc/ladder/*" type="com.christoc.modules.ladder.svc.PostHandler, ladder" />
                   </node>
                   <node path="/configuration/system.webServer/handlers" action="update" key="name" collision="overwrite">
-                    <add name="LadderServicesPosthandler" verb="GET" path="svc/ladder/*" type="com.christoc.modules.ladder.svc.PostHandler, ladder" preCondition="integratedMode" />
+                    <add name="LadderServicesPuthandler" verb="PUT" path="svc/ladder/*" type="com.christoc.modules.ladder.svc.PostHandler, ladder" preCondition="integratedMode" />
                   </node>
                 </nodes>
               </configuration>
