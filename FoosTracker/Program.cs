@@ -162,7 +162,7 @@ namespace com.christoc.netduino.FoosTracker
 
             var sb = string.Empty;
             sb =
-                "{\"Teams\":[{\"TeamId\":0,\"Name\":\"Home\",\"Score\":\"" + homeTeam.Score + "\",\"Games\":0,\"Wins\":0,\"Losses\":0},{\"TeamId\":1,\"Name\":\"Away\",\"Score\":\"" + awayTeam.Score + "\",\"Games\":0,\"Wins\":0,\"Losses\":0}],\"FieldIdentifier\":\"" + _currentGame.FieldIdentifier + "\"}";
+                "{\"Teams\":[{\"TeamId\":0,\"Name\":\"Home\",\"Score\":\"" + homeTeam.Score + "\",\"Games\":0,\"Wins\":0,\"Losses\":0},{\"TeamId\":0,\"Name\":\"Away\",\"Score\":\"" + awayTeam.Score + "\",\"Games\":0,\"Wins\":0,\"Losses\":0}],\"FieldIdentifier\":\"" + _currentGame.FieldIdentifier + "\"}";
             return sb;
 
         }
@@ -194,7 +194,7 @@ namespace com.christoc.netduino.FoosTracker
         {
             byte[] contentBuffer = Encoding.UTF8.GetBytes(content);
             const string CRLF = "\r\n";
-            var requestLine = "PUT /svc/ladder/NewGame HTTP/1.1" + CRLF;
+            var requestLine = "PUT /svc/ladder/Game HTTP/1.1" + CRLF;
             byte[] requestLineBuffer = Encoding.UTF8.
             GetBytes(requestLine);
             var headers =
