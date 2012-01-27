@@ -11,11 +11,10 @@
 */
 
 using System;
+using System.IO;
+using System.Net;
+using System.Text;
 using DotNetNuke.Services.Exceptions;
-using DotNetNuke.Entities.Modules;
-using DotNetNuke.Entities.Modules.Actions;
-using DotNetNuke.Services.Localization;
-using DotNetNuke.Security;
 
 
 namespace com.christoc.modules.LadderTester
@@ -39,7 +38,8 @@ namespace com.christoc.modules.LadderTester
 
         private void InitializeComponent()
         {
-            this.Load += new System.EventHandler(this.Page_Load);
+            Load += Page_Load;
+
         }
 
 
@@ -52,7 +52,13 @@ namespace com.christoc.modules.LadderTester
         {
             try
             {
-
+                //"{\"Teams\":[{\"TeamId\":0,\"Name\":\"Home\",\"Score\":\"" + homeTeam.Score + "\",\"Games\":0,\"Wins\":0,\"Losses\":0},{\"TeamId\":1,\"Name\":\"Away\",\"Score\":\"" + awayTeam.Score + "\",\"Games\":0,\"Wins\":0,\"Losses\":0}],\"FieldIdentifier\":\"" + _currentGame.FieldIdentifier + "\"}";
+                if(!Page.IsPostBack)
+                {
+                    txtFieldIdentifier.Text = "00-B0-D0-86-BB-F7";
+                    txtHomeTeam.Text = "10";
+                    txtAwayTeam.Text = "5";
+                }
             }
             catch (Exception exc) //Module failed to load
             {
@@ -65,9 +71,55 @@ namespace com.christoc.modules.LadderTester
         protected void lbSubmit_Click(object sender, EventArgs e)
         {
             //call the webservice 
+            txtGameJson.Text = BuildJson();
+
+            CallWebService(txtGameJson.Text);
+
         }
 
+        private string BuildJson()
+        {
+            var sb = new StringBuilder();
+            if(txtGameId.Text.Trim()!=string.Empty)
+                sb.Append("{\"GameId\",");
+            else
+            {
+                sb.Append("{");
+            }
 
+            sb.Append("\"Teams\":[{\"TeamId\":0,\"Name\":\"Home\",\"Score\":\"");
+            sb.Append(txtHomeTeam.Text);
+            sb.Append("\",\"Games\":0,\"Wins\":0,\"Losses\":0},{\"TeamId\":0,\"Name\":\"Away\",\"Score\":\"");
+            sb.Append(txtAwayTeam.Text);
+            sb.Append("\",\"Games\":0,\"Wins\":0,\"Losses\":0}],\"FieldIdentifier\":\"");
+            sb.Append(txtFieldIdentifier.Text);
+            sb.Append("\"}");
+            return sb.ToString();
+        }
+
+        private void CallWebService(string jsonValue)
+        {
+            var address = "http://dnndev/svc/ladder/Game";
+            var hwr = WebRequest.Create(address) as HttpWebRequest;
+            hwr.Method = "PUT";
+            hwr.ContentType = "application/json";
+            byte[] byteData = UTF8Encoding.UTF8.GetBytes(jsonValue.ToString());
+            hwr.ContentLength = byteData.Length;
+            using (Stream putStream = hwr.GetRequestStream())
+            {
+                putStream.Write(byteData,0,byteData.Length);
+            }
+            // Get response  
+            //using (HttpWebResponse response = hwr.GetResponse() as HttpWebResponse)
+            //{
+            //    // Get the response stream  
+            //    StreamReader reader = new StreamReader(hwr.GetRequestStream());
+
+            //    // Console application output  
+            //    txtResult.Text = reader.ReadToEnd();
+            //}  
+
+        }
     }
 
 }

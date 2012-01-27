@@ -13,13 +13,40 @@ namespace com.christoc.modules.LadderTester {
     public partial class View {
         
         /// <summary>
-        /// txtGameJson control.
+        /// txtGameId control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtGameJson;
+        protected global::System.Web.UI.WebControls.TextBox txtGameId;
+        
+        /// <summary>
+        /// txtHomeTeam control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtHomeTeam;
+        
+        /// <summary>
+        /// txtAwayTeam control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtAwayTeam;
+        
+        /// <summary>
+        /// txtFieldIdentifier control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtFieldIdentifier;
         
         /// <summary>
         /// lbSubmit control.
@@ -29,6 +56,15 @@ namespace com.christoc.modules.LadderTester {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbSubmit;
+        
+        /// <summary>
+        /// txtGameJson control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtGameJson;
         
         /// <summary>
         /// txtResult control.
