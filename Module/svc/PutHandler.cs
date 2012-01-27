@@ -8,7 +8,7 @@ using DotNetNuke.Entities.Portals;
 
 namespace com.christoc.modules.ladder.svc
 {
-    public class PostHandler : IHttpHandler
+    public class PutHandler : IHttpHandler
     {
 
         public bool IsReusable
@@ -18,6 +18,9 @@ namespace com.christoc.modules.ladder.svc
 
         public void ProcessRequest(HttpContext context)
         {
+
+            var gc = new GameController();
+
             HttpResponse response = context.Response;
             var written = false;
 
@@ -44,28 +47,53 @@ namespace com.christoc.modules.ladder.svc
             */
 
 
-            var CurrentGame = jss.Deserialize<Game>(jsonBody);
+            var currentGame = jss.Deserialize<Game>(jsonBody);
 
             //todo: authenticate the request, perhaps with Netduino ID as a ModuleSetting?
 
-            if (CurrentGame != null)
+            if (currentGame != null)
             {
-                //check if a Field exists, if not add it
-                var f = FieldController.GetField(CurrentGame.FieldIdentifier);
-                if (f == null)
-                {
-                    f = new Field { FieldIdentifier = CurrentGame.FieldIdentifier, FieldName = "New Field" };
-                    f = f.Save();
-                }
 
+                //todo: we need to lookup the game based on the GameId if passed in the json, if so, then combine all the new stats
+                if (currentGame.GameId > 0)
+                {
+                    var existingGame = gc.GetGame(currentGame.GameId);
+                    currentGame.FieldIdentifier = existingGame.FieldIdentifier;
+                    currentGame.CreatedDate = existingGame.CreatedDate;
+                    currentGame.CreatedByUserId = existingGame.CreatedByUserId;
+                    currentGame.LastUpdatedByUserId = existingGame.LastUpdatedByUserId;
+                    currentGame.LastUpdatedDate = DateTime.Now;
+                    currentGame.PlayedDate = DateTime.Now;
+                    currentGame.PortalId = PortalId;
+                }
+                else
+                {
+                    currentGame.CreatedDate = DateTime.Now;
+                    currentGame.CreatedByUserId = 1;
+                    currentGame.LastUpdatedByUserId = 1;
+                    currentGame.LastUpdatedDate = DateTime.Now;
+                    currentGame.PlayedDate = DateTime.Now;
+                    currentGame.PortalId = PortalId;
+
+                    //check if a Field exists, if not add it
+                    var f = FieldController.GetField(currentGame.FieldIdentifier);
+                    if (f == null)
+                    {
+                        f = new Field { FieldIdentifier = currentGame.FieldIdentifier, FieldName = currentGame.FieldIdentifier, CreatedByUserId = 1, CreatedDate = DateTime.Now, LastUpdatedByUserId = 1, LastUpdatedDate = DateTime.Now };
+                        f = f.Save();
+                    }
+
+                    currentGame.FieldIdentifier = f.FieldIdentifier;
+                    
+                }
+                
                 //todo:add the teams to the game
 
                 //g = new Game {FieldIdentifier = f.FieldIdentifier, PortalId = PortalId, PlayedDate = DateTime.Now};
 
                 //save the game
-                var gc = new GameController();
-
-                CurrentGame = gc.SaveGame(CurrentGame);
+                
+                currentGame = gc.SaveGame(currentGame);
 
                 //TODO: how to keep track of games in progress?
                 
@@ -74,6 +102,8 @@ namespace com.christoc.modules.ladder.svc
 
             response.Write("Test");
 
+
+            //todo: return the GameId
 
             //update score
 

@@ -669,6 +669,31 @@ SELECT [teamid]
 		[teamid] = @teamid
 GO
 
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwner}[{objectQualifier}Ladder_GetTeamByName]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	DROP PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetTeamByName]
+GO
+
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetTeamByName]
+		@Name nvarchar(100)
+AS
+
+SELECT [teamid]
+      ,[name]
+      ,[games]
+      ,[wins]
+      ,[losses]
+      ,[firstplayed]
+      ,[lastplayed]
+      ,[createdbyuserid]
+      ,[createddate]
+      ,[lastupdatedbyuserid]
+      ,[lastupdateddate]
+	  ,[portalid]
+  FROM {databaseOwner}[{objectQualifier}Ladder_Team]
+  WHERE
+		[name] = @Name
+GO
+
 
 IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwner}[{objectQualifier}Ladder_GetGames]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
 	DROP PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetGames]
@@ -856,7 +881,7 @@ IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwner}[{
 GO
 
 CREATE PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetFieldByIdentifier]
-		@fieldidentifier nvarchar
+		@fieldidentifier nvarchar(50)
 AS
 
 SELECT [fieldid]
@@ -872,5 +897,65 @@ SELECT [fieldid]
 	[fieldidentifier] = @fieldidentifier
 
 GO
+
+
+
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwner}[{objectQualifier}Ladder_AddGameTeam]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	DROP PROCEDURE {databaseOwner}[{objectQualifier}Ladder_AddGameTeam]
+GO
+
+
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}Ladder_AddGameTeam]
+	@gameid int
+	, @teamid int
+	, @score int
+	, @win bit
+	, @home bit
+AS
+
+
+INSERT INTO [dnndev].[dbo].[dnn_Ladder_GameTeam]
+           ([gameid]
+           ,[teamid]
+           ,[score]
+           ,[win]
+           ,[home])
+     VALUES
+           (@gameid
+	, @teamid
+	, @score
+	, @win
+	, @home)
+
+GO
+
+
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwner}[{objectQualifier}Ladder_UpdateGameTeam]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	DROP PROCEDURE {databaseOwner}[{objectQualifier}Ladder_UpdateGameTeam]
+GO
+
+
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}Ladder_UpdateGameTeam]
+	@gameid int
+	, @teamid int
+	, @score int
+	, @win bit
+	, @home bit
+AS
+
+
+UPDATE {databaseOwner}.[{objectQualifier}Ladder_UpdateGameTeam]
+           set
+           [score] = @score
+           , [win] = @win
+	   , [home] = @home
+where 
+           gameid = @gameid
+	and teamid = @teamid
+
+
+GO
+
+
 
 

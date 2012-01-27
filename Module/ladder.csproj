@@ -166,7 +166,7 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="svc\Configuration.cs" />
-    <Compile Include="svc\PostHandler.cs" />
+    <Compile Include="svc\PutHandler.cs" />
     <Compile Include="View.ascx.designer.cs">
       <DependentUpon>View.ascx</DependentUpon>
     </Compile>

@@ -8,7 +8,9 @@
 ' THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ' 
 */
+using System;
 using com.christoc.modules.ladder.Data;
+using DotNetNuke.Common.Utilities;
 
 namespace com.christoc.modules.ladder.Components
 {
@@ -20,15 +22,32 @@ namespace com.christoc.modules.ladder.Components
         //save game
         public Game SaveGame(Game g)
         {
+            bool newGame = true;
+            if(g.GameId>0)
+                newGame = false;
+
             g = g.GameId > 0 ? UpdateGame(g) : CreateGame(g);
 
             foreach (var t in g.Teams)
             {
                 var tc = new TeamController();
-                tc.SaveTeam(t);
+                //configure the portalId
+                t.PortalId = g.PortalId;
+                t.LastPlayed = DateTime.Now;
+                
+
+                t.TeamId = tc.SaveTeam(t).TeamId;
+
+                //add GameTeam relationship to store the Scores
+
+                //TODO: figure out how to flag a WIN and HOME team
+                if(newGame)
+                    DataProvider.Instance().AddGameTeam(g.GameId,t.TeamId,t.Score,false,true);
+                else
+                    DataProvider.Instance().UpdateGameTeam(g.GameId, t.TeamId, t.Score, false, true);
+
             }
             
-
             return g;
         }
 
@@ -48,8 +67,12 @@ namespace com.christoc.modules.ladder.Components
         }
 
 
-        //todo: get game
+        public Game GetGame (int gameId)
+        {
+            return CBO.FillObject<Game>(DataProvider.Instance().GetGame(gameId));
+        }
 
+        
         //todo: add teams to game
 
 
