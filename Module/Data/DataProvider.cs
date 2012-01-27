@@ -86,6 +86,7 @@ namespace com.christoc.modules.ladder.Data
         public abstract IDataReader GetTeams();
 
         public abstract IDataReader GetTeam(int teamId);
+        public abstract IDataReader GetTeam(string teamName);
 
        
         
@@ -117,6 +118,9 @@ namespace com.christoc.modules.ladder.Data
         public abstract void UpdateGame(Game g);
         public abstract IDataReader GetGames();
         public abstract IDataReader GetGame(int gameId);
+
+        public abstract void AddGameTeam(int gameId, int teamId, int score, bool win, bool home);
+        public abstract void UpdateGameTeam(int gameId, int teamId, int score, bool win, bool home);
 
         #endregion
 

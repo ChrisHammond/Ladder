@@ -71,7 +71,7 @@ namespace com.christoc.modules.ladder.Components
             LastUpdatedDate = Null.SetNullDateTime(dr["LastUpdatedDate"]);
             CreatedByUserId = Null.SetNullInteger(dr["CreatedByUserId"]);
             LastUpdatedByUserId = Null.SetNullInteger(dr["LastUpdatedByUserId"]);
-            ModuleId = Null.SetNullInteger(dr["ModuleId"]);
+            PortalId = Null.SetNullInteger(dr["PortalId"]);
         }
 
         int IHydratable.KeyID

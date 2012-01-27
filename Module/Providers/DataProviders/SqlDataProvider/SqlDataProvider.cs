@@ -149,9 +149,9 @@ namespace com.christoc.modules.ladder.Data
             return Convert.ToInt32(SqlHelper.ExecuteScalar(ConnectionString, NamePrefix + "AddTeam",
                  new SqlParameter("@Name", t.Name)
                 , new SqlParameter("@firstplayed", t.FirstPlayed)
-                , new SqlParameter("@lastplayed", t.Name)
-                , new SqlParameter("@createdbyuserid", t.Name)
-                , new SqlParameter("@lastupdatedbyuserid", t.Name)
+                , new SqlParameter("@lastplayed", t.LastPlayed)
+                , new SqlParameter("@createdbyuserid", t.CreatedByUserId)
+                , new SqlParameter("@lastupdatedbyuserid", t.LastUpdatedByUserId)
                 , new SqlParameter("@moduleid", t.ModuleId)
                 ));
         }
@@ -162,8 +162,8 @@ namespace com.christoc.modules.ladder.Data
                 new SqlParameter("@TeamId", t.TeamId)
                   , new SqlParameter("@Name", t.Name)
                  , new SqlParameter("@firstplayed", t.FirstPlayed)
-                 , new SqlParameter("@lastplayed", t.Name)
-                 , new SqlParameter("@lastupdatedbyuserid", t.Name)
+                 , new SqlParameter("@lastplayed", t.LastPlayed)
+                 , new SqlParameter("@lastupdatedbyuserid", t.LastUpdatedByUserId)
                  , new SqlParameter("@Games", t.Games)
                  , new SqlParameter("@Wins", t.Wins)
                  , new SqlParameter("@Losses", t.Losses)
@@ -191,6 +191,12 @@ namespace com.christoc.modules.ladder.Data
         {
             return SqlHelper.ExecuteReader(ConnectionString, NamePrefix + "GetTeam", new SqlParameter("@TeamId", teamId));
         }
+
+        public override IDataReader GetTeam(string teamName)
+        {
+            return SqlHelper.ExecuteReader(ConnectionString, NamePrefix + "GetTeamByName", new SqlParameter("@Name", teamName));
+        }
+
 
         /* games */
         public override IDataReader GetGames()
@@ -222,6 +228,29 @@ namespace com.christoc.modules.ladder.Data
                                                            , new SqlParameter("@PlayedDate", g.PlayedDate)
                                                            , new SqlParameter("@LastUpdatedByUserId", g.LastUpdatedByUserId)
                                        );
+        }
+
+
+        public override void AddGameTeam(int gameId, int teamId, int score, bool win, bool home)
+        {
+            SqlHelper.ExecuteNonQuery(ConnectionString, NamePrefix + "AddGameTeam"
+                , new SqlParameter("@GameId", gameId)
+                , new SqlParameter("@TeamId", teamId)
+                , new SqlParameter("@score", score)
+                , new SqlParameter("@win", win)
+                , new SqlParameter("@home", home)
+                );
+        }
+
+        public override void UpdateGameTeam(int gameId, int teamId, int score, bool win, bool home)
+        {
+            SqlHelper.ExecuteNonQuery(ConnectionString, NamePrefix + "UpdateGameTeam"
+                , new SqlParameter("@GameId", gameId)
+                , new SqlParameter("@TeamId", teamId)
+                , new SqlParameter("@score", score)
+                , new SqlParameter("@win", win)
+                , new SqlParameter("@home", home)
+                );
         }
 
 
