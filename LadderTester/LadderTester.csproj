@@ -9,7 +9,7 @@
     <ProjectGuid>{C812444A-5893-4455-9733-DEEFD9FAE4F0}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
-    <RootNamespace>DotNetNuke.Modules.LadderTester</RootNamespace>
+    <RootNamespace>com.christoc.modules.LadderTester</RootNamespace>
     <AssemblyName>LadderTester</AssemblyName>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -110,10 +110,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App_LocalResources\Edit.ascx.resx" />
-    <None Include="App_LocalResources\Settings.ascx.resx">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="App_LocalResources\View.ascx.resx" />
     <None Include="BuildScripts\ModulePackage.targets" />
     <None Include="BuildScripts\MSBuild.Community.Tasks.Targets" />
