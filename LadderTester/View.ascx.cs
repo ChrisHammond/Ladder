@@ -62,6 +62,11 @@ namespace com.christoc.modules.LadderTester
 
         #endregion
 
+        protected void lbSubmit_Click(object sender, EventArgs e)
+        {
+            //call the webservice 
+        }
+
 
     }
 
