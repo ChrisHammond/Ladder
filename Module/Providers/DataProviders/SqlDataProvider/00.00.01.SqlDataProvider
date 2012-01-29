@@ -944,7 +944,7 @@ CREATE PROCEDURE {databaseOwner}[{objectQualifier}Ladder_UpdateGameTeam]
 AS
 
 
-UPDATE {databaseOwner}.[{objectQualifier}Ladder_UpdateGameTeam]
+UPDATE {databaseOwner}[{objectQualifier}Ladder_GameTeam]
            set
            [score] = @score
            , [win] = @win

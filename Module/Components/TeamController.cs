@@ -20,7 +20,7 @@ namespace com.christoc.modules.ladder.Components
 
         public Team SaveTeam(Team t)
         {
-            //todo: we need to look to see if the team already exists, if so update their info on the object before saving.
+            //we need to look to see if the team already exists, if so update their info on the object before saving.
             var lookup = GetTeamByName(t.Name);
             if(lookup!=null)
             {
