@@ -73,10 +73,7 @@ namespace com.christoc.modules.ladder.Components
         }
 
         
-        //todo: add teams to game
-
-
-
+        
         // gameId
         // populate game data, populate collection of teams
 

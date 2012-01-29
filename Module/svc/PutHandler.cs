@@ -45,36 +45,25 @@ namespace com.christoc.modules.ladder.svc
             g.Teams.Add(awayTeam);
 
             */
-
-
+            
             var currentGame = jss.Deserialize<Game>(jsonBody);
 
             //todo: authenticate the request, perhaps with Netduino ID as a ModuleSetting?
 
             if (currentGame != null)
             {
-
                 //todo: we need to lookup the game based on the GameId if passed in the json, if so, then combine all the new stats
                 if (currentGame.GameId > 0)
                 {
                     var existingGame = gc.GetGame(currentGame.GameId);
                     currentGame.FieldIdentifier = existingGame.FieldIdentifier;
                     currentGame.CreatedDate = existingGame.CreatedDate;
-                    currentGame.CreatedByUserId = existingGame.CreatedByUserId;
-                    currentGame.LastUpdatedByUserId = existingGame.LastUpdatedByUserId;
-                    currentGame.LastUpdatedDate = DateTime.Now;
-                    currentGame.PlayedDate = DateTime.Now;
-                    currentGame.PortalId = PortalId;
+                    currentGame.CreatedByUserId = existingGame.CreatedByUserId;        
                 }
                 else
                 {
                     currentGame.CreatedDate = DateTime.Now;
                     currentGame.CreatedByUserId = 1;
-                    currentGame.LastUpdatedByUserId = 1;
-                    currentGame.LastUpdatedDate = DateTime.Now;
-                    currentGame.PlayedDate = DateTime.Now;
-                    currentGame.PortalId = PortalId;
-
                     //check if a Field exists, if not add it
                     var f = FieldController.GetField(currentGame.FieldIdentifier);
                     if (f == null)
@@ -82,29 +71,25 @@ namespace com.christoc.modules.ladder.svc
                         f = new Field { FieldIdentifier = currentGame.FieldIdentifier, FieldName = currentGame.FieldIdentifier, CreatedByUserId = 1, CreatedDate = DateTime.Now, LastUpdatedByUserId = 1, LastUpdatedDate = DateTime.Now };
                         f = f.Save();
                     }
-
                     currentGame.FieldIdentifier = f.FieldIdentifier;
-                    
                 }
-                
-                //todo:add the teams to the game
 
-                //g = new Game {FieldIdentifier = f.FieldIdentifier, PortalId = PortalId, PlayedDate = DateTime.Now};
+                currentGame.LastUpdatedByUserId = 1;
+                currentGame.PlayedDate = DateTime.Now;
+                currentGame.PortalId = PortalId;
 
-                //save the game
-                
+                //save the game information
                 currentGame = gc.SaveGame(currentGame);
 
                 //TODO: how to keep track of games in progress?
+
+                //return the GameID so Netduino knows to use this
+                response.Write(jss.Serialize(currentGame.GameId));
                 
                 written = true;
             }
 
-            response.Write("Test");
-
-
-            //todo: return the GameId
-
+            
             //update score
 
             //complete game
