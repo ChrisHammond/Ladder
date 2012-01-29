@@ -81,7 +81,7 @@ namespace com.christoc.modules.LadderTester
         {
             var sb = new StringBuilder();
             if(txtGameId.Text.Trim()!=string.Empty)
-                sb.Append("{\"GameId\",");
+                sb.Append("{\"GameId\":" + txtGameId.Text + ",");
             else
             {
                 sb.Append("{");
@@ -105,10 +105,24 @@ namespace com.christoc.modules.LadderTester
             hwr.ContentType = "application/json";
             byte[] byteData = UTF8Encoding.UTF8.GetBytes(jsonValue.ToString());
             hwr.ContentLength = byteData.Length;
-            using (Stream putStream = hwr.GetRequestStream())
-            {
-                putStream.Write(byteData,0,byteData.Length);
-            }
+            Stream putStream = hwr.GetRequestStream();
+            
+            putStream.Write(byteData,0,byteData.Length);
+
+            putStream.Close();
+
+            var response = hwr.GetResponse();
+
+            var data = response.GetResponseStream();
+
+            var dataReader = new StreamReader (data);
+            var responseFromServer = dataReader.ReadToEnd();
+
+            response.Close();
+
+            txtResult.Text = responseFromServer;
+            txtGameId.Text = responseFromServer;
+
             // Get response  
             //using (HttpWebResponse response = hwr.GetResponse() as HttpWebResponse)
             //{
