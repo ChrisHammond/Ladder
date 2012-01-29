@@ -35,6 +35,8 @@ namespace com.christoc.netduino.FoosTracker
         static readonly OutputPort AwayLed = new OutputPort(Pins.GPIO_PIN_D12, false);
         static readonly OutputPort HomeLed = new OutputPort(Pins.GPIO_PIN_D13, false);
 
+        private static int gameId = 0;
+
         public static void Main()
         {
             //configure the buttons for scoring
@@ -61,14 +63,13 @@ namespace com.christoc.netduino.FoosTracker
             homeTeamAdd.OnInterrupt += homeTeamAdd_OnInterrupt;
             homeTeamSubtract.OnInterrupt += homeTeamSubtract_OnInterrupt;
 
+            //using the MAC address to identify the "field" or which foosball table
             _currentGame.FieldIdentifier = Mac();
 
-            //todo: use the mac address as the identifier
-
-
+            
             while (true)
             {
-                //todo: check for Max score/win
+                //check for Max score/win
                 CheckTeamScores();
             }
             // ReSharper disable FunctionNeverReturns
@@ -100,6 +101,19 @@ namespace com.christoc.netduino.FoosTracker
 
         private static void CheckTeamScores()
         {
+
+            //build json
+            var jsonString = BuildJson();
+
+            // convert sample to byte array
+            byte[] contentBuffer = Encoding.UTF8.GetBytes(jsonString);
+            // produce request
+            using (Socket connection = Connect("192.168.1.9", 5000))
+            {
+                gameId = Convert.ToInt32(SendRequest(connection, jsonString));
+            }
+
+
             if (awayTeam.Score < WinningScore && homeTeam.Score < WinningScore) return;
 
             //game over someone got 10
@@ -116,17 +130,6 @@ namespace com.christoc.netduino.FoosTracker
             //todo: play game over audio
 
             //todo: send the game information out to web service
-
-            //build json
-            var jsonString = BuildJson();
-
-            // convert sample to byte array
-            byte[] contentBuffer = Encoding.UTF8.GetBytes(jsonString);
-            // produce request
-            using (Socket connection = Connect("192.168.1.9", 5000))
-            {
-                SendRequest(connection, jsonString);
-            }
 
             //call NewGame to reset the teams
             NewGame();
@@ -162,7 +165,7 @@ namespace com.christoc.netduino.FoosTracker
 
             var sb = string.Empty;
             sb =
-                "{\"Teams\":[{\"TeamId\":0,\"Name\":\"Home\",\"Score\":\"" + homeTeam.Score + "\",\"Games\":0,\"Wins\":0,\"Losses\":0},{\"TeamId\":0,\"Name\":\"Away\",\"Score\":\"" + awayTeam.Score + "\",\"Games\":0,\"Wins\":0,\"Losses\":0}],\"FieldIdentifier\":\"" + _currentGame.FieldIdentifier + "\"}";
+                "{\"GameId\":" + gameId + ";\"Teams\":[{\"TeamId\":0,\"Name\":\"Home\",\"Score\":\"" + homeTeam.Score + "\",\"Games\":0,\"Wins\":0,\"Losses\":0},{\"TeamId\":0,\"Name\":\"Away\",\"Score\":\"" + awayTeam.Score + "\",\"Games\":0,\"Wins\":0,\"Losses\":0}],\"FieldIdentifier\":\"" + _currentGame.FieldIdentifier + "\"}";
             return sb;
 
         }
@@ -190,9 +193,14 @@ namespace com.christoc.netduino.FoosTracker
             return connection;
         }
 
-        static void SendRequest(Socket s, string content)
+        static string SendRequest(Socket s, string content)
         {
             byte[] contentBuffer = Encoding.UTF8.GetBytes(content);
+
+            //used to "get" the response back, which should be gameId (int)
+            byte[] buffer = new byte[1024];
+            var responseString = string.Empty;
+
             const string CRLF = "\r\n";
             var requestLine = "PUT /svc/ladder/Game HTTP/1.1" + CRLF;
             byte[] requestLineBuffer = Encoding.UTF8.
@@ -206,10 +214,20 @@ namespace com.christoc.netduino.FoosTracker
             s.Send(requestLineBuffer);
             s.Send(headersBuffer);
             s.Send(contentBuffer);
+
+            while (s.Poll(30 * 1000000, SelectMode.SelectRead))
+            {
+                Int32 bytesRead = s.Receive(buffer);
+                responseString += new string(Encoding.UTF8.GetChars(buffer));
+            }
+            //get the response back and set it to GameId
+
+            return responseString;
         }
 
 
 
+        //getting the MAC address of a Netduino plus so we can use that to identify the "field" 
         //http://snipt.net/Evotodi/get-netduino-plus-mac-address/
         public static string Mac()
         {
