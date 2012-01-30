@@ -10,6 +10,7 @@
 */
 
 using System;
+using System.IO;
 using System.Net;
 using System.Text;
 using System.Net.Sockets;
@@ -23,11 +24,9 @@ namespace com.christoc.netduino.FoosTracker
 {
     public class Program
     {
-
-        //create two teams (away/home)
-
         private static Team awayTeam;
         private static Team homeTeam;
+
         private static Game _currentGame;
 
         private const int WinningScore = 10;
@@ -39,6 +38,8 @@ namespace com.christoc.netduino.FoosTracker
 
         public static void Main()
         {
+            //todo: winning score should be handled when creating a new game
+
             //configure the buttons for scoring
             var awayTeamAdd = new InterruptPort(Pins.GPIO_PIN_D2, true, Port.ResistorMode.PullUp,
                                                Port.InterruptMode.InterruptEdgeLow);
@@ -51,12 +52,11 @@ namespace com.christoc.netduino.FoosTracker
 
             //initialize the game and teams
             _currentGame = new Game();
-            homeTeam = new Team { Name = "home", Score = 0, TeamId = 1 };
-            awayTeam = new Team { Name = "away", Score = 0, TeamId = 1 };
+            homeTeam = new Team { Name = "home", Score = 0, TeamId = 0 };
+            awayTeam = new Team { Name = "away", Score = 0, TeamId = 0 };
             //_currentGame.Teams.Add(homeTeam);
             //_currentGame.Teams.Add(awayTeam);
-
-
+            
             //register the interrupts to keep track of button presses
             awayTeamAdd.OnInterrupt += awayTeamAdd_OnInterrupt;
             awayTeamSubtract.OnInterrupt += awayTeamSubtract_OnInterrupt;
@@ -66,7 +66,6 @@ namespace com.christoc.netduino.FoosTracker
             //using the MAC address to identify the "field" or which foosball table
             _currentGame.FieldIdentifier = Mac();
 
-            
             while (true)
             {
                 //check for Max score/win
@@ -80,8 +79,6 @@ namespace com.christoc.netduino.FoosTracker
         {
             awayTeam.Score++;
             AwayLed.Write(true);
-
-            //call the update webservice?
         }
         private static void awayTeamSubtract_OnInterrupt(uint data1, uint data2, DateTime time)
         {
@@ -99,134 +96,113 @@ namespace com.christoc.netduino.FoosTracker
             HomeLed.Write(false);
         }
 
-        private static void CheckTeamScores()
+        private static void UpdateWebScores()
         {
-
             //build json
             var jsonString = BuildJson();
+            //todo: look into threading
+            //call the webservice
+            CallWebService(jsonString, "http://192.168.1.9/svc/ladder/Game");
+        }
 
-            // convert sample to byte array
-            byte[] contentBuffer = Encoding.UTF8.GetBytes(jsonString);
-            // produce request
-            using (Socket connection = Connect("192.168.1.9", 5000))
-            {
-                gameId = Convert.ToInt32(SendRequest(connection, jsonString));
-            }
-
-
+        private static void CheckTeamScores()
+        {
             if (awayTeam.Score < WinningScore && homeTeam.Score < WinningScore) return;
-
-            //game over someone got 10
-
-            if (awayTeam.Score >= WinningScore)
-            {
-                //todo: does the Netduino need to keep track of wins/losses?
-
-            }
-            else
-            {//away team lost, home team won
-
-            }
-            //todo: play game over audio
-
-            //todo: send the game information out to web service
-
-            //call NewGame to reset the teams
+            
+            //game over a team got the winning score points, time to finish
+            GameOver();
+            
+            //call NewGame to reset the teams, this will also send the call to the web service
             NewGame();
         }
 
 
-        private static void NewGame()
+        //code based on examples in Getting Started with the Internet Of Things book http://cjh.am/gswtiot 
+        private static void CallWebService(string jsonGame, string serviceUrl)
         {
+            //todo: handle problems in the web service
 
+            byte[] buffer = Encoding.UTF8.GetBytes(jsonGame);
+            // produce request
+            var requestUri = serviceUrl;
+            using (var request = (HttpWebRequest)WebRequest.Create(requestUri))
+            {
+                request.Method = "PUT";
+                // headers
+                request.ContentType = "application/json";
+                request.ContentLength = buffer.Length;
+                
+                // content
+                Stream s = request.GetRequestStream();
+                s.Write(buffer, 0, buffer.Length);
+                // send request and receive response
+                using (var response = (HttpWebResponse)request.
+                GetResponse())
+                {
+                    // consume response
+                    HandleResponse(response);
+                    Debug.Print("Status code: " + response.StatusCode);
+                }
+            }
+        }
+        //code based on examples in Getting Started with the Internet Of Things book http://cjh.am/gswtiot 
+        private static void HandleResponse(HttpWebResponse response)
+        {
+            //todo: handle problems in the response
+
+            // response body
+            var buffer = new byte[response.ContentLength];
+            Stream stream = response.GetResponseStream();
+            int toRead = buffer.Length;
+            while (toRead > 0)
+            {
+                // already read: buffer.Length - toRead
+                int read = stream.Read(buffer, buffer.Length - toRead,
+                toRead);
+                toRead = toRead - read;
+            }
+            char[] chars = Encoding.UTF8.GetChars(buffer);
+            var responseId = new string(chars);
+            Debug.Print(responseId);
+            gameId = int.Parse(responseId);
+
+        }
+
+        private static void GameOver()
+        {
+            //someone hit 10 points, send the results to the service before clearing and starting a new game
+            UpdateWebScores();
+        }
+
+        private static void NewGame()
+        {   
             //reset the scores
             awayTeam.Score = 0;
             homeTeam.Score = 0;
+            gameId = 0;
 
             _currentGame = new Game();
             _currentGame.FieldIdentifier = Mac();
-            //_currentGame.Teams.Add(awayTeam);
-            //_currentGame.Teams.Add(homeTeam);
+
             //todo: call the webservice to initialize the new game
-
-
+            
             //reset the LEDs
-
             HomeLed.Write(false);
             AwayLed.Write(false);
+            
+            //call the webservice
+            UpdateWebScores();
         }
-
-
-
+        
         public static string BuildJson()
         {
-            //sample json for GAME
-            //"{\"GameId\":0,\"PlayedDate\":\"\\/Date(1327561544141)\\/\",\"CreatedDate\":\"\\/Date(-62135568000000)\\/\",\"LastUpdatedDate\":\"\\/Date(-62135568000000)\\/\",\"PortalId\":0,\"ModuleId\":0,\"Teams\":[{\"TeamId\":0,\"Name\":\"Home\",\"FirstPlayed\":\"\\/Date(-62135568000000)\\/\",\"LastPlayed\":\"\\/Date(-62135568000000)\\/\",\"CreatedDate\":\"\\/Date(-62135568000000)\\/\",\"LastUpdatedDate\":\"\\/Date(-62135568000000)\\/\",\"Score\":4,\"Games\":0,\"Wins\":1,\"Losses\":0,\"ModuleId\":0,\"CreatedByUserId\":0,\"LastUpdatedByUserId\":0,\"PortalId\":0,\"Players\":[],\"CreatedByUser\":\"\",\"LastUpdatedByUser\":\"\"},{\"TeamId\":0,\"Name\":\"Away\",\"FirstPlayed\":\"\\/Date(-62135568000000)\\/\",\"LastPlayed\":\"\\/Date(-62135568000000)\\/\",\"CreatedDate\":\"\\/Date(-62135568000000)\\/\",\"LastUpdatedDate\":\"\\/Date(-62135568000000)\\/\",\"Score\":2,\"Games\":1,\"Wins\":1,\"Losses\":0,\"ModuleId\":0,\"CreatedByUserId\":0,\"LastUpdatedByUserId\":0,\"PortalId\":0,\"Players\":[],\"CreatedByUser\":\"\",\"LastUpdatedByUser\":\"\"}],\"CreatedByUserId\":0,\"LastUpdatedByUserId\":0,\"FieldIdentifier\":\"Test\",\"CreatedByUser\":\"\",\"LastUpdatedByUser\":\"\"}";
-
+            //sample json for GAME //"{\"GameId\":0,\"PlayedDate\":\"\\/Date(1327561544141)\\/\",\"CreatedDate\":\"\\/Date(-62135568000000)\\/\",\"LastUpdatedDate\":\"\\/Date(-62135568000000)\\/\",\"PortalId\":0,\"ModuleId\":0,\"Teams\":[{\"TeamId\":0,\"Name\":\"Home\",\"FirstPlayed\":\"\\/Date(-62135568000000)\\/\",\"LastPlayed\":\"\\/Date(-62135568000000)\\/\",\"CreatedDate\":\"\\/Date(-62135568000000)\\/\",\"LastUpdatedDate\":\"\\/Date(-62135568000000)\\/\",\"Score\":4,\"Games\":0,\"Wins\":1,\"Losses\":0,\"ModuleId\":0,\"CreatedByUserId\":0,\"LastUpdatedByUserId\":0,\"PortalId\":0,\"Players\":[],\"CreatedByUser\":\"\",\"LastUpdatedByUser\":\"\"},{\"TeamId\":0,\"Name\":\"Away\",\"FirstPlayed\":\"\\/Date(-62135568000000)\\/\",\"LastPlayed\":\"\\/Date(-62135568000000)\\/\",\"CreatedDate\":\"\\/Date(-62135568000000)\\/\",\"LastUpdatedDate\":\"\\/Date(-62135568000000)\\/\",\"Score\":2,\"Games\":1,\"Wins\":1,\"Losses\":0,\"ModuleId\":0,\"CreatedByUserId\":0,\"LastUpdatedByUserId\":0,\"PortalId\":0,\"Players\":[],\"CreatedByUser\":\"\",\"LastUpdatedByUser\":\"\"}],\"CreatedByUserId\":0,\"LastUpdatedByUserId\":0,\"FieldIdentifier\":\"Test\",\"CreatedByUser\":\"\",\"LastUpdatedByUser\":\"\"}";
             var sb = string.Empty;
             sb =
-                "{\"GameId\":" + gameId + ";\"Teams\":[{\"TeamId\":0,\"Name\":\"Home\",\"Score\":\"" + homeTeam.Score + "\",\"Games\":0,\"Wins\":0,\"Losses\":0},{\"TeamId\":0,\"Name\":\"Away\",\"Score\":\"" + awayTeam.Score + "\",\"Games\":0,\"Wins\":0,\"Losses\":0}],\"FieldIdentifier\":\"" + _currentGame.FieldIdentifier + "\"}";
+                "{\"GameId\":" + gameId + ",\"Teams\":[{\"TeamId\":0,\"Name\":\"Home\",\"Score\":\"" + homeTeam.Score + "\",\"Games\":0,\"Wins\":0,\"Losses\":0},{\"TeamId\":0,\"Name\":\"Away\",\"Score\":\"" + awayTeam.Score + "\",\"Games\":0,\"Wins\":0,\"Losses\":0}],\"FieldIdentifier\":\"" + _currentGame.FieldIdentifier + "\"}";
             return sb;
-
         }
-
-        //todo: record the temperature measurement at start of game, end of game
-        //todo: allow user selection for teams
-
-
-
-        static Socket Connect(string host, int timeout)
-        {
-            // look up host’s domain name to find IP address(es)
-            IPHostEntry hostEntry = Dns.GetHostEntry(host);
-            // extract a returned address
-            IPAddress hostAddress = hostEntry.AddressList[0];
-            IPEndPoint remoteEndPoint = new IPEndPoint(hostAddress, 80);
-            // connect!
-            Debug.Print("connect...");
-            var connection = new Socket(AddressFamily.InterNetwork,
-            SocketType.Stream, ProtocolType.Tcp);
-            connection.Connect(remoteEndPoint);
-            connection.SetSocketOption(SocketOptionLevel.Tcp,
-            SocketOptionName.NoDelay, true);
-            connection.SendTimeout = timeout;
-            return connection;
-        }
-
-        static string SendRequest(Socket s, string content)
-        {
-            byte[] contentBuffer = Encoding.UTF8.GetBytes(content);
-
-            //used to "get" the response back, which should be gameId (int)
-            byte[] buffer = new byte[1024];
-            var responseString = string.Empty;
-
-            const string CRLF = "\r\n";
-            var requestLine = "PUT /svc/ladder/Game HTTP/1.1" + CRLF;
-            byte[] requestLineBuffer = Encoding.UTF8.
-            GetBytes(requestLine);
-            var headers =
-            "Host: dnndev" + CRLF +
-            "Content-Type: application/json" + CRLF +
-            "Content-Length: " + contentBuffer.Length + CRLF +
-            CRLF;
-            byte[] headersBuffer = Encoding.UTF8.GetBytes(headers);
-            s.Send(requestLineBuffer);
-            s.Send(headersBuffer);
-            s.Send(contentBuffer);
-
-            while (s.Poll(30 * 1000000, SelectMode.SelectRead))
-            {
-                Int32 bytesRead = s.Receive(buffer);
-                responseString += new string(Encoding.UTF8.GetChars(buffer));
-            }
-            //get the response back and set it to GameId
-
-            return responseString;
-        }
-
-
-
+        
         //getting the MAC address of a Netduino plus so we can use that to identify the "field" 
         //http://snipt.net/Evotodi/get-netduino-plus-mac-address/
         public static string Mac()
@@ -253,5 +229,10 @@ namespace com.christoc.netduino.FoosTracker
 
             return macAddress;
         }
+
+        //todo: play game over audio
+        //todo: record the temperature measurement at start of game, end of game
+        //todo: allow user selection for teams
+
     }
 }
