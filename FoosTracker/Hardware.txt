@@ -1,0 +1,9 @@
+﻿ProtoType Board $9.95
+	PT Series Prototyping Board,
+	3 Power Buses, 3.5"L x 2.5"W
+	http://www.jameco.com/Jameco/Products/ProdDS/645677.pdf
+
+
+SparkFun SerLCD Backpack
+	http://www.sparkfun.com/products/258
+

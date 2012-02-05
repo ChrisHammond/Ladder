@@ -31,24 +31,37 @@ namespace com.christoc.netduino.FoosTracker
 
         private const int WinningScore = 10;
 
+        //todo: use these two LEDs for LAST SCORED currently not used
         static readonly OutputPort AwayLed = new OutputPort(Pins.GPIO_PIN_D12, false);
         static readonly OutputPort HomeLed = new OutputPort(Pins.GPIO_PIN_D13, false);
+        static readonly SerLCD smallLcd = new SerLCD(SerialPorts.COM1,SerLCD.DisplayType.C16L2); //digital pin 1
+
+        //debouncing multiple button presses via this post http://forums.netduino.com/index.php?/topic/2431-input-debounce/page__view__findpost__p__17364
+        private static DateTime awayAddLastPushed;
+        private static DateTime awaySubLastPushed;
+        private static DateTime homeAddLastPushed;
+        private static DateTime homeSubLastPushed;
 
         private static int gameId = 0;
 
         public static void Main()
         {
             //todo: winning score should be handled when creating a new game
+            //todo: winning team? how do you flag if someone won, besides they have 10 points
 
-            //configure the buttons for scoring
-            var awayTeamAdd = new InterruptPort(Pins.GPIO_PIN_D2, true, Port.ResistorMode.PullUp,
+            //configure the buttons
+            var startNewGame = new InterruptPort(Pins.GPIO_PIN_D4, true, Port.ResistorMode.PullUp,
                                                Port.InterruptMode.InterruptEdgeLow);
-            var awayTeamSubtract = new InterruptPort(Pins.GPIO_PIN_D3, true, Port.ResistorMode.PullUp,
+            var awayTeamAdd = new InterruptPort(Pins.GPIO_PIN_D5, true, Port.ResistorMode.PullUp,
                                                Port.InterruptMode.InterruptEdgeLow);
-            var homeTeamAdd = new InterruptPort(Pins.GPIO_PIN_D4, true, Port.ResistorMode.PullUp,
+            var awayTeamSubtract = new InterruptPort(Pins.GPIO_PIN_D6, true, Port.ResistorMode.PullUp,
                                                Port.InterruptMode.InterruptEdgeLow);
-            var homeTeamSubtract = new InterruptPort(Pins.GPIO_PIN_D5, true, Port.ResistorMode.PullUp,
+            var homeTeamAdd = new InterruptPort(Pins.GPIO_PIN_D7, true, Port.ResistorMode.PullUp,
                                                Port.InterruptMode.InterruptEdgeLow);
+            var homeTeamSubtract = new InterruptPort(Pins.GPIO_PIN_D8, true, Port.ResistorMode.PullUp,
+                                               Port.InterruptMode.InterruptEdgeLow);
+
+            InitializeDisplay();
 
             //initialize the game and teams
             _currentGame = new Game();
@@ -62,6 +75,7 @@ namespace com.christoc.netduino.FoosTracker
             awayTeamSubtract.OnInterrupt += awayTeamSubtract_OnInterrupt;
             homeTeamAdd.OnInterrupt += homeTeamAdd_OnInterrupt;
             homeTeamSubtract.OnInterrupt += homeTeamSubtract_OnInterrupt;
+            startNewGame.OnInterrupt += startNewGame_OnInterrupt;
 
             //using the MAC address to identify the "field" or which foosball table
             _currentGame.FieldIdentifier = Mac();
@@ -75,25 +89,50 @@ namespace com.christoc.netduino.FoosTracker
         }
         // ReSharper restore FunctionNeverReturns
 
+
+        //if someone hits the reset button update the current game online and start a new one
+        private static void startNewGame_OnInterrupt(uint data1, uint data2, DateTime time)
+        {
+            GameOver();
+            NewGame();
+            InitializeDisplay();
+            DisplayScores();
+            //TODO: can we sense how long a button is pressed, if so, do something different?
+        }
+
+
         private static void awayTeamAdd_OnInterrupt(uint data1, uint data2, DateTime time)
         {
+            if (awayAddLastPushed.AddMilliseconds(50) > time)
+                return;
+
             awayTeam.Score++;
-            AwayLed.Write(true);
+            //AwayLed.Write(true);
+            DisplayScores();
         }
         private static void awayTeamSubtract_OnInterrupt(uint data1, uint data2, DateTime time)
         {
+            if (awaySubLastPushed.AddMilliseconds(50) > time)
+                return;
             awayTeam.Score--;
-            AwayLed.Write(false);
+            //AwayLed.Write(false);
+            DisplayScores();
         }
         private static void homeTeamAdd_OnInterrupt(uint data1, uint data2, DateTime time)
         {
+            if (homeAddLastPushed.AddMilliseconds(50) > time)
+                return;
             homeTeam.Score++;
-            HomeLed.Write(true);
+            //HomeLed.Write(true);
+            DisplayScores();
         }
         private static void homeTeamSubtract_OnInterrupt(uint data1, uint data2, DateTime time)
         {
+            if (homeSubLastPushed.AddMilliseconds(50) > time)
+                return;
             homeTeam.Score--;
-            HomeLed.Write(false);
+            //HomeLed.Write(false);
+            DisplayScores();
         }
 
         private static void UpdateWebScores()
@@ -108,7 +147,7 @@ namespace com.christoc.netduino.FoosTracker
         private static void CheckTeamScores()
         {
             if (awayTeam.Score < WinningScore && homeTeam.Score < WinningScore) return;
-            
+            DisplayScores();
             //game over a team got the winning score points, time to finish
             GameOver();
             
@@ -121,29 +160,37 @@ namespace com.christoc.netduino.FoosTracker
         private static void CallWebService(string jsonGame, string serviceUrl)
         {
             //todo: handle problems in the web service
-
-            byte[] buffer = Encoding.UTF8.GetBytes(jsonGame);
-            // produce request
-            var requestUri = serviceUrl;
-            using (var request = (HttpWebRequest)WebRequest.Create(requestUri))
+            try
             {
-                request.Method = "PUT";
-                // headers
-                request.ContentType = "application/json";
-                request.ContentLength = buffer.Length;
-                
-                // content
-                Stream s = request.GetRequestStream();
-                s.Write(buffer, 0, buffer.Length);
-                // send request and receive response
-                using (var response = (HttpWebResponse)request.
-                GetResponse())
+                byte[] buffer = Encoding.UTF8.GetBytes(jsonGame);
+                // produce request
+                var requestUri = serviceUrl;
+                using (var request = (HttpWebRequest)WebRequest.Create(requestUri))
                 {
-                    // consume response
-                    HandleResponse(response);
-                    Debug.Print("Status code: " + response.StatusCode);
+                    request.Method = "PUT";
+                    // headers
+                    request.ContentType = "application/json";
+                    request.ContentLength = buffer.Length;
+                
+                    // content
+                    Stream s = request.GetRequestStream();
+                    s.Write(buffer, 0, buffer.Length);
+                    // send request and receive response
+                    using (var response = (HttpWebResponse)request.
+                    GetResponse())
+                    {
+                        // consume response
+                        HandleResponse(response);
+                        Debug.Print("Status code: " + response.StatusCode);
+                    }
                 }
             }
+            catch (Exception exc)
+            {
+
+                //throw;
+            }
+
         }
         //code based on examples in Getting Started with the Internet Of Things book http://cjh.am/gswtiot 
         private static void HandleResponse(HttpWebResponse response)
@@ -192,6 +239,7 @@ namespace com.christoc.netduino.FoosTracker
             
             //call the webservice
             UpdateWebScores();
+            DisplayScores();
         }
         
         public static string BuildJson()
@@ -228,6 +276,25 @@ namespace com.christoc.netduino.FoosTracker
             }
 
             return macAddress;
+        }
+
+
+        public static void InitializeDisplay()
+        {
+            smallLcd.ClearDisplay();
+            smallLcd.SetCursorPosition(1,1);
+            smallLcd.Write("FoosTracker");
+            smallLcd.SetCursorPosition(2, 1);
+            smallLcd.Write("v1.0.0");
+        }
+
+        public static void DisplayScores()
+        {
+            smallLcd.ClearDisplay();
+            smallLcd.SetCursorPosition(1, 1);
+            smallLcd.Write("Home Team = " + homeTeam.Score);
+            smallLcd.SetCursorPosition(2, 1);
+            smallLcd.Write("Away Team = " + awayTeam.Score);            
         }
 
         //todo: play game over audio
