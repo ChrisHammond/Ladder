@@ -18,7 +18,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("FoosTracker")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Christoc.com")]
 [assembly: AssemblyProduct("FoosTracker")]
 [assembly: AssemblyCopyright("Copyright ©  2012")]
 [assembly: AssemblyTrademark("")]
