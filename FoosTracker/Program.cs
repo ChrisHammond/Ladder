@@ -34,13 +34,17 @@ namespace com.christoc.netduino.FoosTracker
         //todo: use these two LEDs for LAST SCORED currently not used
         static readonly OutputPort AwayLed = new OutputPort(Pins.GPIO_PIN_D12, false);
         static readonly OutputPort HomeLed = new OutputPort(Pins.GPIO_PIN_D13, false);
-        static readonly SerLCD smallLcd = new SerLCD(SerialPorts.COM1,SerLCD.DisplayType.C16L2); //digital pin 1
+        static readonly SerLCD smallLcd = new SerLCD(SerialPorts.COM1, SerLCD.DisplayType.C16L2); //digital pin 1
 
-        //debouncing multiple button presses via this post http://forums.netduino.com/index.php?/topic/2431-input-debounce/page__view__findpost__p__17364
-        private static DateTime awayAddLastPushed;
-        private static DateTime awaySubLastPushed;
-        private static DateTime homeAddLastPushed;
-        private static DateTime homeSubLastPushed;
+        //debouncing multiple button presses via this post http://forums.netduino.com/index.php?/topic/2431-input-debounce/page__view__findpost__p__17367
+        //setup debound to 3 seconds
+        private static long debounceDelay = 30000000;
+
+        private static long awayAddLastPushed;
+        private static long awaySubLastPushed;
+        private static long homeAddLastPushed;
+        private static long homeSubLastPushed;
+        private static long gameRestartLastPushed;
 
         private static int gameId = 0;
 
@@ -69,7 +73,7 @@ namespace com.christoc.netduino.FoosTracker
             awayTeam = new Team { Name = "away", Score = 0, TeamId = 0 };
             //_currentGame.Teams.Add(homeTeam);
             //_currentGame.Teams.Add(awayTeam);
-            
+
             //register the interrupts to keep track of button presses
             awayTeamAdd.OnInterrupt += awayTeamAdd_OnInterrupt;
             awayTeamSubtract.OnInterrupt += awayTeamSubtract_OnInterrupt;
@@ -93,46 +97,59 @@ namespace com.christoc.netduino.FoosTracker
         //if someone hits the reset button update the current game online and start a new one
         private static void startNewGame_OnInterrupt(uint data1, uint data2, DateTime time)
         {
-            GameOver();
-            NewGame();
-            InitializeDisplay();
-            DisplayScores();
+            if ((System.DateTime.Now.Ticks - gameRestartLastPushed) > debounceDelay)
+            {
+                GameOver();
+                NewGame();
+                InitializeDisplay();
+                DisplayScores();
+                gameRestartLastPushed = DateTime.Now.Ticks;
+            }
             //TODO: can we sense how long a button is pressed, if so, do something different?
+
         }
 
 
         private static void awayTeamAdd_OnInterrupt(uint data1, uint data2, DateTime time)
         {
-            if (awayAddLastPushed.AddMilliseconds(50) > time)
-                return;
-
-            awayTeam.Score++;
-            //AwayLed.Write(true);
-            DisplayScores();
+            if ((System.DateTime.Now.Ticks - awayAddLastPushed) > debounceDelay)
+            {
+                awayTeam.Score++;
+                //AwayLed.Write(true);
+                DisplayScores();
+                    awayAddLastPushed = DateTime.Now.Ticks;
+            }
         }
         private static void awayTeamSubtract_OnInterrupt(uint data1, uint data2, DateTime time)
         {
-            if (awaySubLastPushed.AddMilliseconds(50) > time)
-                return;
-            awayTeam.Score--;
-            //AwayLed.Write(false);
-            DisplayScores();
+            if ((System.DateTime.Now.Ticks - awaySubLastPushed) > debounceDelay)
+            {
+                awayTeam.Score--;
+                //AwayLed.Write(false);
+                DisplayScores();
+                awaySubLastPushed = DateTime.Now.Ticks;
+            }
         }
         private static void homeTeamAdd_OnInterrupt(uint data1, uint data2, DateTime time)
         {
-            if (homeAddLastPushed.AddMilliseconds(50) > time)
-                return;
-            homeTeam.Score++;
-            //HomeLed.Write(true);
-            DisplayScores();
+            if ((System.DateTime.Now.Ticks - homeAddLastPushed) > debounceDelay)
+            {
+                
+                homeTeam.Score++;
+                //HomeLed.Write(true);
+                DisplayScores();
+                homeAddLastPushed = DateTime.Now.Ticks;
+            }
         }
         private static void homeTeamSubtract_OnInterrupt(uint data1, uint data2, DateTime time)
         {
-            if (homeSubLastPushed.AddMilliseconds(50) > time)
-                return;
-            homeTeam.Score--;
-            //HomeLed.Write(false);
-            DisplayScores();
+            if ((System.DateTime.Now.Ticks - homeSubLastPushed) > debounceDelay)
+            {
+                homeTeam.Score--;
+                //HomeLed.Write(false);
+                DisplayScores();
+                homeSubLastPushed = DateTime.Now.Ticks;
+            }
         }
 
         private static void UpdateWebScores()
@@ -150,7 +167,7 @@ namespace com.christoc.netduino.FoosTracker
             DisplayScores();
             //game over a team got the winning score points, time to finish
             GameOver();
-            
+
             //call NewGame to reset the teams, this will also send the call to the web service
             NewGame();
         }
@@ -171,7 +188,7 @@ namespace com.christoc.netduino.FoosTracker
                     // headers
                     request.ContentType = "application/json";
                     request.ContentLength = buffer.Length;
-                
+
                     // content
                     Stream s = request.GetRequestStream();
                     s.Write(buffer, 0, buffer.Length);
@@ -222,7 +239,7 @@ namespace com.christoc.netduino.FoosTracker
         }
 
         private static void NewGame()
-        {   
+        {
             //reset the scores
             awayTeam.Score = 0;
             homeTeam.Score = 0;
@@ -232,16 +249,16 @@ namespace com.christoc.netduino.FoosTracker
             _currentGame.FieldIdentifier = Mac();
 
             //todo: call the webservice to initialize the new game
-            
+
             //reset the LEDs
             HomeLed.Write(false);
             AwayLed.Write(false);
-            
+
             //call the webservice
             UpdateWebScores();
             DisplayScores();
         }
-        
+
         public static string BuildJson()
         {
             //sample json for GAME //"{\"GameId\":0,\"PlayedDate\":\"\\/Date(1327561544141)\\/\",\"CreatedDate\":\"\\/Date(-62135568000000)\\/\",\"LastUpdatedDate\":\"\\/Date(-62135568000000)\\/\",\"PortalId\":0,\"ModuleId\":0,\"Teams\":[{\"TeamId\":0,\"Name\":\"Home\",\"FirstPlayed\":\"\\/Date(-62135568000000)\\/\",\"LastPlayed\":\"\\/Date(-62135568000000)\\/\",\"CreatedDate\":\"\\/Date(-62135568000000)\\/\",\"LastUpdatedDate\":\"\\/Date(-62135568000000)\\/\",\"Score\":4,\"Games\":0,\"Wins\":1,\"Losses\":0,\"ModuleId\":0,\"CreatedByUserId\":0,\"LastUpdatedByUserId\":0,\"PortalId\":0,\"Players\":[],\"CreatedByUser\":\"\",\"LastUpdatedByUser\":\"\"},{\"TeamId\":0,\"Name\":\"Away\",\"FirstPlayed\":\"\\/Date(-62135568000000)\\/\",\"LastPlayed\":\"\\/Date(-62135568000000)\\/\",\"CreatedDate\":\"\\/Date(-62135568000000)\\/\",\"LastUpdatedDate\":\"\\/Date(-62135568000000)\\/\",\"Score\":2,\"Games\":1,\"Wins\":1,\"Losses\":0,\"ModuleId\":0,\"CreatedByUserId\":0,\"LastUpdatedByUserId\":0,\"PortalId\":0,\"Players\":[],\"CreatedByUser\":\"\",\"LastUpdatedByUser\":\"\"}],\"CreatedByUserId\":0,\"LastUpdatedByUserId\":0,\"FieldIdentifier\":\"Test\",\"CreatedByUser\":\"\",\"LastUpdatedByUser\":\"\"}";
@@ -250,7 +267,7 @@ namespace com.christoc.netduino.FoosTracker
                 "{\"GameId\":" + gameId + ",\"Teams\":[{\"TeamId\":0,\"Name\":\"Home\",\"Score\":\"" + homeTeam.Score + "\",\"Games\":0,\"Wins\":0,\"Losses\":0},{\"TeamId\":0,\"Name\":\"Away\",\"Score\":\"" + awayTeam.Score + "\",\"Games\":0,\"Wins\":0,\"Losses\":0}],\"FieldIdentifier\":\"" + _currentGame.FieldIdentifier + "\"}";
             return sb;
         }
-        
+
         //getting the MAC address of a Netduino plus so we can use that to identify the "field" 
         //http://snipt.net/Evotodi/get-netduino-plus-mac-address/
         public static string Mac()
@@ -282,7 +299,7 @@ namespace com.christoc.netduino.FoosTracker
         public static void InitializeDisplay()
         {
             smallLcd.ClearDisplay();
-            smallLcd.SetCursorPosition(1,1);
+            smallLcd.SetCursorPosition(1, 1);
             smallLcd.Write("FoosTracker");
             smallLcd.SetCursorPosition(2, 1);
             smallLcd.Write("v1.0.0");
@@ -294,7 +311,7 @@ namespace com.christoc.netduino.FoosTracker
             smallLcd.SetCursorPosition(1, 1);
             smallLcd.Write("Home Team = " + homeTeam.Score);
             smallLcd.SetCursorPosition(2, 1);
-            smallLcd.Write("Away Team = " + awayTeam.Score);            
+            smallLcd.Write("Away Team = " + awayTeam.Score);
         }
 
         //todo: play game over audio
