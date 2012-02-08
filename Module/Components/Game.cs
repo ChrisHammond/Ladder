@@ -23,7 +23,6 @@ namespace com.christoc.modules.ladder.Components
         public DateTime CreatedDate { get; set; }
         public DateTime LastUpdatedDate { get; set; }
         public int PortalId { get; set; }
-        public int ModuleId { get; set; }
 
         public List<Team> Teams { get; set; }
 

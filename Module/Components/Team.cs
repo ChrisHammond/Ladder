@@ -30,10 +30,12 @@ namespace com.christoc.modules.ladder.Components
         public int Wins { get; set; }
         public int Losses { get; set; }
         public int ModuleId { get; set; }
-
+        
         public int CreatedByUserId { get; set; }
         public int LastUpdatedByUserId { get; set; }
         public int PortalId { get; set; }
+
+        public bool HomeTeam { get; set; }
 
         public List<Player> Players { get; set; }
 
@@ -86,6 +88,8 @@ namespace com.christoc.modules.ladder.Components
             Games = Null.SetNullInteger(dr["Games"]);
             Wins = Null.SetNullInteger(dr["Wins"]);
             Losses = Null.SetNullInteger(dr["Losses"]);
+            Score = Null.SetNullInteger(dr["Score"]);
+            HomeTeam = Null.SetNullBoolean(dr["Home"]);
 
             CreatedByUserId = Null.SetNullInteger(dr["CreatedByUserId"]);
             LastUpdatedByUserId = Null.SetNullInteger(dr["LastUpdatedByUserId"]);

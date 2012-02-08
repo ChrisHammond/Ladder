@@ -9,6 +9,7 @@
 ' 
 */
 using System;
+using System.Collections.Generic;
 using com.christoc.modules.ladder.Data;
 using DotNetNuke.Common.Utilities;
 
@@ -34,17 +35,14 @@ namespace com.christoc.modules.ladder.Components
                 //configure the portalId
                 t.PortalId = g.PortalId;
                 t.LastPlayed = DateTime.Now;
-                
-
                 t.TeamId = tc.SaveTeam(t).TeamId;
-
                 //add GameTeam relationship to store the Scores
 
                 //TODO: figure out how to flag a WIN and HOME team
                 if(newGame)
-                    DataProvider.Instance().AddGameTeam(g.GameId,t.TeamId,t.Score,false,true);
+                    DataProvider.Instance().AddGameTeam(g.GameId,t.TeamId,t.Score,false,t.HomeTeam);
                 else
-                    DataProvider.Instance().UpdateGameTeam(g.GameId, t.TeamId, t.Score, false, true);
+                    DataProvider.Instance().UpdateGameTeam(g.GameId, t.TeamId, t.Score, false, t.HomeTeam);
 
             }
             
@@ -69,10 +67,38 @@ namespace com.christoc.modules.ladder.Components
 
         public Game GetGame (int gameId)
         {
+            //TODO: get the team info
             return CBO.FillObject<Game>(DataProvider.Instance().GetGame(gameId));
         }
 
+
+        //TODO: we're going to need to filter by date range, team, etc
         
+        public List<Game> GetGames (int PortalId, bool populateAll)
+        {
+            //check if we should populate teams and players
+            if(populateAll)
+            {
+                var listOfGames = CBO.FillCollection<Game>(DataProvider.Instance().GetGames(PortalId));
+
+                var outputGames = new List<Game>();
+
+                foreach (var log in listOfGames)
+                {
+                    //get the teams
+                    var tc = new TeamController();
+                    foreach( Team t in tc.GetTeamsByGame(log.GameId))
+                    {
+                        log.Teams.Add(t);
+                    }
+                    outputGames.Add(log);    
+                    //get the players
+                }
+
+                return listOfGames;
+            }
+            return CBO.FillCollection<Game>(DataProvider.Instance().GetGames(PortalId));
+        }
         
         // gameId
         // populate game data, populate collection of teams

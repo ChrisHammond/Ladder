@@ -22,33 +22,20 @@ namespace com.christoc.modules.ladder.svc
             var gc = new GameController();
 
             HttpResponse response = context.Response;
-            var written = false;
 
             //because we're coming into a URL that isn't being handled by DNN we need to figure out the PortalId
             SetPortalId(context.Request);
-
-
+            
             var jss = new JavaScriptSerializer();
 
             //get the content from the post method
 
             var sr = new StreamReader(HttpContext.Current.Request.InputStream);
             var jsonBody = sr.ReadToEnd();
-
-
-            //testing the Serialize method
-            /*
-            var g = new Game { FieldIdentifier = "Test", PortalId = PortalId, PlayedDate = DateTime.Now };
-            var homeTeam = new Team {Name = "Home", Score = 0,Wins = 0, Losses=0, PortalId = PortalId};
-            var awayTeam = new Team { Name = "Away", Score = 0, Wins = 0, Losses = 0, PortalId = PortalId };
-            g.Teams.Add(homeTeam);
-            g.Teams.Add(awayTeam);
-
-            */
             
             var currentGame = jss.Deserialize<Game>(jsonBody);
 
-            //todo: authenticate the request, perhaps with Netduino ID as a ModuleSetting?
+            //todo: authenticate the request, perhaps with Netduino MAC ID as a ModuleSetting? 
 
             if (currentGame != null)
             {
@@ -86,7 +73,6 @@ namespace com.christoc.modules.ladder.svc
                 //return the GameID so Netduino knows to use this
                 response.Write(jss.Serialize(currentGame.GameId));
                 
-                written = true;
             }
 
             

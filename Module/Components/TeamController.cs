@@ -125,6 +125,12 @@ namespace com.christoc.modules.ladder.Components
             return CBO.FillCollection<Team>(DataProvider.Instance().GetTeams());
         }
 
+        //get all teams
+        public List<Team> GetTeamsByGame(int gameId)
+        {
+            return CBO.FillCollection<Team>(DataProvider.Instance().GetTeamsByGame(gameId));
+        }
+
         //get record for a team
     }
 }
