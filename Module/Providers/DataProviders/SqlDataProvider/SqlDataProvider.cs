@@ -187,6 +187,11 @@ namespace com.christoc.modules.ladder.Data
             return SqlHelper.ExecuteReader(ConnectionString, NamePrefix + "GetTeams");
         }
 
+
+        public override IDataReader GetTeamsByGame(int gameId)
+        {
+            return SqlHelper.ExecuteReader(ConnectionString, NamePrefix + "GetTeamsByGame", new SqlParameter("@GameId", gameId));
+        }
         public override IDataReader GetTeam(int teamId)
         {
             return SqlHelper.ExecuteReader(ConnectionString, NamePrefix + "GetTeam", new SqlParameter("@TeamId", teamId));
@@ -199,9 +204,9 @@ namespace com.christoc.modules.ladder.Data
 
 
         /* games */
-        public override IDataReader GetGames()
+        public override IDataReader GetGames(int portalId)
         {
-            return SqlHelper.ExecuteReader(ConnectionString, NamePrefix + "GetGames");
+            return SqlHelper.ExecuteReader(ConnectionString, NamePrefix + "GetGames", new SqlParameter("@PortalId", portalId));
         }
 
         public override IDataReader GetGame(int gameId)
@@ -211,13 +216,12 @@ namespace com.christoc.modules.ladder.Data
 
         public override int AddGame(Game g)
         {
-
-            //TODO: something failed here
             return Convert.ToInt32(SqlHelper.ExecuteScalar(ConnectionString, NamePrefix + "AddGame"
                                                            , new SqlParameter("@PlayedDate", g.PlayedDate)
                                                            , new SqlParameter("@CreatedByUserId", g.CreatedByUserId)
                                                            , new SqlParameter("@LastUpdatedByUserId", g.LastUpdatedByUserId)
-                                                           , new SqlParameter("@moduleid", g.ModuleId)
+                                                           , new SqlParameter("@PortalId", g.PortalId)
+                                                           , new SqlParameter("@FieldIdentifier", g.FieldIdentifier)
                                        ));
         }
 
@@ -251,6 +255,12 @@ namespace com.christoc.modules.ladder.Data
                 , new SqlParameter("@win", win)
                 , new SqlParameter("@home", home)
                 );
+        }
+
+        public override IDataReader GetGameTeams(int gameId)
+        {
+            return SqlHelper.ExecuteReader(ConnectionString, NamePrefix + "GetGameTeams"
+                                    , new SqlParameter("@GameId", gameId));
         }
 
 

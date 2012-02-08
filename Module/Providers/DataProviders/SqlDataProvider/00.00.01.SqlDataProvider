@@ -546,6 +546,7 @@ CREATE PROCEDURE {databaseOwner}[{objectQualifier}Ladder_AddGame]
 	, @createdbyuserid int
 	, @lastupdatedbyuserid int
 	, @portalid int
+	, @fieldidentifier nvarchar(50)
 AS
 
 
@@ -555,14 +556,16 @@ INSERT INTO {databaseOwner}[{objectQualifier}Ladder_Game]
 		   ,[lastupdateddate]
            ,[createdbyuserid]
            ,[lastupdatedbyuserid]
-		   ,[portalid])
+		   ,[portalid]
+		   ,[fieldidentifier])
      VALUES
            (GetDate()
            ,@playeddate
            ,GetDate()
            ,@createdbyuserid
            ,@lastupdatedbyuserid
-		   ,@portalid)
+		   ,@portalid
+		   ,@fieldidentifier)
 
 		   Select @@Identity
 GO
@@ -714,6 +717,8 @@ SELECT [gameid]
   FROM {databaseOwner}[{objectQualifier}Ladder_Game]
   WHERE
 	[portalid]=@portalid
+  ORDER BY
+	playeddate desc
 GO
 
 
@@ -957,5 +962,58 @@ where
 GO
 
 
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwner}[{objectQualifier}Ladder_GetTeamsByGame]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	DROP PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetTeamsByGame]
+GO
+
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetTeamsByGame]
+		@gameId int
+AS
+
+SELECT t.[teamid]
+      ,t.[name]
+      ,t.[games]
+      ,t.[wins]
+      ,t.[losses]
+      ,t.[firstplayed]
+      ,t.[lastplayed]
+      ,t.[createdbyuserid]
+      ,t.[createddate]
+      ,t.[lastupdatedbyuserid]
+      ,t.[lastupdateddate]
+	  ,t.[portalId]
+	  ,gt.[Score]
+	  ,gt.[Win]
+	  ,gt.[Home]
+  FROM {databaseOwner}[{objectQualifier}Ladder_Team] t
+  join {databaseOwner}[{objectQualifier}Ladder_GameTeam] gt on (t.teamid=gt.teamid)
+  WHERE
+	gt.gameid=@gameid
+  
+GO
+
+
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwner}[{objectQualifier}Ladder_GetGameTeams]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	DROP PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetGameTeams]
+GO
+
+
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetGameTeams]
+	@gameid int
+AS
+
+SELECT 
+		[teamid]
+		,[score]
+		,[win]
+		,[home]
+FROM {databaseOwner}[{objectQualifier}Ladder_GameTeam]
+WHERE [gameid]=@gameid
+GO
+
+
+
+
+	
 
 
