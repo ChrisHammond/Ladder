@@ -48,7 +48,7 @@ namespace com.christoc.modules.LadderTester
         /// Page_Load runs when the control is loaded
         /// </summary>
         /// -----------------------------------------------------------------------------
-        private void Page_Load(object sender, System.EventArgs e)
+        private void Page_Load(object sender, EventArgs e)
         {
             try
             {
@@ -89,9 +89,9 @@ namespace com.christoc.modules.LadderTester
 
             sb.Append("\"Teams\":[{\"TeamId\":0,\"Name\":\"Home\",\"Score\":\"");
             sb.Append(txtHomeTeam.Text);
-            sb.Append("\",\"Games\":0,\"Wins\":0,\"Losses\":0},{\"TeamId\":0,\"Name\":\"Away\",\"Score\":\"");
+            sb.Append("\",\"Games\":0,\"Wins\":0,\"Losses\":0,\"HomeTeam\":true},{\"TeamId\":0,\"Name\":\"Away\",\"Score\":\"");
             sb.Append(txtAwayTeam.Text);
-            sb.Append("\",\"Games\":0,\"Wins\":0,\"Losses\":0}],\"FieldIdentifier\":\"");
+            sb.Append("\",\"Games\":0,\"Wins\":0,\"Losses\":0,\"HomeTeam\":false}],\"FieldIdentifier\":\"");
             sb.Append(txtFieldIdentifier.Text);
             sb.Append("\"}");
             return sb.ToString();
@@ -101,37 +101,44 @@ namespace com.christoc.modules.LadderTester
         {
             var address = "http://dnndev/svc/ladder/Game";
             var hwr = WebRequest.Create(address) as HttpWebRequest;
-            hwr.Method = "PUT";
-            hwr.ContentType = "application/json";
-            byte[] byteData = UTF8Encoding.UTF8.GetBytes(jsonValue.ToString());
-            hwr.ContentLength = byteData.Length;
-            Stream putStream = hwr.GetRequestStream();
-            
-            putStream.Write(byteData,0,byteData.Length);
+            if (hwr != null)
+            {
+                hwr.Method = "PUT";
+                hwr.ContentType = "application/json";
+                byte[] byteData = Encoding.UTF8.GetBytes(jsonValue);
+                hwr.ContentLength = byteData.Length;
+                Stream putStream = hwr.GetRequestStream();
 
-            putStream.Close();
+                putStream.Write(byteData, 0, byteData.Length);
 
-            var response = hwr.GetResponse();
+                putStream.Close();
 
-            var data = response.GetResponseStream();
+                var response = hwr.GetResponse();
 
-            var dataReader = new StreamReader (data);
-            var responseFromServer = dataReader.ReadToEnd();
+                var data = response.GetResponseStream();
 
-            response.Close();
+                if (data != null)
+                {
+                    var dataReader = new StreamReader(data);
+                    var responseFromServer = dataReader.ReadToEnd();
 
-            txtResult.Text = responseFromServer;
-            txtGameId.Text = responseFromServer;
+                    response.Close();
 
-            // Get response  
-            //using (HttpWebResponse response = hwr.GetResponse() as HttpWebResponse)
-            //{
-            //    // Get the response stream  
-            //    StreamReader reader = new StreamReader(hwr.GetRequestStream());
+                    txtResult.Text = responseFromServer;
+                    txtGameId.Text = responseFromServer;
+                }
 
-            //    // Console application output  
-            //    txtResult.Text = reader.ReadToEnd();
-            //}  
+                // Get response  
+                //using (HttpWebResponse response = hwr.GetResponse() as HttpWebResponse)
+                //{
+                //    // Get the response stream  
+                //    StreamReader reader = new StreamReader(hwr.GetRequestStream());
+
+                //    // Console application output  
+                //    txtResult.Text = reader.ReadToEnd();
+                //}  
+
+            }
 
         }
     }
