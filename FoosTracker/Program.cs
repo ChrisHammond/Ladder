@@ -13,7 +13,6 @@ using System;
 using System.IO;
 using System.Net;
 using System.Text;
-using System.Net.Sockets;
 using Microsoft.SPOT;
 using Microsoft.SPOT.Hardware;
 
@@ -38,7 +37,7 @@ namespace com.christoc.netduino.FoosTracker
 
         //debouncing multiple button presses via this post http://forums.netduino.com/index.php?/topic/2431-input-debounce/page__view__findpost__p__17367
         //setup debound to 3 seconds
-        private static long debounceDelay = 30000000;
+        private const long debounceDelay = 30000000;
 
         private static long awayAddLastPushed;
         private static long awaySubLastPushed;
@@ -46,7 +45,7 @@ namespace com.christoc.netduino.FoosTracker
         private static long homeSubLastPushed;
         private static long gameRestartLastPushed;
 
-        private static int gameId = 0;
+        private static int gameId;
 
         public static void Main()
         {
@@ -97,7 +96,7 @@ namespace com.christoc.netduino.FoosTracker
         //if someone hits the reset button update the current game online and start a new one
         private static void startNewGame_OnInterrupt(uint data1, uint data2, DateTime time)
         {
-            if ((System.DateTime.Now.Ticks - gameRestartLastPushed) > debounceDelay)
+            if ((DateTime.Now.Ticks - gameRestartLastPushed) > debounceDelay)
             {
                 GameOver();
                 NewGame();
@@ -112,7 +111,7 @@ namespace com.christoc.netduino.FoosTracker
 
         private static void awayTeamAdd_OnInterrupt(uint data1, uint data2, DateTime time)
         {
-            if ((System.DateTime.Now.Ticks - awayAddLastPushed) > debounceDelay)
+            if ((DateTime.Now.Ticks - awayAddLastPushed) > debounceDelay)
             {
                 awayTeam.Score++;
                 //AwayLed.Write(true);
@@ -122,7 +121,7 @@ namespace com.christoc.netduino.FoosTracker
         }
         private static void awayTeamSubtract_OnInterrupt(uint data1, uint data2, DateTime time)
         {
-            if ((System.DateTime.Now.Ticks - awaySubLastPushed) > debounceDelay)
+            if ((DateTime.Now.Ticks - awaySubLastPushed) > debounceDelay)
             {
                 awayTeam.Score--;
                 //AwayLed.Write(false);
@@ -132,7 +131,7 @@ namespace com.christoc.netduino.FoosTracker
         }
         private static void homeTeamAdd_OnInterrupt(uint data1, uint data2, DateTime time)
         {
-            if ((System.DateTime.Now.Ticks - homeAddLastPushed) > debounceDelay)
+            if ((DateTime.Now.Ticks - homeAddLastPushed) > debounceDelay)
             {
                 
                 homeTeam.Score++;
@@ -143,7 +142,7 @@ namespace com.christoc.netduino.FoosTracker
         }
         private static void homeTeamSubtract_OnInterrupt(uint data1, uint data2, DateTime time)
         {
-            if ((System.DateTime.Now.Ticks - homeSubLastPushed) > debounceDelay)
+            if ((DateTime.Now.Ticks - homeSubLastPushed) > debounceDelay)
             {
                 homeTeam.Score--;
                 //HomeLed.Write(false);
@@ -176,7 +175,7 @@ namespace com.christoc.netduino.FoosTracker
         //code based on examples in Getting Started with the Internet Of Things book http://cjh.am/gswtiot 
         private static void CallWebService(string jsonGame, string serviceUrl)
         {
-            //todo: handle problems in the web service
+            //todo: should this use threading?
             try
             {
                 byte[] buffer = Encoding.UTF8.GetBytes(jsonGame);
@@ -202,8 +201,9 @@ namespace com.christoc.netduino.FoosTracker
                     }
                 }
             }
-            catch (Exception exc)
+            catch
             {
+                //todo: how should we handle this?
 
                 //throw;
             }
@@ -245,8 +245,7 @@ namespace com.christoc.netduino.FoosTracker
             homeTeam.Score = 0;
             gameId = 0;
 
-            _currentGame = new Game();
-            _currentGame.FieldIdentifier = Mac();
+            _currentGame = new Game {FieldIdentifier = Mac()};
 
             //todo: call the webservice to initialize the new game
 
@@ -262,9 +261,7 @@ namespace com.christoc.netduino.FoosTracker
         public static string BuildJson()
         {
             //sample json for GAME //"{\"GameId\":0,\"PlayedDate\":\"\\/Date(1327561544141)\\/\",\"CreatedDate\":\"\\/Date(-62135568000000)\\/\",\"LastUpdatedDate\":\"\\/Date(-62135568000000)\\/\",\"PortalId\":0,\"ModuleId\":0,\"Teams\":[{\"TeamId\":0,\"Name\":\"Home\",\"FirstPlayed\":\"\\/Date(-62135568000000)\\/\",\"LastPlayed\":\"\\/Date(-62135568000000)\\/\",\"CreatedDate\":\"\\/Date(-62135568000000)\\/\",\"LastUpdatedDate\":\"\\/Date(-62135568000000)\\/\",\"Score\":4,\"Games\":0,\"Wins\":1,\"Losses\":0,\"ModuleId\":0,\"CreatedByUserId\":0,\"LastUpdatedByUserId\":0,\"PortalId\":0,\"Players\":[],\"CreatedByUser\":\"\",\"LastUpdatedByUser\":\"\"},{\"TeamId\":0,\"Name\":\"Away\",\"FirstPlayed\":\"\\/Date(-62135568000000)\\/\",\"LastPlayed\":\"\\/Date(-62135568000000)\\/\",\"CreatedDate\":\"\\/Date(-62135568000000)\\/\",\"LastUpdatedDate\":\"\\/Date(-62135568000000)\\/\",\"Score\":2,\"Games\":1,\"Wins\":1,\"Losses\":0,\"ModuleId\":0,\"CreatedByUserId\":0,\"LastUpdatedByUserId\":0,\"PortalId\":0,\"Players\":[],\"CreatedByUser\":\"\",\"LastUpdatedByUser\":\"\"}],\"CreatedByUserId\":0,\"LastUpdatedByUserId\":0,\"FieldIdentifier\":\"Test\",\"CreatedByUser\":\"\",\"LastUpdatedByUser\":\"\"}";
-            var sb = string.Empty;
-            sb =
-                "{\"GameId\":" + gameId + ",\"Teams\":[{\"TeamId\":0,\"Name\":\"Home\",\"Score\":\"" + homeTeam.Score + "\",\"Games\":0,\"Wins\":0,\"Losses\":0},{\"TeamId\":0,\"Name\":\"Away\",\"Score\":\"" + awayTeam.Score + "\",\"Games\":0,\"Wins\":0,\"Losses\":0}],\"FieldIdentifier\":\"" + _currentGame.FieldIdentifier + "\"}";
+            string sb = "{\"GameId\":" + gameId + ",\"Teams\":[{\"TeamId\":0,\"Name\":\"Home\",\"Score\":\"" + homeTeam.Score + "\",\"Games\":0,\"Wins\":0,\"Losses\":0,\"HomeTeam\":true},{\"TeamId\":0,\"Name\":\"Away\",\"Score\":\"" + awayTeam.Score + "\",\"Games\":0,\"Wins\":0,\"Losses\":0,\"HomeTeam\":false}],\"FieldIdentifier\":\"" + _currentGame.FieldIdentifier + "\"}";
             return sb;
         }
 
