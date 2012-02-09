@@ -37,7 +37,7 @@ namespace com.christoc.netduino.FoosTracker
 
         //debouncing multiple button presses via this post http://forums.netduino.com/index.php?/topic/2431-input-debounce/page__view__findpost__p__17367
         //setup debound to 3 seconds
-        private const long debounceDelay = 30000000;
+        private const long debounceDelay = 15000000;
 
         private static long awayAddLastPushed;
         private static long awaySubLastPushed;
