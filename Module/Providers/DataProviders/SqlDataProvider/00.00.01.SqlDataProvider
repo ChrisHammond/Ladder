@@ -919,7 +919,7 @@ CREATE PROCEDURE {databaseOwner}[{objectQualifier}Ladder_AddGameTeam]
 AS
 
 
-INSERT INTO [dnndev].[dbo].[dnn_Ladder_GameTeam]
+INSERT INTO {databaseOwner}[{objectQualifier}Ladder_GameTeam]
            ([gameid]
            ,[teamid]
            ,[score]
