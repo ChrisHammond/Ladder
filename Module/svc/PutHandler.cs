@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Script.Serialization;
 using com.christoc.modules.ladder.Components;
 using DotNetNuke.Entities.Portals;
+using DotNetNuke.Services.Exceptions;
 
 namespace com.christoc.modules.ladder.svc
 {
@@ -19,68 +20,79 @@ namespace com.christoc.modules.ladder.svc
         public void ProcessRequest(HttpContext context)
         {
 
-            var gc = new GameController();
-
-            HttpResponse response = context.Response;
-
-            //because we're coming into a URL that isn't being handled by DNN we need to figure out the PortalId
-            SetPortalId(context.Request);
-            
-            var jss = new JavaScriptSerializer();
-
-            //get the content from the post method
-
-            var sr = new StreamReader(HttpContext.Current.Request.InputStream);
-            var jsonBody = sr.ReadToEnd();
-            
-            var currentGame = jss.Deserialize<Game>(jsonBody);
-
-            //todo: authenticate the request, perhaps with Netduino MAC ID as a ModuleSetting? 
-
-            if (currentGame != null)
+            try
             {
-                //todo: we need to lookup the game based on the GameId if passed in the json, if so, then combine all the new stats
-                if (currentGame.GameId > 0)
+
+                var gc = new GameController();
+
+                HttpResponse response = context.Response;
+
+                //because we're coming into a URL that isn't being handled by DNN we need to figure out the PortalId
+                SetPortalId(context.Request);
+
+                var jss = new JavaScriptSerializer();
+
+                //get the content from the post method
+
+                var sr = new StreamReader(HttpContext.Current.Request.InputStream);
+                var jsonBody = sr.ReadToEnd();
+
+                var currentGame = jss.Deserialize<Game>(jsonBody);
+
+                //todo: authenticate the request, perhaps with Netduino MAC ID as a ModuleSetting? 
+
+                if (currentGame != null)
                 {
-                    var existingGame = gc.GetGame(currentGame.GameId);
-                    currentGame.FieldIdentifier = existingGame.FieldIdentifier;
-                    currentGame.CreatedDate = existingGame.CreatedDate;
-                    currentGame.CreatedByUserId = existingGame.CreatedByUserId;        
-                }
-                else
-                {
-                    currentGame.CreatedDate = DateTime.Now;
-                    currentGame.CreatedByUserId = 1;
-                    //check if a Field exists, if not add it
-                    var f = FieldController.GetField(currentGame.FieldIdentifier);
-                    if (f == null)
+                    //todo: we need to lookup the game based on the GameId if passed in the json, if so, then combine all the new stats
+                    if (currentGame.GameId > 0)
                     {
-                        f = new Field { FieldIdentifier = currentGame.FieldIdentifier, FieldName = currentGame.FieldIdentifier, CreatedByUserId = 1, CreatedDate = DateTime.Now, LastUpdatedByUserId = 1, LastUpdatedDate = DateTime.Now };
-                        f = f.Save();
+                        var existingGame = gc.GetGame(currentGame.GameId);
+                        currentGame.FieldIdentifier = existingGame.FieldIdentifier;
+                        currentGame.CreatedDate = existingGame.CreatedDate;
+                        currentGame.CreatedByUserId = existingGame.CreatedByUserId;
                     }
-                    currentGame.FieldIdentifier = f.FieldIdentifier;
+                    else
+                    {
+                        currentGame.CreatedDate = DateTime.Now;
+                        currentGame.CreatedByUserId = 1;
+                        //check if a Field exists, if not add it
+                        var f = FieldController.GetField(currentGame.FieldIdentifier);
+                        if (f == null)
+                        {
+                            f = new Field { FieldIdentifier = currentGame.FieldIdentifier, FieldName = currentGame.FieldIdentifier, CreatedByUserId = 1, CreatedDate = DateTime.Now, LastUpdatedByUserId = 1, LastUpdatedDate = DateTime.Now };
+                            f = f.Save();
+                        }
+                        currentGame.FieldIdentifier = f.FieldIdentifier;
+                    }
+
+                    currentGame.LastUpdatedByUserId = 1;
+                    currentGame.PlayedDate = DateTime.Now;
+                    currentGame.PortalId = PortalId;
+
+                    //save the game information
+                    currentGame = gc.SaveGame(currentGame);
+
+                    //TODO: how to keep track of games in progress?
+
+                    //return the GameID so Netduino knows to use this
+                    response.Write(jss.Serialize(currentGame.GameId));
+
                 }
 
-                currentGame.LastUpdatedByUserId = 1;
-                currentGame.PlayedDate = DateTime.Now;
-                currentGame.PortalId = PortalId;
 
-                //save the game information
-                currentGame = gc.SaveGame(currentGame);
+                //update score
 
-                //TODO: how to keep track of games in progress?
+                //complete game
 
-                //return the GameID so Netduino knows to use this
-                response.Write(jss.Serialize(currentGame.GameId));
-                
+                //restart game
+
+            }
+            catch (Exception exc)
+            {
+                Exceptions.ProcessHttpException(exc.ToString());
+                throw;
             }
 
-            
-            //update score
-
-            //complete game
-
-            //restart game
 
         }
 
