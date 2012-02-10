@@ -44,6 +44,8 @@ namespace com.christoc.netduino.FoosTracker
         private static long homeAddLastPushed;
         private static long homeSubLastPushed;
         private static long gameRestartLastPushed;
+        
+        private const string webServiceUrl = "http://dnndev/svc/ladder/Game";
 
         private static int gameId;
 
@@ -157,7 +159,7 @@ namespace com.christoc.netduino.FoosTracker
             var jsonString = BuildJson();
             //todo: look into threading
             //call the webservice
-            CallWebService(jsonString, "http://192.168.1.9/svc/ladder/Game");
+            CallWebService(jsonString, webServiceUrl);
         }
 
         private static void CheckTeamScores()
@@ -234,8 +236,10 @@ namespace com.christoc.netduino.FoosTracker
 
         private static void GameOver()
         {
-            //someone hit 10 points, send the results to the service before clearing and starting a new game
-            UpdateWebScores();
+            //someone hit 10 points or the Reset button, send the results to the service before clearing and starting a new game
+            //only call service if there is a score >0
+            if(homeTeam.Score>0 || awayTeam.Score>0)
+                UpdateWebScores();
         }
 
         private static void NewGame()
