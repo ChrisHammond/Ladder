@@ -1,5 +1,5 @@
 <%@ Control language="C#" Inherits="com.christoc.modules.LadderTester.View" AutoEventWireup="false"  Codebehind="View.ascx.cs" %>
-
+Server URL <asp:TextBox ID="txtServerUrl" runat="server" /> <br />
 GameID <asp:TextBox ID="txtGameId" runat="server" /> <br />
 Home Team Score <asp:TextBox ID="txtHomeTeam" runat="server" /> <br />
 Away Team Score <asp:TextBox ID="txtAwayTeam" runat="server" /> <br />

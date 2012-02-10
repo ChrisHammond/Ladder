@@ -99,7 +99,7 @@ namespace com.christoc.modules.LadderTester
 
         private void CallWebService(string jsonValue)
         {
-            var address = "http://dnndev/svc/ladder/Game";
+            var address = txtServerUrl.Text;
             var hwr = WebRequest.Create(address) as HttpWebRequest;
             if (hwr != null)
             {
