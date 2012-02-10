@@ -13,6 +13,15 @@ namespace com.christoc.modules.LadderTester {
     public partial class View {
         
         /// <summary>
+        /// txtServerUrl control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtServerUrl;
+        
+        /// <summary>
         /// txtGameId control.
         /// </summary>
         /// <remarks>
