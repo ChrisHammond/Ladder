@@ -45,7 +45,7 @@ namespace com.christoc.netduino.FoosTracker
         private static long homeSubLastPushed;
         private static long gameRestartLastPushed;
         
-        private const string webServiceUrl = "http://dnndev/svc/ladder/Game";
+        private const string webServiceUrl = "http://www.dnnfoos.com/svc/ladder/Game";
 
         private static int gameId;
 
@@ -203,10 +203,10 @@ namespace com.christoc.netduino.FoosTracker
                     }
                 }
             }
-            catch
+            catch (Exception exc)
             {
                 //todo: how should we handle this?
-
+                Debug.Print("Error: " + exc.StackTrace.ToString());
                 //throw;
             }
 
