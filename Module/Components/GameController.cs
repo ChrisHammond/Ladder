@@ -67,8 +67,16 @@ namespace com.christoc.modules.ladder.Components
 
         public Game GetGame (int gameId)
         {
-            //TODO: get the team info
-            return CBO.FillObject<Game>(DataProvider.Instance().GetGame(gameId));
+            
+            var thisGame = CBO.FillObject<Game>(DataProvider.Instance().GetGame(gameId));
+
+            var tc = new TeamController();
+            foreach (Team t in tc.GetTeamsByGame(thisGame.GameId))
+            {
+                thisGame.Teams.Add(t);
+            }
+
+            return thisGame;
         }
 
 
@@ -105,15 +113,22 @@ namespace com.christoc.modules.ladder.Components
 
 
         //get games by date
-
         //get games by team
-
         //get games by player
-
         //get games by....
 
 
+        //TODO: DELETE GAME
 
+        ///<summary>
+        /// Delete game, this takes a GameID (integer) and removes the "GameTeam" records, then deletes the game itself.
+        ///</summary>
+        ///<param name="gameId"></param>
+        public void DeleteGame(int gameId)
+        {
+            DataProvider.Instance().DeleteGameTeams(gameId);
 
+            DataProvider.Instance().DeleteGame(gameId);
+        }
     }
 }

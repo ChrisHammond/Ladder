@@ -131,6 +131,12 @@ namespace com.christoc.modules.ladder.Components
             return CBO.FillCollection<Team>(DataProvider.Instance().GetTeamsByGame(gameId));
         }
 
+
+        public void DeleteTeam(int teamId)
+        {
+            DataProvider.Instance().DeleteTeam(teamId);
+        }
+
         //get record for a team
     }
 }

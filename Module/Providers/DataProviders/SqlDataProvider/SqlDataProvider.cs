@@ -356,6 +356,38 @@ namespace com.christoc.modules.ladder.Data
         }
 
 
+
+        public override void DeleteTeam(int teamId)
+        {
+            SqlHelper.ExecuteNonQuery(ConnectionString, NamePrefix + "DeleteTeam"
+                , new SqlParameter("@TeamId", teamId));
+        }
+
+        public override void DeleteTeamPlayers(int teamId)
+        {
+            SqlHelper.ExecuteNonQuery(ConnectionString, NamePrefix + "DeleteTeamPlayers"
+            , new SqlParameter("@TeamId", teamId));
+
+        }
+
+        public override void DeleteField(int fieldId)
+        {
+            SqlHelper.ExecuteNonQuery(ConnectionString, NamePrefix + "DeleteField"
+                , new SqlParameter("@FieldId", fieldId));
+
+        }
+
+        public override void DeleteGame(int gameId)
+        {
+            SqlHelper.ExecuteNonQuery(ConnectionString, NamePrefix + "DeleteGame"
+                , new SqlParameter("@GameId", gameId));
+        }
+
+        public override void DeleteGameTeams(int gameId)
+        {
+            SqlHelper.ExecuteNonQuery(ConnectionString, NamePrefix + "DeleteGameTeams"
+                , new SqlParameter("@GameId", gameId));
+        }
     }
 
 }
