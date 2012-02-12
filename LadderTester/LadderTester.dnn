@@ -13,7 +13,7 @@
       <license src="License.txt"></license>
       <releaseNotes src="ReleaseNotes.txt"></releaseNotes>
       <dependencies>
-        <dependency type="CoreVersion">06.00.00</dependency>
+        <dependency type="CoreVersion">06.01.03</dependency>
       </dependencies>
 
       <components>
@@ -30,7 +30,7 @@
           <desktopModule>
             <moduleName>LadderTester</moduleName>
             <foldername>LadderTester</foldername>
-            <businessControllerClass>com.christoc.modules.LadderTester.Components.FeatureController</businessControllerClass>
+            <businessControllerClass />
             <supportedFeatures />
             <moduleDefinitions>
               <moduleDefinition>
