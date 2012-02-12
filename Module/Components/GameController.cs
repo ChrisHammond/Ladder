@@ -24,7 +24,7 @@ namespace com.christoc.modules.ladder.Components
         public Game SaveGame(Game g)
         {
             bool newGame = true;
-            if(g.GameId>0)
+            if (g.GameId > 0)
                 newGame = false;
 
             g = g.GameId > 0 ? UpdateGame(g) : CreateGame(g);
@@ -39,13 +39,13 @@ namespace com.christoc.modules.ladder.Components
                 //add GameTeam relationship to store the Scores
 
                 //TODO: figure out how to flag a WIN and HOME team
-                if(newGame)
-                    DataProvider.Instance().AddGameTeam(g.GameId,t.TeamId,t.Score,false,t.HomeTeam);
+                if (newGame)
+                    DataProvider.Instance().AddGameTeam(g.GameId, t.TeamId, t.Score, false, t.HomeTeam);
                 else
                     DataProvider.Instance().UpdateGameTeam(g.GameId, t.TeamId, t.Score, false, t.HomeTeam);
 
             }
-            
+
             return g;
         }
 
@@ -65,60 +65,104 @@ namespace com.christoc.modules.ladder.Components
         }
 
 
-        public Game GetGame (int gameId)
+        public Game GetGame(int gameId)
         {
-            
+            return GetGame(gameId, true);
+        }
+
+        public Game GetGame(int gameId, bool populateTeams)
+        {
+
             var thisGame = CBO.FillObject<Game>(DataProvider.Instance().GetGame(gameId));
-
-            var tc = new TeamController();
-            foreach (Team t in tc.GetTeamsByGame(thisGame.GameId))
+            if (populateTeams)
             {
-                thisGame.Teams.Add(t);
+                var tc = new TeamController();
+                foreach (Team t in tc.GetTeamsByGame(thisGame.GameId))
+                {
+                    thisGame.Teams.Add(t);
+                }
             }
-
             return thisGame;
         }
 
 
         //TODO: we're going to need to filter by date range, team, etc
-        
-        public List<Game> GetGames (int PortalId, bool populateAll)
+
+        public List<Game> GetGames(int PortalId, bool populateAll)
         {
             //check if we should populate teams and players
-            if(populateAll)
+            if (populateAll)
             {
                 var listOfGames = CBO.FillCollection<Game>(DataProvider.Instance().GetGames(PortalId));
-
-                var outputGames = new List<Game>();
-
-                foreach (var log in listOfGames)
-                {
-                    //get the teams
-                    var tc = new TeamController();
-                    foreach( Team t in tc.GetTeamsByGame(log.GameId))
-                    {
-                        log.Teams.Add(t);
-                    }
-                    outputGames.Add(log);    
-                    //get the players
-                }
-
-                return listOfGames;
+                var outputGames = PopulateTeamsForGame(listOfGames);
+                return outputGames;
             }
             return CBO.FillCollection<Game>(DataProvider.Instance().GetGames(PortalId));
         }
-        
-        // gameId
-        // populate game data, populate collection of teams
 
 
-        //get games by date
+        ///<summary>Get the games with a max number of games to return
+        ///</summary>
+        ///<param name="PortalId"></param>
+        ///<param name="count"></param>
+        ///<param name="populateAll"></param>
+        ///<returns></returns>
+        public List<Game> GetGames(int PortalId, int count, bool populateAll)
+        {
+            //check if we should populate teams and players
+            if (populateAll)
+            {
+                var listOfGames = CBO.FillCollection<Game>(DataProvider.Instance().GetGames(PortalId, count));
+                var outputGames = PopulateTeamsForGame(listOfGames);
+                return outputGames;
+            }
+            return CBO.FillCollection<Game>(DataProvider.Instance().GetGames(PortalId, count));
+        }
+
+        ///<summary>Return games for the specific date range
+        ///</summary>
+        ///<param name="PortalId"></param>
+        ///<param name="startDate"></param>
+        ///<param name="endDate"></param>
+        ///<param name="populateAll"></param>
+        ///<returns></returns>
+        public List<Game> GetGames(int PortalId, DateTime startDate, DateTime endDate, bool populateAll)
+        {
+            //check if we should populate teams and players
+            if (populateAll)
+            {
+                var listOfGames = CBO.FillCollection<Game>(DataProvider.Instance().GetGames(PortalId, startDate, endDate));
+                var outputGames = PopulateTeamsForGame(listOfGames);
+                return outputGames;
+            }
+            return CBO.FillCollection<Game>(DataProvider.Instance().GetGames(PortalId, startDate, endDate));
+        }
+
+        ///<summary>Take a list of Games and populate the Teams
+        ///</summary>
+        private static List<Game> PopulateTeamsForGame(IEnumerable<Game> games)
+        {
+            var outputGames = new List<Game>();
+
+            foreach (var log in games)
+            {
+                //get the teams
+                var tc = new TeamController();
+                foreach (Team t in tc.GetTeamsByGame(log.GameId))
+                {
+                    log.Teams.Add(t);
+                }
+                outputGames.Add(log);
+                //get the players
+            }
+
+            return outputGames;
+        }
+
         //get games by team
         //get games by player
         //get games by....
 
-
-        //TODO: DELETE GAME
 
         ///<summary>
         /// Delete game, this takes a GameID (integer) and removes the "GameTeam" records, then deletes the game itself.
@@ -126,8 +170,9 @@ namespace com.christoc.modules.ladder.Components
         ///<param name="gameId"></param>
         public void DeleteGame(int gameId)
         {
+            //first delete the GameTeam records
             DataProvider.Instance().DeleteGameTeams(gameId);
-
+            //Delete the game itself
             DataProvider.Instance().DeleteGame(gameId);
         }
     }

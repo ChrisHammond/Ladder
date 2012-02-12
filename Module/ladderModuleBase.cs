@@ -8,6 +8,8 @@
 ' THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ' 
 */
+using System;
+
 namespace com.christoc.modules.ladder
 {
 
@@ -15,7 +17,29 @@ namespace com.christoc.modules.ladder
     {
         //with this base class you can provide any custom properties and methods that all your controls can access here, you can also access all the DNN 
         // methods and properties available off of portalmodulebase such as TabId, UserId, UserInfo, etc.
+        public int GameId
+        {
+            get
+            {
+                var qs = Request.QueryString["gid"];
+                if (qs != null)
+                    return Convert.ToInt32(qs);
+                return -1;
+            }
+        }
 
+        public string GetGameLink()
+        {
+            return GetGameLink(GameId);
+        }
+
+        public string GetGameLink(int gameId)
+        {
+
+            return DotNetNuke.Common.Globals.NavigateURL(TabId, String.Empty, "df=ViewGame&gid=" + gameId);
+            ;
+
+        }
 
     }
 

@@ -1,0 +1,124 @@
+﻿
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwner}[{objectQualifier}Ladder_DeleteGame]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	DROP PROCEDURE {databaseOwner}[{objectQualifier}Ladder_DeleteGame]
+GO
+
+
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}Ladder_DeleteGame]
+	@gameid int
+AS
+
+DELETE FROM  {databaseOwner}[{objectQualifier}Ladder_Game]
+      WHERE GameId = @GameId 
+GO
+
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwner}[{objectQualifier}Ladder_DeleteGameTeams]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	DROP PROCEDURE {databaseOwner}[{objectQualifier}Ladder_DeleteGameTeams]
+GO
+
+
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}Ladder_DeleteGameTeams]
+	@gameid int
+	
+AS
+
+DELETE FROM  {databaseOwner}[{objectQualifier}Ladder_GameTeam]
+      WHERE GameId = @GameId 
+GO
+
+
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwner}[{objectQualifier}Ladder_DeleteField]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	DROP PROCEDURE {databaseOwner}[{objectQualifier}Ladder_DeleteField]
+GO
+
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}Ladder_DeleteField]
+	@FieldId int
+	
+AS
+
+DELETE FROM  {databaseOwner}[{objectQualifier}Ladder_Field]
+      WHERE FieldId = @FieldId 
+GO
+
+
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwner}[{objectQualifier}Ladder_DeleteTeamPlayers]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	DROP PROCEDURE {databaseOwner}[{objectQualifier}Ladder_DeleteTeamPlayers]
+GO
+
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}Ladder_DeleteTeamPlayers]
+	@TeamId int
+	
+AS
+DELETE FROM  {databaseOwner}[{objectQualifier}Ladder_TeamPlayers]
+      WHERE TeamId = @TeamId 
+GO
+
+
+
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwner}[{objectQualifier}Ladder_DeleteTeam]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	DROP PROCEDURE {databaseOwner}[{objectQualifier}Ladder_DeleteTeam]
+GO
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}Ladder_DeleteTeam]
+	@TeamId int
+	
+AS
+
+DELETE FROM  {databaseOwner}[{objectQualifier}Ladder_Team]
+      WHERE TeamId = @TeamId 
+GO
+
+
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwner}[{objectQualifier}Ladder_GetGamesLastX]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	DROP PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetGamesLastX]
+GO
+
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetGamesLastX]
+	@portalid int
+	, @lastNumber int
+AS
+
+SELECT top(@lastNumber) [gameid]
+      ,[createddate]
+      ,[playeddate]
+      ,[lastupdateddate]
+      ,[createdbyuserid]
+      ,[lastupdatedbyuserid]
+	  ,[fieldidentifier]
+	  ,[portalId]
+  FROM {databaseOwner}[{objectQualifier}Ladder_Game]
+  WHERE
+	[portalid]=@portalid
+  ORDER BY
+	playeddate desc
+GO
+
+
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwner}[{objectQualifier}Ladder_GetGamesByDateRange]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	DROP PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetGamesByDateRange]
+GO
+
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetGamesByDateRange]
+	@portalid int
+	, @startDate datetime
+	, @endDate datetime
+AS
+
+SELECT [gameid]
+      ,[createddate]
+      ,[playeddate]
+      ,[lastupdateddate]
+      ,[createdbyuserid]
+      ,[lastupdatedbyuserid]
+	  ,[fieldidentifier]
+	  ,[portalId]
+  FROM {databaseOwner}[{objectQualifier}Ladder_Game]
+  WHERE
+	[portalid]=@portalid
+	and playeddate BETWEEN @startDate and @endDate
+  ORDER BY
+	playeddate desc
+GO
+
+
+
+

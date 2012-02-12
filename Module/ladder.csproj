@@ -109,6 +109,13 @@
     <Compile Include="Components\Team.cs" />
     <Compile Include="Components\Game.cs" />
     <Compile Include="Components\TeamController.cs" />
+    <Compile Include="Controls\GameList.ascx.cs">
+      <DependentUpon>GameList.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\GameList.ascx.designer.cs">
+      <DependentUpon>GameList.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ManageGame.ascx.cs">
       <DependentUpon>ManageGame.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -137,7 +144,22 @@
     <Compile Include="Controls\ManageTeam.ascx.designer.cs">
       <DependentUpon>ManageTeam.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ViewGame.ascx.cs">
+      <DependentUpon>ViewGame.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\ViewGame.ascx.designer.cs">
+      <DependentUpon>ViewGame.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ViewTeam.ascx.cs">
+      <DependentUpon>ViewTeam.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\ViewTeam.ascx.designer.cs">
+      <DependentUpon>ViewTeam.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Data\DataProvider.cs" />
+    <Content Include="Controls\GameList.ascx" />
     <Content Include="Controls\ManageGame.ascx" />
     <Content Include="Controls\ManagePlayer.ascx" />
     <Content Include="Controls\ManageSettings.ascx" />
@@ -185,14 +207,25 @@
     </None>
     <None Include="BuildScripts\MSBuild.Community.Tasks.Targets" />
     <None Include="Providers\DataProviders\SqlDataProvider\00.00.01.SqlDataProvider" />
-    <None Include="ladder.dnn" />
+    <None Include="ladder.dnn">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Providers\DataProviders\SqlDataProvider\00.00.02.SqlDataProvider" />
     <None Include="Providers\DataProviders\SqlDataProvider\Uninstall.SqlDataProvider" />
     <None Include="module.css" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Controls\ViewGame.ascx" />
+    <Content Include="Controls\ViewTeam.ascx" />
     <Content Include="Edit.ascx" />
+    <Content Include="License.txt" />
+    <Content Include="ReleaseNotes.txt" />
     <Content Include="Settings.ascx" />
     <Content Include="View.ascx" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Controls\App_LocalResources\GameList.ascx.resx" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="'$(Solutions.VSVersion)' == '8.0'" />
