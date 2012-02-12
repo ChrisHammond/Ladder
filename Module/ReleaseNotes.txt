@@ -1,0 +1,15 @@
+﻿<h3>Ladder</h3>
+<p class="Contributor">
+	Christoc.com <br />
+	<a href="mailto:modules@christoc.com">modules@christoc.com</a><br />
+	<a href=http://www.christoc.com>http://www.christoc.com</a><br />
+</p>
+<hr/>
+<div class="License">
+	<h3>About the Ladder</h3>
+	<p class="Owner">
+		<b>Version 00.00.02</b><br /><br />
+	</p>
+	<p>This module is used to display and manage results from FoosTracker, www.dnnfoos.com</p>
+		
+</div>

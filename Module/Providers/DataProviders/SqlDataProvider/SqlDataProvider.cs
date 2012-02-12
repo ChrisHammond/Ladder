@@ -209,6 +209,18 @@ namespace com.christoc.modules.ladder.Data
             return SqlHelper.ExecuteReader(ConnectionString, NamePrefix + "GetGames", new SqlParameter("@PortalId", portalId));
         }
 
+
+        public override IDataReader GetGames(int portalId, int count)
+        {
+            return SqlHelper.ExecuteReader(ConnectionString, NamePrefix + "GetGamesLastX", new SqlParameter("@PortalId", portalId), new SqlParameter("@lastNumber" , count));
+        }
+
+        public override IDataReader GetGames(int portalId, DateTime startDate, DateTime endDate)
+        {
+            return SqlHelper.ExecuteReader(ConnectionString, NamePrefix + "GetGamesByDateRange", new SqlParameter("@PortalId", portalId), new SqlParameter("@startDate", startDate), new SqlParameter("@endDate", endDate));
+        }
+
+
         public override IDataReader GetGame(int gameId)
         {
             return SqlHelper.ExecuteReader(ConnectionString, NamePrefix + "GetGame", new SqlParameter("@GameId", gameId));
