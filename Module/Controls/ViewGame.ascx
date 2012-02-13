@@ -8,7 +8,7 @@
 <asp:Label ID="lblGameStart" runat="server" CssClass="GameTime" />
 
 <div class="TeamDiv">
-    <asp:Label ID="lblTeam1Name" runat="server" class="Team1Name" />
+    <asp:HyperLink ID="lblTeam1Link" runat="server" CssClass="Team1Name"/>
     <asp:Label ID="lblTeam1Score" runat="server" class="Team1Score" />
     <div class="TeamDetails">
         <asp:PlaceHolder id="phTeam1Details" runat="server" />
@@ -16,7 +16,7 @@
 </div>
 
 <div class="TeamDiv">
-    <asp:Label ID="lblTeam2Name" runat="server" class="Team2Name" />
+    <asp:HyperLink ID="lblTeam2Link" runat="server" CssClass="Team2Name"/>
     <asp:Label ID="lblTeam2Score" runat="server" class="Team2Score" />
     <div class="TeamDetails">
         <asp:PlaceHolder id="phTeam2Details" runat="server" />

@@ -16,6 +16,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using com.christoc.modules.ladder;
+using DotNetNuke.Services.Exceptions;
 
 namespace com.christoc.modules.ladder.Controls
 {
@@ -24,6 +25,21 @@ namespace com.christoc.modules.ladder.Controls
         protected void Page_Load(object sender, EventArgs e)
         {
             //allow for creating and editing a team
+            try
+            {
+                //dlPlayers
+
+                //todo: populate a list of all players
+                //todo: populate a list of players for team
+                //todo: save a list of players for a team
+
+
+            }
+            catch (Exception exc)
+            {
+                
+                Exceptions.ProcessModuleLoadException(this,exc);
+            }
 
         }
     }

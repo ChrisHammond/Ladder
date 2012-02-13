@@ -35,10 +35,12 @@ namespace com.christoc.modules.ladder
 
         public string GetGameLink(int gameId)
         {
-
             return DotNetNuke.Common.Globals.NavigateURL(TabId, String.Empty, "df=ViewGame&gid=" + gameId);
-            ;
+        }
 
+        public string GetTeamLink(int teamId)
+        {
+            return DotNetNuke.Common.Globals.NavigateURL(TabId, String.Empty, "df=ViewTeam&tid=" + teamId);
         }
 
     }

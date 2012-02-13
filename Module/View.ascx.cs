@@ -52,26 +52,46 @@ namespace com.christoc.modules.ladder
         {
             try
             {
-                var controlToLoad = "Controls/GameList.ascx";
-                if (GameId > 0)
-                {
-                    controlToLoad = "Controls/GameView.ascx";
-                }
-
+                var
+                controlToLoad = ControlToLoad();
                 var mbl = (ladderModuleBase)LoadControl(controlToLoad);
                 mbl.ModuleConfiguration = ModuleConfiguration;
                 mbl.ID = System.IO.Path.GetFileNameWithoutExtension(controlToLoad);
                 phLadder.Controls.Add(mbl);
-               
+
             }
             catch (Exception exc) //Module failed to load
             {
                 Exceptions.ProcessModuleLoadException(this, exc);
             }
         }
-        
+
+        private string ControlToLoad()
+        {
+
+            var df = Request.QueryString["df"];
+            var cl = string.Empty;
+            if (df != null)
+            {
+                switch (df)
+                {
+                    case "ViewGame":
+                        return ("controls/ViewGame.ascx");
+                        break;
+                    case "ViewTeam":
+                        return ("controls/ViewTeam.ascx");
+                        break;
+                    default:
+                        return ("controls/GameList.ascx");
+                        break;
+                }
+            }
+            return "controls/GameList.ascx";
+
+        }
+
         #endregion
-        
+
         #region Optional Interfaces
 
         public ModuleActionCollection ModuleActions

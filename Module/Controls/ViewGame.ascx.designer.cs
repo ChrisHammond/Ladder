@@ -40,13 +40,13 @@ namespace com.christoc.modules.ladder.Controls {
         protected global::System.Web.UI.WebControls.Label lblGameStart;
         
         /// <summary>
-        /// lblTeam1Name control.
+        /// lblTeam1Link control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblTeam1Name;
+        protected global::System.Web.UI.WebControls.HyperLink lblTeam1Link;
         
         /// <summary>
         /// lblTeam1Score control.
@@ -67,13 +67,13 @@ namespace com.christoc.modules.ladder.Controls {
         protected global::System.Web.UI.WebControls.PlaceHolder phTeam1Details;
         
         /// <summary>
-        /// lblTeam2Name control.
+        /// lblTeam2Link control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblTeam2Name;
+        protected global::System.Web.UI.WebControls.HyperLink lblTeam2Link;
         
         /// <summary>
         /// lblTeam2Score control.
