@@ -1,6 +1,8 @@
 ul.ladder_game li
 {
     list-style-type:none;
+    float:left;
+    padding:10px;
 }
 
 

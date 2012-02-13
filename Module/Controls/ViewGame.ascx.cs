@@ -6,6 +6,8 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using com.christoc.modules.ladder.Components;
 using DotNetNuke.Services.Exceptions;
+using DotNetNuke.Services.Localization;
+using DotNetNuke.UI.Utilities;
 
 namespace com.christoc.modules.ladder.Controls
 {
@@ -16,14 +18,18 @@ namespace com.christoc.modules.ladder.Controls
             try
             {
                 pnlAdmin.Visible = IsEditable;
+                ClientAPI.AddButtonConfirm(lbDeleteGame, Localization.GetString("DeleteConfirm", LocalResourceFile));
+
                 var gc = new GameController();
                 var currentGame = gc.GetGame(GameId);
                 if(currentGame!=null)
                 {
                     lblGameStart.Text = currentGame.PlayedDate.ToShortDateString();
-                    lblTeam1Name.Text = currentGame.Teams[0].Name;
+                    lblTeam1Link.NavigateUrl = GetTeamLink(currentGame.Teams[0].TeamId);
+                    lblTeam1Link.Text = currentGame.Teams[0].Name;
                     lblTeam1Score.Text = currentGame.Teams[0].Score.ToString();
-                    lblTeam2Name.Text = currentGame.Teams[1].Name;
+                    lblTeam2Link.NavigateUrl = GetTeamLink(currentGame.Teams[1].TeamId);
+                    lblTeam2Link.Text = currentGame.Teams[1].Name;
                     lblTeam2Score.Text = currentGame.Teams[1].Score.ToString();
                 }
             }
