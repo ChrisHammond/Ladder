@@ -148,6 +148,13 @@
     <Compile Include="Controls\ManageTeam.ascx.designer.cs">
       <DependentUpon>ManageTeam.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Controls\PlayerList.ascx.cs">
+      <DependentUpon>PlayerList.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\PlayerList.ascx.designer.cs">
+      <DependentUpon>PlayerList.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ViewGame.ascx.cs">
       <DependentUpon>ViewGame.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -219,6 +226,7 @@
     <None Include="module.css" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Controls\PlayerList.ascx" />
     <Content Include="Controls\ViewGame.ascx" />
     <Content Include="Controls\ViewTeam.ascx" />
     <Content Include="Edit.ascx" />
@@ -235,6 +243,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Controls\App_LocalResources\ManageTeam.ascx.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Controls\App_LocalResources\ViewTeam.ascx.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Controls\App_LocalResources\PlayerList.ascx.resx" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="'$(Solutions.VSVersion)' == '8.0'" />

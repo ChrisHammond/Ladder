@@ -22,7 +22,16 @@ namespace com.christoc.modules.ladder.Components
         public int Games { get; set; }
         public int Wins { get; set; }
         public int Losses { get; set; }
-                
+        public int PortalId { get; set; }
+
+        public string DisplayName {
+
+            get
+            {
+                return UserId != 0 ? DotNetNuke.Entities.Users.UserController.GetUserById(PortalId, PlayerId).DisplayName : Null.NullString;
+            }
+        
+        }
 
         #region IHydratable Members
 
@@ -34,7 +43,7 @@ namespace com.christoc.modules.ladder.Components
             Games = Null.SetNullInteger(dr["games"]);
             Wins = Null.SetNullInteger(dr["wins"]);
             Losses = Null.SetNullInteger(dr["losses"]);
-
+            PortalId = Null.SetNullInteger(dr["portalId"]);
         }
 
         int IHydratable.KeyID

@@ -306,6 +306,10 @@ namespace com.christoc.modules.ladder.Data
             return SqlHelper.ExecuteReader(ConnectionString, NamePrefix + "GetPlayer", new SqlParameter("@PlayerId", playerId));
         }
 
+        public override IDataReader GetNonPlayers(int portalId)
+        {
+            return SqlHelper.ExecuteReader(ConnectionString, NamePrefix + "GetNonPlayers", new SqlParameter("@PortalId", portalId));
+        }
 
         #endregion
 

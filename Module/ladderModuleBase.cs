@@ -28,6 +28,17 @@ namespace com.christoc.modules.ladder
             }
         }
 
+        public int TeamId
+        {
+            get
+            {
+                var qs = Request.QueryString["tid"];
+                if (qs != null)
+                    return Convert.ToInt32(qs);
+                return -1;
+            }
+        }
+
         public string GetGameLink()
         {
             return GetGameLink(GameId);
@@ -37,11 +48,20 @@ namespace com.christoc.modules.ladder
         {
             return DotNetNuke.Common.Globals.NavigateURL(TabId, String.Empty, "df=ViewGame&gid=" + gameId);
         }
+        public string GetGameManageLink(int gameId)
+        {
+            return DotNetNuke.Common.Globals.NavigateURL(TabId, String.Empty, "df=ManageGame&tid=" + gameId);
+        }
 
         public string GetTeamLink(int teamId)
         {
             return DotNetNuke.Common.Globals.NavigateURL(TabId, String.Empty, "df=ViewTeam&tid=" + teamId);
         }
+        public string GetTeamManageLink(int teamId)
+        {
+            return DotNetNuke.Common.Globals.NavigateURL(TabId, String.Empty, "df=ManageTeam&tid=" + teamId);
+        }
+
 
     }
 

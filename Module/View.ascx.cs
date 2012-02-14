@@ -77,13 +77,31 @@ namespace com.christoc.modules.ladder
                 {
                     case "ViewGame":
                         return ("controls/ViewGame.ascx");
+                    case "ManageGame":
+                        //you can't load the Manage Game control if you don't have edit permissions
+                        if (IsEditable)
+                        {
+                            return ("controls/ManageGame.ascx");
+                        }
                         break;
                     case "ViewTeam":
                         return ("controls/ViewTeam.ascx");
+                    case "ManageTeam":
+                        //you can't load the Manage Team control if you don't have edit permissions
+                        if(IsEditable)
+                        {
+                            return ("controls/ManageTeam.ascx");
+                        }
+                        break;
+
+                    case "ManagePlayerList":
+                        if(IsEditable)
+                        {
+                            return ("controls/PlayerList.ascx");
+                        }
                         break;
                     default:
                         return ("controls/GameList.ascx");
-                        break;
                 }
             }
             return "controls/GameList.ascx";
@@ -100,6 +118,7 @@ namespace com.christoc.modules.ladder
             {
                 var Actions = new ModuleActionCollection();
                 Actions.Add(GetNextActionID(), Localization.GetString("EditModule", this.LocalResourceFile), "", "", "", EditUrl(), false, SecurityAccessLevel.Edit, true, false);
+                Actions.Add(GetNextActionID(), Localization.GetString("ManagePlayerList", this.LocalResourceFile), "", "", "", DotNetNuke.Common.Globals.NavigateURL(TabId, String.Empty, "df=ManagePlayerList"), false, SecurityAccessLevel.Edit, true, false);
                 return Actions;
             }
         }

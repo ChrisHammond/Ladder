@@ -15,6 +15,12 @@ namespace com.christoc.modules.ladder.Controls
         {
             try
             {
+                if(IsEditable)
+                {
+                    hlManageTeam.NavigateUrl = GetTeamManageLink(TeamId);
+                    pnlAdmin.Enabled = true;
+                }
+
                 if(TeamId>0)
                 {
 
@@ -41,15 +47,5 @@ namespace com.christoc.modules.ladder.Controls
             }
         }
 
-        public int TeamId
-        {
-            get
-            {
-                var qs = Request.QueryString["tid"];
-                if (qs != null)
-                    return Convert.ToInt32(qs);
-                return -1;
-            }
-        }
     }
 }

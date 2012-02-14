@@ -10,12 +10,8 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using com.christoc.modules.ladder;
+using com.christoc.modules.ladder.Components;
+
 using DotNetNuke.Services.Exceptions;
 
 namespace com.christoc.modules.ladder.Controls
@@ -32,15 +28,28 @@ namespace com.christoc.modules.ladder.Controls
                 //todo: populate a list of all players
                 //todo: populate a list of players for team
                 //todo: save a list of players for a team
-
-
+                if (!Page.IsPostBack)
+                {
+                    var tc = new TeamController();
+                    if (TeamId > 0)
+                    {
+                        var curTeam = tc.GetTeam(TeamId);
+                        
+                        //populate team name
+                        txtTeamName.Text = curTeam.Name;
+                        
+                        //populate list of players
+                        foreach (var p in curTeam.Players)
+                        {
+                            dlPlayers.Assigned.Add(p);
+                        }
+                    }
+                }
             }
             catch (Exception exc)
             {
-                
-                Exceptions.ProcessModuleLoadException(this,exc);
+                Exceptions.ProcessModuleLoadException(this, exc);
             }
-
         }
     }
 }

@@ -8,6 +8,7 @@
 ' THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ' 
 */
+using System.Collections.Generic;
 using com.christoc.modules.ladder.Data;
 using DotNetNuke.Common.Utilities;
 
@@ -53,5 +54,12 @@ namespace com.christoc.modules.ladder.Components
             return CBO.FillObject<Player>(DataProvider.Instance().GetPlayer(playerId));
         }
 
+        public List<Player> GetPlayers(int portalId)
+        {
+            //TODO: get list of all players for a portal
+            return new List<Player>();
+        }
+
+        
     }
 }
