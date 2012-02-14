@@ -13,6 +13,24 @@ namespace com.christoc.modules.ladder.Controls {
     public partial class ViewTeam {
         
         /// <summary>
+        /// pnlAdmin control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlAdmin;
+        
+        /// <summary>
+        /// hlManageTeam control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink hlManageTeam;
+        
+        /// <summary>
         /// lblTeamName control.
         /// </summary>
         /// <remarks>

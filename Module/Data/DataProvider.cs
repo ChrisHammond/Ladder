@@ -79,21 +79,16 @@ namespace com.christoc.modules.ladder.Data
         public abstract void UpdateTeam(Team t);
         public abstract void DeleteTeam(int teamId);
 
-
-
         public abstract void AddTeamPlayer(int teamId, int playerId);
 
         public abstract IDataReader GetTeamPlayers(int teamId);
         public abstract void DeleteTeamPlayers(int teamId);
-
         
         public abstract IDataReader GetTeams();
         public abstract IDataReader GetTeamsByGame(int gameId);
         
         public abstract IDataReader GetTeam(int teamId);
         public abstract IDataReader GetTeam(string teamName);
-
-       
         
         /*game player settings*/
         public abstract void AddGamePlayerSetting(GamePlayerSetting gps);
@@ -109,6 +104,8 @@ namespace com.christoc.modules.ladder.Data
 
         public abstract IDataReader GetPlayer(int playerId);
 
+        public abstract IDataReader GetNonPlayers(int portalId);
+
         /* field */
         public abstract IDataReader GetFields();
         public abstract IDataReader GetField(int fieldId);
@@ -117,7 +114,6 @@ namespace com.christoc.modules.ladder.Data
         public abstract void UpdateField(Field f);
         public abstract void DeleteField(int fieldId);
         
-
 
         /* game */
         public abstract int AddGame(Game g);
@@ -128,7 +124,6 @@ namespace com.christoc.modules.ladder.Data
 
         public abstract IDataReader GetGames(int portalId, int count);
         public abstract IDataReader GetGames(int portalId, DateTime startDate, DateTime endDate);
-
         public abstract IDataReader GetGame(int gameId);
 
         

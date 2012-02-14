@@ -122,3 +122,64 @@ GO
 
 
 
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwner}[{objectQualifier}Ladder_GetTeamPlayers]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	DROP PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetTeamPlayers]
+GO
+
+
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetTeamPlayers]
+	@TeamId int
+
+AS
+Select 
+	p.PlayerId 
+	, p.userid
+	, t.portalid 
+	from {databaseOwner}[{objectQualifier}Ladder_TeamPlayer] tp
+	join {databaseOwner}[{objectQualifier}Ladder_Player] p on tp.playerid=p.playerid
+	join {databaseOwner}[{objectQualifier}Ladder_Team] t on t.teamid = tp.teamid
+where 
+	tp.TeamId = @TeamId
+
+GO
+
+
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwner}[{objectQualifier}Ladder_GetPlayer]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	DROP PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetPlayer]
+GO
+
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetPlayer]
+	@PlayerId int
+
+AS
+Select PlayerId, UserId, Rank, Games, Wins, Losses, PortalId from {databaseOwner}[{objectQualifier}Ladder_Player]
+where playerId = @PlayerId
+
+GO
+
+
+if not exists (select * from syscolumns where name = 'PortalId' and id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}Ladder_Player]'))
+ALTER TABLE {databaseOwner}{objectQualifier}Ladder_Player ADD
+	PortalId INT NULL
+GO
+
+
+
+
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwner}[{objectQualifier}Ladder_GetNonPlayers]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	DROP PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetNonPlayers]
+GO
+
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetNonPlayers]
+	@PortalId int
+
+AS
+select 
+	UserID
+	, DisplayName
+from 
+	{objectQualifier}Users u 
+where 
+	u.UserID 
+		not in (select up.UserID from {objectQualifier}Ladder_Player lp join {objectQualifier}UserPortals up on lp.userid=up.userid and up.PortalId = @PortalId)
+GO

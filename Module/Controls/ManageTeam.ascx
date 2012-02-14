@@ -17,10 +17,12 @@
         </div>
         <div class="dnnFormItem">
             <dnn:label id="lblPlayers" controlname="lblPlayers" runat="server" />
-            <dnn:duallist runat="server" id="dlPlayers" />
-
+            <dnn:duallist runat="server" id="dlPlayers" DataTextField="DisplayName" DataValueField="PlayerId" />
         </div>
-
+        <div class="dnnFormItem">
+        <asp:LinkButton ID="lbSave" runat="server" CssClass="dnnPrimaryAction" resourcekey="lbSave" />
+        <asp:LinkButton ID="lbCancel" runat="server" CssClass="dnnSecondaryAction" resourcekey="lbCancel" />
+        </div>
     </fieldset>
 
 </div>

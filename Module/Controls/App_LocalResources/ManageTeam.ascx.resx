@@ -132,4 +132,10 @@
   <data name="TeamSettings.Text" xml:space="preserve">
     <value>Team Settings</value>
   </data>
+  <data name="lbCancel.Text" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="lbSave.Text" xml:space="preserve">
+    <value>Save</value>
+  </data>
 </root>

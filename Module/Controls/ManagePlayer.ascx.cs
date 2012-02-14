@@ -16,6 +16,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using com.christoc.modules.ladder;
+using DotNetNuke.Services.Exceptions;
 
 namespace com.christoc.modules.ladder.Controls
 {
@@ -24,6 +25,15 @@ namespace com.christoc.modules.ladder.Controls
         protected void Page_Load(object sender, EventArgs e)
         {
             //allow for creating and editing a player
+            try
+            {
+
+            }
+            catch (Exception exc)
+            {
+                
+                Exceptions.ProcessModuleLoadException(this,exc);
+            }
         }
     }
 }
