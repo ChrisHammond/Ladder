@@ -28,7 +28,7 @@ namespace com.christoc.modules.ladder.Components
 
             get
             {
-                return UserId != 0 ? DotNetNuke.Entities.Users.UserController.GetUserById(PortalId, PlayerId).DisplayName : Null.NullString;
+                return UserId != 0 ? DotNetNuke.Entities.Users.UserController.GetUserById(PortalId, UserId).DisplayName : Null.NullString;
             }
         
         }

@@ -22,6 +22,7 @@ namespace com.christoc.modules.ladder.Components
         {
             //we need to look to see if the team already exists, if so update their info on the object before saving.
             var lookup = GetTeamByName(t.Name);
+            var originalPlayers = new List<Player>();
             if(lookup!=null)
             {
                 t.TeamId = lookup.TeamId;
@@ -30,11 +31,13 @@ namespace com.christoc.modules.ladder.Components
                 t.Games = lookup.Wins;
                 t.FirstPlayed = lookup.FirstPlayed;
                 t.LastPlayed = lookup.LastPlayed;
+                t.Score = 0;
+                originalPlayers = lookup.Players;
             }
             
             //if the team has an ID we are updating them, otherwise we are creating them
             if(t.TeamId>0)
-                UpdateTeam(t);
+                UpdateTeam(t, originalPlayers);
             else
                 t = CreateTeam(t);           
             return t;
@@ -55,18 +58,17 @@ namespace com.christoc.modules.ladder.Components
             //create the team and updated with the new TeamId
             t.TeamId = DataProvider.Instance().CreateTeam(t);
             //since Team is created add the players
-            AddPlayers(t);
+            AddPlayers(t, new List<Player>());
             return t;
         }
 
         //update team
 
-        public void UpdateTeam(Team t)
+        public void UpdateTeam(Team t, List<Player> originalPlayers)
         {
             t.LastUpdatedByUserId = 1;
-
             DataProvider.Instance().UpdateTeam(t);
-            AddPlayers(t);
+            AddPlayers(t, originalPlayers);
         }
 
         //get players for a team
@@ -90,8 +92,11 @@ namespace com.christoc.modules.ladder.Components
             DataProvider.Instance().AddTeamPlayer(teamId, playerId);
         }
 
-        public void AddPlayers(Team t)
+        public void AddPlayers(Team t, List<Player> originalPlayers)
         {   
+            //todo: check new players versus original players
+            //todo: how to handle?
+
             foreach (Player p in t.Players)
             {
                 AddTeamPlayer(t.TeamId,p.PlayerId);
@@ -107,7 +112,6 @@ namespace com.christoc.modules.ladder.Components
             if(t!=null)
                 t.Players = GetPlayers(t.TeamId);            //populate collection of players for team
             return t;
-            
         }
 
         public Team GetTeam(int teamId)

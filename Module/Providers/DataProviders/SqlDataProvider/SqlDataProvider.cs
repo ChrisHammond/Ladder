@@ -298,6 +298,7 @@ namespace com.christoc.modules.ladder.Data
                 , new SqlParameter("@Games", p.Games)
                 , new SqlParameter("@Wins", p.Wins)
                 , new SqlParameter("@Losses", p.Losses)
+                , new SqlParameter("@PortalId", p.PortalId)
                );
         }
 
@@ -309,6 +310,11 @@ namespace com.christoc.modules.ladder.Data
         public override IDataReader GetNonPlayers(int portalId)
         {
             return SqlHelper.ExecuteReader(ConnectionString, NamePrefix + "GetNonPlayers", new SqlParameter("@PortalId", portalId));
+        }
+
+        public override IDataReader GetPlayers(int portalId)
+        {
+            return SqlHelper.ExecuteReader(ConnectionString, NamePrefix + "GetPlayers", new SqlParameter("@PortalId", portalId));
         }
 
         #endregion
