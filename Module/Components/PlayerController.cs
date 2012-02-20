@@ -19,7 +19,7 @@ namespace com.christoc.modules.ladder.Components
 
         public Player Save(Player p)
         {
-            if (p.PlayerId < 0)
+            if (p.PlayerId < 1)
                 p = CreatePlayer(p.UserId);
             else
             {
@@ -33,12 +33,14 @@ namespace com.christoc.modules.ladder.Components
         {
             var p = new Player
                         {
-                            UserId = DataProvider.Instance().CreatePlayer(playerId),
+                            PlayerId = DataProvider.Instance().CreatePlayer(playerId),
+                            UserId= playerId,    
                             Rank = 0,
                             Games = 0,
                             Losses = 0,
                             Wins = 0
                         };
+            UpdatePlayer(p);
             return p;
         }
 
@@ -56,8 +58,7 @@ namespace com.christoc.modules.ladder.Components
 
         public List<Player> GetPlayers(int portalId)
         {
-            //TODO: get list of all players for a portal
-            return new List<Player>();
+            return CBO.FillCollection<Player>(DataProvider.Instance().GetPlayers(portalId));
         }
 
         

@@ -103,6 +103,7 @@ namespace com.christoc.modules.ladder.Data
         public abstract void UpdatePlayer(Player p);
 
         public abstract IDataReader GetPlayer(int playerId);
+        public abstract IDataReader GetPlayers(int portalId);
 
         public abstract IDataReader GetNonPlayers(int portalId);
 

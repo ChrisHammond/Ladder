@@ -10,6 +10,8 @@
 */
 
 using System;
+using System.Collections;
+using System.Web.UI.WebControls;
 using com.christoc.modules.ladder.Components;
 
 using DotNetNuke.Services.Exceptions;
@@ -20,36 +22,83 @@ namespace com.christoc.modules.ladder.Controls
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            //allow for creating and editing a team
+            //TODO: allow for creating 
             try
             {
-                //dlPlayers
-
-                //todo: populate a list of all players
-                //todo: populate a list of players for team
-                //todo: save a list of players for a team
                 if (!Page.IsPostBack)
                 {
+                    //get a list of players that are available
+                    var pc = new PlayerController();
+                    var availPlayerList = new ArrayList();
+                    var teamPlayerList = new ArrayList();
+
+                    foreach (var player in pc.GetPlayers(PortalId))
+                    {
+                        availPlayerList.Add(player);
+                    }
+
                     var tc = new TeamController();
                     if (TeamId > 0)
                     {
                         var curTeam = tc.GetTeam(TeamId);
-                        
+
                         //populate team name
                         txtTeamName.Text = curTeam.Name;
-                        
+
                         //populate list of players
                         foreach (var p in curTeam.Players)
                         {
-                            dlPlayers.Assigned.Add(p);
+                            teamPlayerList.Add(p);
                         }
                     }
+
+                    dlPlayers.Available = availPlayerList;
+                    dlPlayers.Assigned = teamPlayerList;
+
+                    dlPlayers.DataBind();
                 }
             }
             catch (Exception exc)
             {
                 Exceptions.ProcessModuleLoadException(this, exc);
             }
+        }
+
+        protected void lbSave_Click(object sender, EventArgs e)
+        {
+
+            //TODO: handle the removal of a player from a team
+            //possibly delete all players on a team save, then add them again? seems inefficient.
+
+            //TODO: don't allow more than two players on a team
+
+
+            //save the team
+            var tc = new TeamController();
+            if (TeamId > 0)
+            {
+                var curTeam = tc.GetTeam(TeamId);
+
+                //populate team name
+                curTeam.Name = txtTeamName.Text;
+
+                //populate list of players
+                var pc = new PlayerController();
+                foreach (var player in dlPlayers.Assigned)
+                {
+                    var li = (ListItem)player;
+
+                    var curPlayer = pc.GetPlayer(Convert.ToInt32(li.Value));
+                    curTeam.Players.Add(curPlayer);
+                }
+                tc.SaveTeam(curTeam);
+            }
+        }
+
+        protected void lbCancel_Click(object sender, EventArgs e)
+        {
+            //todo:where should we go? currently redirecting to the tabid
+            Response.Redirect(DotNetNuke.Common.Globals.NavigateURL(TabId));
         }
     }
 }

@@ -1,4 +1,9 @@
-﻿
+﻿if not exists (select * from syscolumns where name = 'PortalId' and id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}Ladder_Player]'))
+ALTER TABLE {databaseOwner}{objectQualifier}Ladder_Player ADD
+	PortalId INT NULL
+GO
+
+
 IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwner}[{objectQualifier}Ladder_DeleteGame]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
 	DROP PROCEDURE {databaseOwner}[{objectQualifier}Ladder_DeleteGame]
 GO
@@ -122,6 +127,7 @@ GO
 
 
 
+
 IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwner}[{objectQualifier}Ladder_GetTeamPlayers]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
 	DROP PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetTeamPlayers]
 GO
@@ -158,10 +164,6 @@ where playerId = @PlayerId
 GO
 
 
-if not exists (select * from syscolumns where name = 'PortalId' and id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}Ladder_Player]'))
-ALTER TABLE {databaseOwner}{objectQualifier}Ladder_Player ADD
-	PortalId INT NULL
-GO
 
 
 
@@ -183,3 +185,117 @@ where
 	u.UserID 
 		not in (select up.UserID from {objectQualifier}Ladder_Player lp join {objectQualifier}UserPortals up on lp.userid=up.userid and up.PortalId = @PortalId)
 GO
+
+
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwner}[{objectQualifier}Ladder_GetTeam]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	DROP PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetTeam]
+GO
+
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetTeam]
+		@teamid int
+AS
+
+SELECT [teamid]
+      ,[name]
+      ,[games]
+      ,[wins]
+      ,[losses]
+      ,[firstplayed]
+      ,[lastplayed]
+      ,[createdbyuserid]
+      ,[createddate]
+      ,[lastupdatedbyuserid]
+      ,[lastupdateddate]
+	  , 0 as 'score'
+	  , 'false' as 'home'
+	  ,[portalid]
+  FROM {databaseOwner}[{objectQualifier}Ladder_Team]
+  WHERE
+		[teamid] = @teamid
+GO
+
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwner}[{objectQualifier}Ladder_GetPlayers]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	DROP PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetPlayers]
+GO
+
+
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetPlayers]
+	@PortalId int
+
+AS
+Select 
+	p.PlayerId
+	, p.userid
+	, p.Rank
+	, p.Games
+	, p.Wins
+	, p.Losses
+	, p.PortalId
+from 
+	{objectQualifier}Ladder_Player p
+
+where 
+	p.PortalId = @PortalId
+
+GO
+
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwner}[{objectQualifier}Ladder_UpdatePlayer]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	DROP PROCEDURE {databaseOwner}[{objectQualifier}Ladder_UpdatePlayer]
+GO
+
+
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}Ladder_UpdatePlayer]
+	@UserId int,
+	@Games int,
+	@Wins int,
+	@Losses int,
+	@PortalId int
+AS
+update {databaseOwner}[{objectQualifier}Ladder_Player]
+set [games] = @games
+           ,[wins] = @wins
+           ,[losses] = @losses
+		   ,[portalId] = @portalId
+where userId = @UserId
+
+GO
+
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwner}[{objectQualifier}Ladder_GetTeamByName]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	DROP PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetTeamByName]
+GO
+
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetTeamByName]
+		@Name nvarchar(100)
+AS
+
+SELECT [teamid]
+      ,[name]
+      ,[games]
+      ,[wins]
+      ,[losses]
+      ,[firstplayed]
+      ,[lastplayed]
+      ,[createdbyuserid]
+      ,[createddate]
+      ,[lastupdatedbyuserid]
+      ,[lastupdateddate]
+	  ,[portalid]
+	  ,0 as 'score'
+	  ,'false' as 'home'
+  FROM {databaseOwner}[{objectQualifier}Ladder_Team]
+  WHERE
+		[name] = @Name
+GO
+
+
+
+IF  EXISTS (SELECT * FROM sys.key_constraints WHERE object_id = OBJECT_ID(N'{databaseOwner}[UC_{objectQualifier}Ladder_Player_UserIdPortalId]') AND parent_object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}Ladder_Player]'))
+ALTER TABLE {databaseOwner}[{objectQualifier}Ladder_Player] DROP CONSTRAINT [UC_{objectQualifier}Ladder_Player_UserIdPortalId]
+GO
+
+ALTER TABLE {databaseOwner}[{objectQualifier}Ladder_Player]
+ ADD CONSTRAINT [UC_{objectQualifier}Ladder_Player_UserIdPortalId] UNIQUE(UserId,PortalId)
+ GO
+
+
+
