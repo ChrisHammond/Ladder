@@ -9,8 +9,6 @@
 ' 
 */
 using System;
-using System.Web.UI.WebControls;
-using com.christoc.modules.ladder.Components;
 using DotNetNuke.Services.Exceptions;
 using DotNetNuke.Entities.Modules;
 using DotNetNuke.Entities.Modules.Actions;
@@ -26,7 +24,7 @@ namespace com.christoc.modules.ladder
     /// The Viewladder class displays the content
     /// </summary>
     /// -----------------------------------------------------------------------------
-    public partial class View : ladderModuleBase, IActionable
+    public partial class View : LadderModuleBase, IActionable
     {
 
         #region Event Handlers
@@ -39,7 +37,7 @@ namespace com.christoc.modules.ladder
 
         private void InitializeComponent()
         {
-            Load += Page_Load;
+            Load += PageLoad;
         }
 
 
@@ -48,13 +46,13 @@ namespace com.christoc.modules.ladder
         /// Page_Load runs when the control is loaded
         /// </summary>
         /// -----------------------------------------------------------------------------
-        private void Page_Load(object sender, EventArgs e)
+        private void PageLoad(object sender, EventArgs e)
         {
             try
             {
                 var
                 controlToLoad = ControlToLoad();
-                var mbl = (ladderModuleBase)LoadControl(controlToLoad);
+                var mbl = (LadderModuleBase)LoadControl(controlToLoad);
                 mbl.ModuleConfiguration = ModuleConfiguration;
                 mbl.ID = System.IO.Path.GetFileNameWithoutExtension(controlToLoad);
                 phLadder.Controls.Add(mbl);
@@ -116,10 +114,34 @@ namespace com.christoc.modules.ladder
         {
             get
             {
-                var Actions = new ModuleActionCollection();
-                Actions.Add(GetNextActionID(), Localization.GetString("EditModule", this.LocalResourceFile), "", "", "", EditUrl(), false, SecurityAccessLevel.Edit, true, false);
-                Actions.Add(GetNextActionID(), Localization.GetString("ManagePlayerList", this.LocalResourceFile), "", "", "", DotNetNuke.Common.Globals.NavigateURL(TabId, String.Empty, "df=ManagePlayerList"), false, SecurityAccessLevel.Edit, true, false);
-                return Actions;
+                var moduleActionCollection = new ModuleActionCollection
+                                                 {
+                                                     {
+                                                         GetNextActionID(),
+                                                         Localization.GetString("EditModule", this.LocalResourceFile),
+                                                         "", "", "", EditUrl(), false, SecurityAccessLevel.Edit, true,
+                                                         false
+                                                         },
+                                                     {
+                                                         GetNextActionID(),
+                                                         Localization.GetString("ManagePlayerList",
+                                                                                this.LocalResourceFile), "", "", "",
+                                                         DotNetNuke.Common.Globals.NavigateURL(TabId, String.Empty,
+                                                                                               "df=ManagePlayerList"),
+                                                         false, SecurityAccessLevel.Edit, true, false
+                                                         },
+                                                     {
+                                                         GetNextActionID(),
+                                                         Localization.GetString("ManageTeam", this.LocalResourceFile),
+                                                         "", "", "",
+                                                         DotNetNuke.Common.Globals.NavigateURL(TabId, String.Empty,
+                                                                                               "df=ManageTeam"), false,
+                                                         SecurityAccessLevel.Edit, true, false
+                                                         }
+                                                 };
+
+
+                return moduleActionCollection;
             }
         }
 

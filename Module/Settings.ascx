@@ -7,7 +7,7 @@
         <%=LocalizeString("BasicSettings")%></a></h2>
 <fieldset>
     <div class="dnnFormItem">
-        <dnn:label ID="Setting1" runat="server" ControlName="txtSetting1" />
-        <asp:TextBox ID="txtSetting1" runat="server" />
+        <dnn:label ID="lblMaxPerTeam" runat="server" ControlName="txtMaxPerTeam" />
+        <asp:TextBox ID="txtMaxPerTeam" runat="server" />
     </div>
 </fieldset>

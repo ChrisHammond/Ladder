@@ -10,19 +10,13 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using com.christoc.modules.ladder;
 using DotNetNuke.Services.Exceptions;
 
 namespace com.christoc.modules.ladder.Controls
 {
-    public partial class ManagePlayer : ladderModuleBase
+    public partial class ManagePlayer : LadderModuleBase
     {
-        protected void Page_Load(object sender, EventArgs e)
+        protected void PageLoad(object sender, EventArgs e)
         {
             //allow for creating and editing a player
             try

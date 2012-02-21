@@ -30,42 +30,44 @@ namespace com.christoc.modules.ladder.Data
 
         #region Shared/Static Methods
 
-        private static DataProvider provider;
+        private static DataProvider _provider;
 
         // return the provider
         public static DataProvider Instance()
         {
-            if (provider == null)
+            if (_provider == null)
             {
                 const string assembly = "com.christoc.modules.ladder.Data.SqlDataprovider,ladder";
                 Type objectType = Type.GetType(assembly, true, true);
 
-                provider = (DataProvider)Activator.CreateInstance(objectType);
-                DataCache.SetCache(objectType.FullName, provider);
+                _provider = (DataProvider)Activator.CreateInstance(objectType);
+                DataCache.SetCache(objectType.FullName, _provider);
             }
 
-            return provider;
+            return _provider;
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Not returning class state information")]
         public static IDbConnection GetConnection()
         {
             const string providerType = "data";
-            ProviderConfiguration _providerConfiguration = ProviderConfiguration.GetProviderConfiguration(providerType);
+            ProviderConfiguration providerConfiguration = ProviderConfiguration.GetProviderConfiguration(providerType);
 
-            Provider objProvider = ((Provider)_providerConfiguration.Providers[_providerConfiguration.DefaultProvider]);
-            string _connectionString;
+            var objProvider = ((Provider)providerConfiguration.Providers[providerConfiguration.DefaultProvider]);
+            string connectionString;
             if (!String.IsNullOrEmpty(objProvider.Attributes["connectionStringName"]) && !String.IsNullOrEmpty(System.Configuration.ConfigurationManager.AppSettings[objProvider.Attributes["connectionStringName"]]))
             {
-                _connectionString = System.Configuration.ConfigurationManager.AppSettings[objProvider.Attributes["connectionStringName"]];
+                connectionString = System.Configuration.ConfigurationManager.AppSettings[objProvider.Attributes["connectionStringName"]];
             }
             else
             {
-                _connectionString = objProvider.Attributes["connectionString"];
+                connectionString = objProvider.Attributes["connectionString"];
             }
 
-            IDbConnection newConnection = new System.Data.SqlClient.SqlConnection();
-            newConnection.ConnectionString = _connectionString.ToString();
+            IDbConnection newConnection = new System.Data.SqlClient.SqlConnection
+                                              {
+                                                  ConnectionString = connectionString
+                                              };
             newConnection.Open();
             return newConnection;
         }
