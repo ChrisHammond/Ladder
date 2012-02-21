@@ -11,12 +11,13 @@
 using System;
 using System.Data;
 using System.Data.SqlClient;
+using com.christoc.modules.ladder.Data;
 using DotNetNuke.Common.Utilities;
 using DotNetNuke.Framework.Providers;
 using com.christoc.modules.ladder.Components;
 using Microsoft.ApplicationBlocks.Data;
 
-namespace com.christoc.modules.ladder.Data
+namespace com.christoc.modules.ladder.Providers.DataProviders.SqlDataProvider
 {
 
     /// -----------------------------------------------------------------------------
@@ -118,14 +119,6 @@ namespace com.christoc.modules.ladder.Data
 
         #endregion
 
-        #region Private Methods
-
-        private static object GetNull(object Field)
-        {
-            return Null.GetNull(Field, DBNull.Value);
-        }
-
-        #endregion
 
         #region Public Methods
 

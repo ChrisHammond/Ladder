@@ -9,13 +9,12 @@
 ' 
 */
 using System;
-using com.christoc.modules.ladder;
 
 namespace com.christoc.modules.ladder.Controls
 {
-    public partial class ManageGame : ladderModuleBase
+    public partial class ManageGame : LadderModuleBase
     {
-        protected void Page_Load(object sender, EventArgs e)
+        protected void PageLoad(object sender, EventArgs e)
         {
             //allow for creating and editing a game
 

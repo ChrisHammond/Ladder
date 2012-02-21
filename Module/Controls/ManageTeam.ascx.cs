@@ -18,9 +18,9 @@ using DotNetNuke.Services.Exceptions;
 
 namespace com.christoc.modules.ladder.Controls
 {
-    public partial class ManageTeam : ladderModuleBase
+    public partial class ManageTeam : LadderModuleBase
     {
-        protected void Page_Load(object sender, EventArgs e)
+        protected void PageLoad(object sender, EventArgs e)
         {
             //TODO: allow for creating 
             try
@@ -54,7 +54,6 @@ namespace com.christoc.modules.ladder.Controls
 
                     dlPlayers.Available = availPlayerList;
                     dlPlayers.Assigned = teamPlayerList;
-
                     dlPlayers.DataBind();
                 }
             }
@@ -64,38 +63,44 @@ namespace com.christoc.modules.ladder.Controls
             }
         }
 
-        protected void lbSave_Click(object sender, EventArgs e)
+        protected void LbSaveClick(object sender, EventArgs e)
         {
-
-            //TODO: handle the removal of a player from a team
-            //possibly delete all players on a team save, then add them again? seems inefficient.
-
-            //TODO: don't allow more than two players on a team
-
-
-            //save the team
-            var tc = new TeamController();
-            if (TeamId > 0)
+            if (Settings.Contains("MaxPerTeam"))
             {
-                var curTeam = tc.GetTeam(TeamId);
-
-                //populate team name
-                curTeam.Name = txtTeamName.Text;
-
-                //populate list of players
-                var pc = new PlayerController();
-                foreach (var player in dlPlayers.Assigned)
+                if (dlPlayers.Assigned.Count < Convert.ToInt32(Settings["MaxPerTeam"])+1)
                 {
-                    var li = (ListItem)player;
+                    //TODO: handle the removal of a player from a team
+                    //possibly delete all players on a team save, then add them again? seems inefficient.
 
-                    var curPlayer = pc.GetPlayer(Convert.ToInt32(li.Value));
-                    curTeam.Players.Add(curPlayer);
+                    //TODO: don't allow more than two players on a team
+
+                    //save the team
+
+                    var curTeam = new Team();
+
+                    var tc = new TeamController();
+                    if (TeamId > 0)
+                    {
+                        curTeam = tc.GetTeam(TeamId);
+                    }
+                    curTeam.Name = txtTeamName.Text;
+
+                    //populate list of players
+                    var pc = new PlayerController();
+                    foreach (var player in dlPlayers.Assigned)
+                    {
+                        var li = (ListItem)player;
+
+                        var curPlayer = pc.GetPlayer(Convert.ToInt32(li.Value));
+                        curTeam.Players.Add(curPlayer);
+                    }
+                    tc.SaveTeam(curTeam);
+                    Response.Redirect(DotNetNuke.Common.Globals.NavigateURL(TabId));
                 }
-                tc.SaveTeam(curTeam);
             }
         }
 
-        protected void lbCancel_Click(object sender, EventArgs e)
+        protected void LbCancelClick(object sender, EventArgs e)
         {
             //todo:where should we go? currently redirecting to the tabid
             Response.Redirect(DotNetNuke.Common.Globals.NavigateURL(TabId));

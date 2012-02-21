@@ -2,7 +2,7 @@
 
 <asp:Panel ID="pnlAdmin" runat="server">
     <asp:LinkButton ID="lbDeleteGame" runat="server" resourcekey="lbDeleteGame" 
-        onclick="lbDeleteGame_Click" />
+        onclick="LbDeleteGameClick" />
 </asp:Panel>
 
 <asp:Label ID="lblGameStart" runat="server" CssClass="GameTime" />

@@ -138,4 +138,10 @@
   <data name="lbSave.Text" xml:space="preserve">
     <value>Save</value>
   </data>
+  <data name="lblPlayers.Help" xml:space="preserve">
+    <value>Choose the players on the team.</value>
+  </data>
+  <data name="lblTeamName.Help" xml:space="preserve">
+    <value>Select/change the team name.</value>
+  </data>
 </root>

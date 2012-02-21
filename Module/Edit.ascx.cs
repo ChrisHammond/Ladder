@@ -20,7 +20,7 @@ namespace com.christoc.modules.ladder
     /// The Editladder class is used to manage content
     /// </summary>
     /// -----------------------------------------------------------------------------
-    public partial class Edit : ladderModuleBase
+    public partial class Edit : LadderModuleBase
     {
 
         #region Event Handlers
@@ -33,7 +33,7 @@ namespace com.christoc.modules.ladder
 
         private void InitializeComponent()
         {
-            this.Load += new System.EventHandler(this.Page_Load);
+            Load += PageLoad;
         }
 
         /// -----------------------------------------------------------------------------
@@ -41,7 +41,7 @@ namespace com.christoc.modules.ladder
         /// Page_Load runs when the control is loaded
         /// </summary>
         /// -----------------------------------------------------------------------------
-        private void Page_Load(object sender, System.EventArgs e)
+        private void PageLoad(object sender, EventArgs e)
         {
             try
             {

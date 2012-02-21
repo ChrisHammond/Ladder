@@ -13,7 +13,7 @@ using DotNetNuke.Entities.Modules;
 namespace com.christoc.modules.ladder
 {
 
-    public class ladderSettingsBase : ModuleSettingsBase
+    public class LadderSettingsBase : ModuleSettingsBase
     {
 
 

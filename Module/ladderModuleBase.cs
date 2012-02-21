@@ -13,7 +13,7 @@ using System;
 namespace com.christoc.modules.ladder
 {
 
-    public class ladderModuleBase : DotNetNuke.Entities.Modules.PortalModuleBase
+    public class LadderModuleBase : DotNetNuke.Entities.Modules.PortalModuleBase
     {
         //with this base class you can provide any custom properties and methods that all your controls can access here, you can also access all the DNN 
         // methods and properties available off of portalmodulebase such as TabId, UserId, UserInfo, etc.

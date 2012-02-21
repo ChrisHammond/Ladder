@@ -123,4 +123,7 @@
   <data name="ManagePlayerList.Text" xml:space="preserve">
     <value>Manage Player List</value>
   </data>
+  <data name="ManageTeam.Text" xml:space="preserve">
+    <value>Create Team</value>
+  </data>
 </root>

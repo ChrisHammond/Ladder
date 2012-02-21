@@ -21,7 +21,7 @@ namespace com.christoc.modules.ladder
     /// The Settings class manages Module Settings
     /// </summary>
     /// -----------------------------------------------------------------------------
-    public partial class Settings : ladderSettingsBase
+    public partial class Settings : LadderSettingsBase
     {
 
         #region Base Method Implementations
@@ -39,6 +39,10 @@ namespace com.christoc.modules.ladder
                 {
                     //Check for existing settings and use those on this page
                     //Settings["SettingName"]
+                    if(Settings.Contains("MaxPerTeam"))
+                    {
+                        txtMaxPerTeam.Text = Settings["MaxPerTeam"].ToString();
+                    }
                 }
             }
             catch (Exception exc) //Module failed to load
@@ -56,9 +60,9 @@ namespace com.christoc.modules.ladder
         {
             try
             {
-                ModuleController modules = new ModuleController();
+                var modules = new ModuleController();
                 //modules.UpdateTabModuleSetting(this.TabModuleId, "ModuleSetting", (control.value ? "true" : "false"));
-                //modules.UpdateModuleSetting(this.TabModuleId, "LogBreadCrumb", (control.value ? "true" : "false"));
+                modules.UpdateModuleSetting(ModuleId, "MaxPerTeam", txtMaxPerTeam.Text);
             }
             catch (Exception exc) //Module failed to load
             {

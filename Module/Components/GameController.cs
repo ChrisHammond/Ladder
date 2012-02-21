@@ -49,7 +49,7 @@ namespace com.christoc.modules.ladder.Components
             return g;
         }
 
-        private Game CreateGame(Game g)
+        private static Game CreateGame(Game g)
         {
             g.GameId = DataProvider.Instance().AddGame(g);
 
@@ -58,7 +58,7 @@ namespace com.christoc.modules.ladder.Components
         }
 
         //update game
-        private Game UpdateGame(Game g)
+        private static Game UpdateGame(Game g)
         {
             DataProvider.Instance().UpdateGame(g);
             return g;
@@ -88,54 +88,54 @@ namespace com.christoc.modules.ladder.Components
 
         //TODO: we're going to need to filter by date range, team, etc
 
-        public List<Game> GetGames(int PortalId, bool populateAll)
+        public List<Game> GetGames(int portalId, bool populateAll)
         {
             //check if we should populate teams and players
             if (populateAll)
             {
-                var listOfGames = CBO.FillCollection<Game>(DataProvider.Instance().GetGames(PortalId));
+                var listOfGames = CBO.FillCollection<Game>(DataProvider.Instance().GetGames(portalId));
                 var outputGames = PopulateTeamsForGame(listOfGames);
                 return outputGames;
             }
-            return CBO.FillCollection<Game>(DataProvider.Instance().GetGames(PortalId));
+            return CBO.FillCollection<Game>(DataProvider.Instance().GetGames(portalId));
         }
 
 
         ///<summary>Get the games with a max number of games to return
         ///</summary>
-        ///<param name="PortalId"></param>
+        ///<param name="portalId"></param>
         ///<param name="count"></param>
         ///<param name="populateAll"></param>
         ///<returns></returns>
-        public List<Game> GetGames(int PortalId, int count, bool populateAll)
+        public List<Game> GetGames(int portalId, int count, bool populateAll)
         {
             //check if we should populate teams and players
             if (populateAll)
             {
-                var listOfGames = CBO.FillCollection<Game>(DataProvider.Instance().GetGames(PortalId, count));
+                var listOfGames = CBO.FillCollection<Game>(DataProvider.Instance().GetGames(portalId, count));
                 var outputGames = PopulateTeamsForGame(listOfGames);
                 return outputGames;
             }
-            return CBO.FillCollection<Game>(DataProvider.Instance().GetGames(PortalId, count));
+            return CBO.FillCollection<Game>(DataProvider.Instance().GetGames(portalId, count));
         }
 
         ///<summary>Return games for the specific date range
         ///</summary>
-        ///<param name="PortalId"></param>
+        ///<param name="portalId"></param>
         ///<param name="startDate"></param>
         ///<param name="endDate"></param>
         ///<param name="populateAll"></param>
         ///<returns></returns>
-        public List<Game> GetGames(int PortalId, DateTime startDate, DateTime endDate, bool populateAll)
+        public List<Game> GetGames(int portalId, DateTime startDate, DateTime endDate, bool populateAll)
         {
             //check if we should populate teams and players
             if (populateAll)
             {
-                var listOfGames = CBO.FillCollection<Game>(DataProvider.Instance().GetGames(PortalId, startDate, endDate));
+                var listOfGames = CBO.FillCollection<Game>(DataProvider.Instance().GetGames(portalId, startDate, endDate));
                 var outputGames = PopulateTeamsForGame(listOfGames);
                 return outputGames;
             }
-            return CBO.FillCollection<Game>(DataProvider.Instance().GetGames(PortalId, startDate, endDate));
+            return CBO.FillCollection<Game>(DataProvider.Instance().GetGames(portalId, startDate, endDate));
         }
 
         ///<summary>Take a list of Games and populate the Teams

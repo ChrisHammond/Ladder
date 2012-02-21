@@ -21,9 +21,9 @@
         </div>
         <div class="dnnFormItem">
         <asp:LinkButton ID="lbSave" runat="server" CssClass="dnnPrimaryAction" 
-                resourcekey="lbSave" onclick="lbSave_Click" />
+                resourcekey="lbSave" onclick="LbSaveClick" />
         <asp:LinkButton ID="lbCancel" runat="server" CssClass="dnnSecondaryAction" 
-                resourcekey="lbCancel" onclick="lbCancel_Click" />
+                resourcekey="lbCancel" onclick="LbCancelClick" />
         </div>
     </fieldset>
 

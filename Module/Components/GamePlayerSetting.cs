@@ -9,14 +9,6 @@
 ' 
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using DotNetNuke.Common.Utilities;
-using DotNetNuke.Entities.Modules;
-
-
 namespace com.christoc.modules.ladder.Components
 {
     public class GamePlayerSetting

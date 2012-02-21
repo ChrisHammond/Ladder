@@ -45,11 +45,7 @@ namespace com.christoc.modules.ladder.Components
             {
                 return f;
             }
-            else
-            {
-                return null;
-            }
-
+            return null;
         }
     }
 }
