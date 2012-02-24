@@ -19,11 +19,14 @@ namespace com.christoc.modules.ladder.Controls
 {
     public partial class ViewGame : LadderModuleBase
     {
-        protected void PageLoad(object sender, EventArgs e)
+        protected void Page_Load(object sender, EventArgs e)
         {
             try
             {
-                //TODO: allow select of the Teams
+
+
+                //check if we have a GameId?
+                lbManageGame.NavigateUrl = GetGameManageLink(GameId);
 
                 pnlAdmin.Visible = IsEditable;
                 ClientAPI.AddButtonConfirm(lbDeleteGame, Localization.GetString("DeleteConfirm", LocalResourceFile));
@@ -40,6 +43,8 @@ namespace com.christoc.modules.ladder.Controls
                     lblTeam2Link.Text = currentGame.Teams[1].Name;
                     lblTeam2Score.Text = currentGame.Teams[1].Score.ToString();
                 }
+
+
             }
             catch (Exception exc)
             {

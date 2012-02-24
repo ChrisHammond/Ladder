@@ -16,7 +16,7 @@ namespace com.christoc.modules.ladder.Controls
 {
     public partial class ManagePlayer : LadderModuleBase
     {
-        protected void PageLoad(object sender, EventArgs e)
+        protected void Page_Load(object sender, EventArgs e)
         {
             //allow for creating and editing a player
             try

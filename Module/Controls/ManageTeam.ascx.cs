@@ -20,7 +20,7 @@ namespace com.christoc.modules.ladder.Controls
 {
     public partial class ManageTeam : LadderModuleBase
     {
-        protected void PageLoad(object sender, EventArgs e)
+        protected void Page_Load(object sender, EventArgs e)
         {
             //TODO: allow for creating 
             try

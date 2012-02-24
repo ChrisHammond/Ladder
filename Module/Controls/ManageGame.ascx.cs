@@ -9,15 +9,86 @@
 ' 
 */
 using System;
+using com.christoc.modules.ladder.Components;
+using DotNetNuke.Services.Exceptions;
 
 namespace com.christoc.modules.ladder.Controls
 {
     public partial class ManageGame : LadderModuleBase
     {
-        protected void PageLoad(object sender, EventArgs e)
+        protected void Page_Load(object sender, EventArgs e)
         {
-            //allow for creating and editing a game
+            //TODO: allow for creating a game
+            //TODO: fix expand panels on view control
 
+            try
+            {
+                //LoadTeamLists
+                if (!Page.IsPostBack)
+                {
+                    LoadAvailableTeams();
+                    //load the game
+                    var gc = new GameController();
+                    var currentGame = gc.GetGame(GameId);
+                    if (currentGame != null)
+                    {
+                        ddlTeam1.Items.FindByValue(currentGame.Teams[0].TeamId.ToString()).Selected = true;
+                        txtTeam1Score.Text = currentGame.Teams[0].Score.ToString();
+                        chkTeam1IsHome.Checked = currentGame.Teams[0].HomeTeam;
+                        ddlTeam2.Items.FindByValue(currentGame.Teams[1].TeamId.ToString()).Selected = true;
+                        txtTeam2Score.Text = currentGame.Teams[1].Score.ToString();
+                        chkTeam2IsHome.Checked = currentGame.Teams[1].HomeTeam;
+                    }
+                }
+            }
+            catch (Exception exc)
+            {
+                Exceptions.ProcessModuleLoadException(this, exc);
+            }
+        }
+
+        private void LoadAvailableTeams()
+        {
+            //get a list of all teams
+            var tc = new TeamController();
+            ddlTeam1.DataSource = ddlTeam2.DataSource = tc.GetTeams(PortalId);
+            ddlTeam1.DataBind();
+            ddlTeam2.DataBind();
+
+        }
+
+        protected void lbCancel_Click(object sender, EventArgs e)
+        {
+            Response.Redirect(GetGameLink(GameId));
+        }
+
+        protected void lbSaveGame_Click(object sender, EventArgs e)
+        {
+            //save the game
+
+            var gc = new GameController();
+            var currentGame = gc.GetGame(GameId);
+            if (currentGame != null)
+            {
+                currentGame.Teams.Clear();
+                var tc = new TeamController();
+                var team1 = tc.GetTeam(Convert.ToInt32(ddlTeam1.SelectedValue));
+
+                team1.Score = Convert.ToInt32(txtTeam1Score.Text);
+                team1.HomeTeam = chkTeam1IsHome.Checked;
+
+                var team2 = tc.GetTeam(Convert.ToInt32(ddlTeam2.SelectedValue));
+
+                team2.Score = Convert.ToInt32(txtTeam2Score.Text);
+                team2.HomeTeam = chkTeam2IsHome.Checked;
+
+                currentGame.Teams.Clear();
+                currentGame.Teams.Add(team1);
+                currentGame.Teams.Add(team2);
+
+                currentGame.Save();
+            }
+            Response.Redirect(GetGameLink(GameId));
         }
     }
 }

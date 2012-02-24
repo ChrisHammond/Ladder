@@ -117,13 +117,52 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="DeleteConfirm.Text" xml:space="preserve">
-    <value>Are you sure you want to delete this game?</value>
+  <data name="lbCancel.Text" xml:space="preserve">
+    <value>Cancel</value>
   </data>
-  <data name="lbDeleteGame.Text" xml:space="preserve">
-    <value>Delete</value>
+  <data name="lblTeam1.Text" xml:space="preserve">
+    <value>Team 1</value>
   </data>
-  <data name="lbManageGame.Text" xml:space="preserve">
-    <value>Manage</value>
+  <data name="lblTeam2.Text" xml:space="preserve">
+    <value>Team 2</value>
+  </data>
+  <data name="lbSaveGame.Text" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="lblTeam1.Help" xml:space="preserve">
+    <value>Select the First Team</value>
+  </data>
+  <data name="lblTeam1IsHome.Help" xml:space="preserve">
+    <value>Is this the home team?</value>
+  </data>
+  <data name="lblTeam1IsHome.Text" xml:space="preserve">
+    <value>Home Team?</value>
+  </data>
+  <data name="lblTeam1Score.Help" xml:space="preserve">
+    <value>Make changes to the first team score.</value>
+  </data>
+  <data name="lblTeam1Score.Text" xml:space="preserve">
+    <value>Score</value>
+  </data>
+  <data name="lblTeam2.Help" xml:space="preserve">
+    <value>Select the Second Team</value>
+  </data>
+  <data name="lblTeam2IsHome.Help" xml:space="preserve">
+    <value>Is this the home team?</value>
+  </data>
+  <data name="lblTeam2IsHome.Text" xml:space="preserve">
+    <value>Home Team?</value>
+  </data>
+  <data name="lblTeam2Score.Help" xml:space="preserve">
+    <value>Make changes to the second team score.</value>
+  </data>
+  <data name="lblTeam2Score.Text" xml:space="preserve">
+    <value>Score</value>
+  </data>
+  <data name="Team1.Text" xml:space="preserve">
+    <value>Team 1</value>
+  </data>
+  <data name="Team2.Text" xml:space="preserve">
+    <value>Team 2</value>
   </data>
 </root>

@@ -250,6 +250,9 @@
   <ItemGroup>
     <Content Include="Controls\App_LocalResources\PlayerList.ascx.resx" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Controls\App_LocalResources\ManageGame.ascx.resx" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="'$(Solutions.VSVersion)' == '8.0'" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v9.0\WebApplications\Microsoft.WebApplication.targets" Condition="'$(Solutions.VSVersion)' == '9.0'" />
