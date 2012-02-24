@@ -33,7 +33,7 @@ namespace com.christoc.netduino.FoosTracker
         //todo: use these two LEDs for LAST SCORED currently not used
         static readonly OutputPort AwayLed = new OutputPort(Pins.GPIO_PIN_D12, false);
         static readonly OutputPort HomeLed = new OutputPort(Pins.GPIO_PIN_D13, false);
-        static readonly SerLCD smallLcd = new SerLCD(SerialPorts.COM1, SerLCD.DisplayType.C16L2); //digital pin 1
+        static readonly SerLCD smallLcd = new SerLCD(SerialPorts.COM1, SerLCD.DisplayType.C16L2); //digital pin 1 (0 based array)
 
         //debouncing multiple button presses via this post http://forums.netduino.com/index.php?/topic/2431-input-debounce/page__view__findpost__p__17367
         //setup debound to 3 seconds
@@ -44,8 +44,9 @@ namespace com.christoc.netduino.FoosTracker
         private static long homeAddLastPushed;
         private static long homeSubLastPushed;
         private static long gameRestartLastPushed;
-        
+
         private const string webServiceUrl = "http://www.dnnfoos.com/svc/ladder/Game";
+        //private const string webServiceUrl = "http://192.168.1.9/svc/ladder/Game";
 
         private static int gameId;
 
@@ -118,7 +119,8 @@ namespace com.christoc.netduino.FoosTracker
                 awayTeam.Score++;
                 //AwayLed.Write(true);
                 DisplayScores();
-                    awayAddLastPushed = DateTime.Now.Ticks;
+                awayAddLastPushed = DateTime.Now.Ticks;
+                UpdateWebScores();
             }
         }
         private static void awayTeamSubtract_OnInterrupt(uint data1, uint data2, DateTime time)
@@ -140,6 +142,7 @@ namespace com.christoc.netduino.FoosTracker
                 //HomeLed.Write(true);
                 DisplayScores();
                 homeAddLastPushed = DateTime.Now.Ticks;
+                UpdateWebScores();
             }
         }
         private static void homeTeamSubtract_OnInterrupt(uint data1, uint data2, DateTime time)
