@@ -31,7 +31,7 @@ namespace com.christoc.modules.ladder.Components
                 t.Games = lookup.Wins;
                 t.FirstPlayed = lookup.FirstPlayed;
                 t.LastPlayed = lookup.LastPlayed;
-                t.Score = 0;
+                //t.Score = 0;
                 originalPlayers = lookup.Players;
             }
             
@@ -124,9 +124,9 @@ namespace com.christoc.modules.ladder.Components
         }
 
         //get all teams
-        public List<Team> GetTeams()
+        public List<Team> GetTeams(int portalId)
         {
-            return CBO.FillCollection<Team>(DataProvider.Instance().GetTeams());
+            return CBO.FillCollection<Team>(DataProvider.Instance().GetTeams(portalId));
         }
 
         //get all teams

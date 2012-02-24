@@ -50,7 +50,7 @@ namespace com.christoc.modules.ladder
         }
         public string GetGameManageLink(int gameId)
         {
-            return DotNetNuke.Common.Globals.NavigateURL(TabId, String.Empty, "df=ManageGame&tid=" + gameId);
+            return DotNetNuke.Common.Globals.NavigateURL(TabId, String.Empty, "df=ManageGame&gid=" + gameId);
         }
 
         public string GetTeamLink(int teamId)

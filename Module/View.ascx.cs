@@ -37,7 +37,7 @@ namespace com.christoc.modules.ladder
 
         private void InitializeComponent()
         {
-            Load += PageLoad;
+            Load += Page_Load;
         }
 
 
@@ -46,7 +46,7 @@ namespace com.christoc.modules.ladder
         /// Page_Load runs when the control is loaded
         /// </summary>
         /// -----------------------------------------------------------------------------
-        private void PageLoad(object sender, EventArgs e)
+        private void Page_Load(object sender, EventArgs e)
         {
             try
             {

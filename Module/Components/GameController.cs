@@ -29,6 +29,12 @@ namespace com.christoc.modules.ladder.Components
 
             g = g.GameId > 0 ? UpdateGame(g) : CreateGame(g);
 
+            if(!newGame)
+            {               
+                //clear game/team records first? then update to handle change of team ids?
+                DataProvider.Instance().DeleteGameTeams(g.GameId);
+            }
+
             foreach (var t in g.Teams)
             {
                 var tc = new TeamController();
@@ -38,11 +44,17 @@ namespace com.christoc.modules.ladder.Components
                 t.TeamId = tc.SaveTeam(t).TeamId;
                 //add GameTeam relationship to store the Scores
 
+
                 //TODO: figure out how to flag a WIN and HOME team
                 if (newGame)
                     DataProvider.Instance().AddGameTeam(g.GameId, t.TeamId, t.Score, false, t.HomeTeam);
                 else
-                    DataProvider.Instance().UpdateGameTeam(g.GameId, t.TeamId, t.Score, false, t.HomeTeam);
+                {
+                    DataProvider.Instance().AddGameTeam(g.GameId, t.TeamId, t.Score, false, t.HomeTeam);
+
+                    //we aren't using UpdateGameTeam anymore as we clear then add the records in again...
+                    //DataProvider.Instance().UpdateGameTeam(g.GameId, t.TeamId, t.Score, false, t.HomeTeam);
+                }
 
             }
 

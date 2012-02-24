@@ -37,7 +37,7 @@ namespace com.christoc.modules.ladder.Data
         {
             if (_provider == null)
             {
-                const string assembly = "com.christoc.modules.ladder.Data.SqlDataprovider,ladder";
+                const string assembly = "com.christoc.modules.ladder.Providers.DataProviders.SqlDataProvider,ladder";
                 Type objectType = Type.GetType(assembly, true, true);
 
                 _provider = (DataProvider)Activator.CreateInstance(objectType);
@@ -86,7 +86,7 @@ namespace com.christoc.modules.ladder.Data
         public abstract IDataReader GetTeamPlayers(int teamId);
         public abstract void DeleteTeamPlayers(int teamId);
         
-        public abstract IDataReader GetTeams();
+        public abstract IDataReader GetTeams(int portalId);
         public abstract IDataReader GetTeamsByGame(int gameId);
         
         public abstract IDataReader GetTeam(int teamId);
@@ -133,6 +133,7 @@ namespace com.christoc.modules.ladder.Data
 
         public abstract void AddGameTeam(int gameId, int teamId, int score, bool win, bool home);
         public abstract void UpdateGameTeam(int gameId, int teamId, int score, bool win, bool home);
+        
         public abstract IDataReader GetGameTeams(int gameId);
 
         public abstract void DeleteGameTeams(int gameId);

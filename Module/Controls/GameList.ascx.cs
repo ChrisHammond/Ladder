@@ -18,7 +18,7 @@ namespace com.christoc.modules.ladder.Controls
 {
     public partial class GameList : LadderModuleBase
     {
-        protected void PageLoad(object sender, EventArgs e)
+        protected void Page_Load(object sender, EventArgs e)
         {
             try
             {

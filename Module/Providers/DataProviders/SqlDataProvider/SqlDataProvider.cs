@@ -17,7 +17,7 @@ using DotNetNuke.Framework.Providers;
 using com.christoc.modules.ladder.Components;
 using Microsoft.ApplicationBlocks.Data;
 
-namespace com.christoc.modules.ladder.Providers.DataProviders.SqlDataProvider
+namespace com.christoc.modules.ladder.Providers.DataProviders
 {
 
     /// -----------------------------------------------------------------------------
@@ -175,9 +175,9 @@ namespace com.christoc.modules.ladder.Providers.DataProviders.SqlDataProvider
             return SqlHelper.ExecuteReader(ConnectionString, NamePrefix + "GetTeamPlayers", new SqlParameter("@TeamId", teamId));
         }
 
-        public override IDataReader GetTeams()
+        public override IDataReader GetTeams(int portalId)
         {
-            return SqlHelper.ExecuteReader(ConnectionString, NamePrefix + "GetTeams");
+            return SqlHelper.ExecuteReader(ConnectionString, NamePrefix + "GetTeams", new SqlParameter("@PortalId", portalId));
         }
 
 

@@ -297,5 +297,3 @@ ALTER TABLE {databaseOwner}[{objectQualifier}Ladder_Player]
  ADD CONSTRAINT [UC_{objectQualifier}Ladder_Player_UserIdPortalId] UNIQUE(UserId,PortalId)
  GO
 
-
-
