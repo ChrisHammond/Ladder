@@ -1,6 +1,6 @@
 <dotnetnuke type="Package" version="5.0">
   <packages>
-    <package name="ladder" type="Module" version="00.00.02">
+    <package name="ladder" type="Module" version="00.00.03">
       <friendlyName>ladder</friendlyName>
       <description>Christoc.com ladder module</description>
       <owner>
@@ -32,7 +32,7 @@
             <script type="UnInstall">
               <path>Providers\DataProviders\SqlDataProvider</path>
               <name>Uninstall.SqlDataProvider</name>
-              <version>00.00.02</version>
+              <version>00.00.03</version>
             </script>
           </scripts>
         </component>

@@ -40,6 +40,7 @@ namespace com.christoc.modules.ladder.Controls
 
         private void BindPlayerList()
         {
+            //TODO: fix, currently pulling all players from all portals
             gvListOfNonPlayers.DataSource = DataProvider.Instance().GetNonPlayers(PortalId);
             gvListOfNonPlayers.DataBind();
         }
