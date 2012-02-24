@@ -20,7 +20,7 @@ namespace com.christoc.modules.ladder.Components
         public Player Save(Player p)
         {
             if (p.PlayerId < 1)
-                p = CreatePlayer(p.UserId);
+                p = CreatePlayer(p.UserId, p.PortalId);
             else
             {
                 UpdatePlayer(p);
@@ -29,16 +29,17 @@ namespace com.christoc.modules.ladder.Components
         }
 
         //create player
-        public Player CreatePlayer(int playerId)
+        public Player CreatePlayer(int playerId, int portalId)
         {
             var p = new Player
                         {
                             PlayerId = DataProvider.Instance().CreatePlayer(playerId),
-                            UserId= playerId,    
+                            UserId = playerId,
                             Rank = 0,
                             Games = 0,
                             Losses = 0,
-                            Wins = 0
+                            Wins = 0,
+                            PortalId = portalId
                         };
             UpdatePlayer(p);
             return p;

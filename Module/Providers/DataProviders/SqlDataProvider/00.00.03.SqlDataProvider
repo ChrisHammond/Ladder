@@ -1,0 +1,22 @@
+﻿
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwner}[{objectQualifier}Ladder_GetNonPlayers]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	DROP PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetNonPlayers]
+GO
+
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetNonPlayers]
+	@PortalId int
+
+AS
+select 
+	u.UserID
+	, u.DisplayName
+from 
+	{objectQualifier}Users u 
+join {objectQualifier}UserPortals up on (u.userid = up.userid)
+where 
+	u.UserID 
+		not in (select up.UserID from {objectQualifier}Ladder_Player lp join {objectQualifier}UserPortals up on lp.userid=up.userid and up.PortalId = @PortalId)
+and
+up.PortalId = @PortalId
+GO
+
