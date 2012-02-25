@@ -120,6 +120,9 @@
   <data name="DisplayName.Header" xml:space="preserve">
     <value>Display Name</value>
   </data>
+  <data name="NoPlayers.Text" xml:space="preserve">
+    <value>No unallocated users</value>
+  </data>
   <data name="UserId.Header" xml:space="preserve">
     <value>User Id</value>
   </data>

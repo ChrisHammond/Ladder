@@ -23,14 +23,11 @@ namespace com.christoc.modules.ladder.Controls
                 if(IsEditable)
                 {
                     hlManageTeam.NavigateUrl = GetTeamManageLink(TeamId);
-                    pnlAdmin.Enabled = true;
+                    pnlAdmin.Visible = pnlAdmin.Enabled = true;
                 }
 
                 if(TeamId>0)
                 {
-
-                    //TODO: link to the Manage Team controls
-
                     var tc = new TeamController();
                     var curTeam = tc.GetTeam(TeamId);
 

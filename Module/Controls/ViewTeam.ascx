@@ -1,7 +1,7 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ViewTeam.ascx.cs" Inherits="com.christoc.modules.ladder.Controls.ViewTeam" %>
 <%@ Register TagPrefix="dnn" TagName="label" Src="~/controls/labelcontrol.ascx" %>
 
-<asp:Panel ID="pnlAdmin" runat="server" Enabled="false">
+<asp:Panel ID="pnlAdmin" runat="server" Enabled="false" Visible="false">
     <asp:HyperLink ID="hlManageTeam" runat="server" resourcekey="hlManageTeam" />
 </asp:Panel>
 

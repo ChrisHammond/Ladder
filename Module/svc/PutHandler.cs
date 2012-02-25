@@ -43,7 +43,7 @@ namespace com.christoc.modules.ladder.svc
 
                 if (currentGame != null)
                 {
-                    //todo: we need to lookup the game based on the GameId if passed in the json, if so, then combine all the new stats
+                    //we need to lookup the game based on the GameId if passed in the json, if so, then combine all the new stats
                     if (currentGame.GameId > 0)
                     {
                         var existingGame = gc.GetGame(currentGame.GameId);
@@ -72,19 +72,11 @@ namespace com.christoc.modules.ladder.svc
                     //save the game information
                     currentGame = gc.SaveGame(currentGame);
 
-                    //TODO: how to keep track of games in progress?
+                    //TODO: how to flag games in progress?
 
                     //return the GameID so Netduino knows to use this
                     response.Write(jss.Serialize(currentGame.GameId));
-
                 }
-
-
-                //update score
-
-                //complete game
-
-                //restart game
 
             }
             catch (Exception exc)
@@ -92,11 +84,7 @@ namespace com.christoc.modules.ladder.svc
                 Exceptions.ProcessHttpException(exc.ToString());
                 throw;
             }
-
-
         }
-
-
 
         ///<summary>
         /// Set the portalid, taking the current request and locating which portal is being called based on this request.
@@ -104,9 +92,7 @@ namespace com.christoc.modules.ladder.svc
         /// <param name="request">request</param>
         private static void SetPortalId(HttpRequest request)
         {
-
             string domainName = DotNetNuke.Common.Globals.GetDomainName(request, true);
-
             string portalAlias = domainName.Substring(0, domainName.IndexOf("/svc"));
             PortalAliasInfo pai = PortalSettings.GetPortalAliasInfo(portalAlias);
             if (pai != null)

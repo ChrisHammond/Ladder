@@ -43,19 +43,17 @@ namespace com.christoc.modules.ladder.Components
                 t.LastPlayed = DateTime.Now;
                 t.TeamId = tc.SaveTeam(t).TeamId;
                 //add GameTeam relationship to store the Scores
-
+                var win = false;
+                if (t.Score >= 10)
+                    win = true;
 
                 //TODO: figure out how to flag a WIN and HOME team
                 if (newGame)
-                    DataProvider.Instance().AddGameTeam(g.GameId, t.TeamId, t.Score, false, t.HomeTeam);
+                    DataProvider.Instance().AddGameTeam(g.GameId, t.TeamId, t.Score, win, t.HomeTeam);
                 else
                 {
-                    DataProvider.Instance().AddGameTeam(g.GameId, t.TeamId, t.Score, false, t.HomeTeam);
-
-                    //we aren't using UpdateGameTeam anymore as we clear then add the records in again...
-                    //DataProvider.Instance().UpdateGameTeam(g.GameId, t.TeamId, t.Score, false, t.HomeTeam);
+                    DataProvider.Instance().AddGameTeam(g.GameId, t.TeamId, t.Score, win, t.HomeTeam);
                 }
-
             }
 
             return g;

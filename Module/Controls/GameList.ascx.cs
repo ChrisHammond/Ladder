@@ -26,11 +26,9 @@ namespace com.christoc.modules.ladder.Controls
 
                 //load games into the gvGames grid view
                 var listOfGames = gc.GetGames(PortalId, 5, true);
-                //TODO: using game.Teams figure out how to display scores
-
                 rptGames.DataSource = listOfGames;
                 rptGames.DataBind();
-                
+
             }
             catch (Exception exc) //Module failed to load
             {
@@ -50,13 +48,23 @@ namespace com.christoc.modules.ladder.Controls
                 var lblTeam2Name = e.Item.FindControl("lblTeam2Name") as Label;
                 var hlGameLink = e.Item.FindControl("hlGameLink") as HyperLink;
 
-
+                var pnlTeam1 = e.Item.FindControl("pnlTeam1") as Panel;
+                var pnlTeam2 = e.Item.FindControl("pnlTeam2") as Panel;
+                
                 var curGame = (Game)e.Item.DataItem;
                 if (lblTeam1Score != null) lblTeam1Score.Text = curGame.Teams[0].Score.ToString();
                 if (lblTeam1Name != null) lblTeam1Name.Text = curGame.Teams[0].Name;
                 if (lblTeam2Score != null) lblTeam2Score.Text = curGame.Teams[1].Score.ToString();
                 if (lblTeam2Name != null) lblTeam2Name.Text = curGame.Teams[1].Name;
                 if (hlGameLink != null) hlGameLink.NavigateUrl = GetGameLink(curGame.GameId);
+
+                if (lblTeam2Score != null && lblTeam1Score != null && pnlTeam1 != null && pnlTeam2 != null)
+                {
+                    if (Convert.ToInt32(lblTeam1Score.Text) > Convert.ToInt32(lblTeam2Score.Text))
+                        pnlTeam1.CssClass += " Win";
+                    else
+                        pnlTeam2.CssClass += " Win";
+                }
             }
         }
     }
