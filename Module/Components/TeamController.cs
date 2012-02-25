@@ -42,7 +42,6 @@ namespace com.christoc.modules.ladder.Components
                 t = CreateTeam(t);           
             return t;
 
-            //todo: save players?
         }
         //create team
         private Team CreateTeam(Team t)
@@ -95,7 +94,7 @@ namespace com.christoc.modules.ladder.Components
         public void AddPlayers(Team t, List<Player> originalPlayers)
         {   
             //todo: check new players versus original players
-            //todo: how to handle?
+            //todo: how should you handle changes to a team configuration? Don't allow it? Once a team, always a team? Form a new team if necessary?
 
             foreach (Player p in t.Players)
             {
@@ -105,6 +104,7 @@ namespace com.christoc.modules.ladder.Components
 
 
         //todo: delete team player
+        //should we ever delete a team player? Shouldn't a new team start?
 
         public Team GetTeamByName(string teamName)
         {

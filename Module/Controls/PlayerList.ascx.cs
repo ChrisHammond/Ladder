@@ -40,7 +40,6 @@ namespace com.christoc.modules.ladder.Controls
 
         private void BindPlayerList()
         {
-            //TODO: fix, currently pulling all players from all portals
             gvListOfNonPlayers.DataSource = DataProvider.Instance().GetNonPlayers(PortalId);
             gvListOfNonPlayers.DataBind();
         }
@@ -48,10 +47,6 @@ namespace com.christoc.modules.ladder.Controls
 
         protected void gbListOfNonPlayers_OnRowDataBound(object sender, GridViewRowEventArgs e)
         {
-            //TODO: we need to bind the user info so that we can allow the add button to be clicked.
-            //todo: we need to designate current game
-            //todo: we need to designate last game
-
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
                 var lbAdd = e.Row.FindControl("lbAdd") as LinkButton;
@@ -73,15 +68,8 @@ namespace com.christoc.modules.ladder.Controls
             var pc = new PlayerController();
             pc.Save(newP);
             //todo: refresh the grid to remove the recently added player
-            
+            BindPlayerList();
         }
 
-
-        //
-        //add a player
-        //if (e.Row.DataItem.GetType() == UserInfo.GetType())
-        //{
-        //    
-        //}
     }
 }

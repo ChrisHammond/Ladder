@@ -22,7 +22,6 @@ namespace com.christoc.modules.ladder.Controls
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            //TODO: allow for creating 
             try
             {
                 if (!Page.IsPostBack)
@@ -69,9 +68,7 @@ namespace com.christoc.modules.ladder.Controls
             {
                 if (dlPlayers.Assigned.Count < Convert.ToInt32(Settings["MaxPerTeam"])+1)
                 {
-                    //TODO: handle the removal of a player from a team
-                    //possibly delete all players on a team save, then add them again? seems inefficient.
-
+                    
                     //TODO: don't allow more than two players on a team
 
                     //save the team
