@@ -1,6 +1,5 @@
 using System;
 using System.IO.Ports;
-using Microsoft.SPOT;
 
 namespace com.christoc.netduino.FoosTracker
 {
@@ -225,7 +224,7 @@ namespace com.christoc.netduino.FoosTracker
 
         public void Write(string text)
         {
-            byte[] buffer = new byte[text.Length];
+            var buffer = new byte[text.Length];
 
             for (int i = 0; i < text.Length; i++)
             {
