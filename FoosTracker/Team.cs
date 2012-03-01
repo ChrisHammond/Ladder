@@ -1,6 +1,3 @@
-using System;
-using Microsoft.SPOT;
-
 namespace com.christoc.netduino.FoosTracker
 {
     class Team
