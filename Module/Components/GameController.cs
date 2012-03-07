@@ -29,8 +29,8 @@ namespace com.christoc.modules.ladder.Components
 
             g = g.GameId > 0 ? UpdateGame(g) : CreateGame(g);
 
-            if(!newGame)
-            {               
+            if (!newGame)
+            {
                 //clear game/team records first? then update to handle change of team ids?
                 DataProvider.Instance().DeleteGameTeams(g.GameId);
             }
@@ -84,12 +84,15 @@ namespace com.christoc.modules.ladder.Components
         {
 
             var thisGame = CBO.FillObject<Game>(DataProvider.Instance().GetGame(gameId));
-            if (populateTeams)
+            if (thisGame != null)
             {
-                var tc = new TeamController();
-                foreach (Team t in tc.GetTeamsByGame(thisGame.GameId))
+                if (populateTeams)
                 {
-                    thisGame.Teams.Add(t);
+                    var tc = new TeamController();
+                    foreach (Team t in tc.GetTeamsByGame(thisGame.GameId))
+                    {
+                        thisGame.Teams.Add(t);
+                    }
                 }
             }
             return thisGame;

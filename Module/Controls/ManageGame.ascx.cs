@@ -29,15 +29,18 @@ namespace com.christoc.modules.ladder.Controls
                     LoadAvailableTeams();
                     //load the game
                     var gc = new GameController();
-                    var currentGame = gc.GetGame(GameId);
-                    if (currentGame != null)
+                    if (1 == 1)
                     {
-                        ddlTeam1.Items.FindByValue(currentGame.Teams[0].TeamId.ToString()).Selected = true;
-                        txtTeam1Score.Text = currentGame.Teams[0].Score.ToString();
-                        chkTeam1IsHome.Checked = currentGame.Teams[0].HomeTeam;
-                        ddlTeam2.Items.FindByValue(currentGame.Teams[1].TeamId.ToString()).Selected = true;
-                        txtTeam2Score.Text = currentGame.Teams[1].Score.ToString();
-                        chkTeam2IsHome.Checked = currentGame.Teams[1].HomeTeam;
+                        var currentGame = gc.GetGame(GameId);
+                        if (currentGame != null)
+                        {
+                            ddlTeam1.Items.FindByValue(currentGame.Teams[0].TeamId.ToString()).Selected = true;
+                            txtTeam1Score.Text = currentGame.Teams[0].Score.ToString();
+                            chkTeam1IsHome.Checked = currentGame.Teams[0].HomeTeam;
+                            ddlTeam2.Items.FindByValue(currentGame.Teams[1].TeamId.ToString()).Selected = true;
+                            txtTeam2Score.Text = currentGame.Teams[1].Score.ToString();
+                            chkTeam2IsHome.Checked = currentGame.Teams[1].HomeTeam;
+                        }
                     }
                 }
             }
@@ -67,28 +70,28 @@ namespace com.christoc.modules.ladder.Controls
             //save the game
 
             var gc = new GameController();
-            var currentGame = gc.GetGame(GameId);
-            if (currentGame != null)
-            {
-                currentGame.Teams.Clear();
-                var tc = new TeamController();
-                var team1 = tc.GetTeam(Convert.ToInt32(ddlTeam1.SelectedValue));
 
-                team1.Score = Convert.ToInt32(txtTeam1Score.Text);
-                team1.HomeTeam = chkTeam1IsHome.Checked;
+            var currentGame = gc.GetGame(GameId) ?? new Game();
 
-                var team2 = tc.GetTeam(Convert.ToInt32(ddlTeam2.SelectedValue));
+            currentGame.Teams.Clear();
+            var tc = new TeamController();
+            var team1 = tc.GetTeam(Convert.ToInt32(ddlTeam1.SelectedValue));
 
-                team2.Score = Convert.ToInt32(txtTeam2Score.Text);
-                team2.HomeTeam = chkTeam2IsHome.Checked;
+            team1.Score = Convert.ToInt32(txtTeam1Score.Text);
+            team1.HomeTeam = chkTeam1IsHome.Checked;
 
-                currentGame.Teams.Clear();
-                currentGame.Teams.Add(team1);
-                currentGame.Teams.Add(team2);
+            var team2 = tc.GetTeam(Convert.ToInt32(ddlTeam2.SelectedValue));
 
-                currentGame.Save();
-            }
-            Response.Redirect(GetGameLink(GameId));
+            team2.Score = Convert.ToInt32(txtTeam2Score.Text);
+            team2.HomeTeam = chkTeam2IsHome.Checked;
+
+            currentGame.Teams.Clear();
+            currentGame.Teams.Add(team1);
+            currentGame.Teams.Add(team2);
+
+            currentGame.Save();
+
+            Response.Redirect(GetGameLink(currentGame.GameId));
         }
     }
 }

@@ -48,6 +48,12 @@ namespace com.christoc.modules.ladder
         {
             return DotNetNuke.Common.Globals.NavigateURL(TabId, String.Empty, "df=ViewGame&gid=" + gameId);
         }
+
+        public string GetGameManageLink()
+        {
+            return DotNetNuke.Common.Globals.NavigateURL(TabId, String.Empty, "df=ManageGame");
+        }
+
         public string GetGameManageLink(int gameId)
         {
             return DotNetNuke.Common.Globals.NavigateURL(TabId, String.Empty, "df=ManageGame&gid=" + gameId);
