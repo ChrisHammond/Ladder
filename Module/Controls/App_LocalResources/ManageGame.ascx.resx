@@ -165,4 +165,13 @@
   <data name="Team2.Text" xml:space="preserve">
     <value>Team 2</value>
   </data>
+  <data name="GeneralGameSettings.Text" xml:space="preserve">
+    <value>General Game Settings</value>
+  </data>
+  <data name="lblGameDate.Help" xml:space="preserve">
+    <value>When was the game played?</value>
+  </data>
+  <data name="lblGameDate.Text" xml:space="preserve">
+    <value>Date</value>
+  </data>
 </root>

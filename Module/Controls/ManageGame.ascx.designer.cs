@@ -13,6 +13,24 @@ namespace com.christoc.modules.ladder.Controls {
     public partial class ManageGame {
         
         /// <summary>
+        /// lblGameDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DotNetNuke.UI.UserControls.LabelControl lblGameDate;
+        
+        /// <summary>
+        /// txtGameDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtGameDate;
+        
+        /// <summary>
         /// lblTeam1 control.
         /// </summary>
         /// <remarks>
