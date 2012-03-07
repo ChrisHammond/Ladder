@@ -40,6 +40,12 @@ namespace com.christoc.modules.ladder.Controls
                             ddlTeam2.Items.FindByValue(currentGame.Teams[1].TeamId.ToString()).Selected = true;
                             txtTeam2Score.Text = currentGame.Teams[1].Score.ToString();
                             chkTeam2IsHome.Checked = currentGame.Teams[1].HomeTeam;
+
+                            txtGameDate.Text = currentGame.PlayedDate.ToString();
+                        }
+                        else
+                        {
+                            txtGameDate.Text = DateTime.Now.ToString();
                         }
                     }
                 }
@@ -89,6 +95,15 @@ namespace com.christoc.modules.ladder.Controls
             currentGame.Teams.Add(team1);
             currentGame.Teams.Add(team2);
 
+            //check if we're creating a new game and assign the current user as the Creator
+
+            if (currentGame.CreatedByUserId < 0)
+                currentGame.CreatedByUserId = UserId;
+
+            currentGame.PlayedDate = Convert.ToDateTime(txtGameDate.Text);
+
+            currentGame.LastUpdatedByUserId = UserId;
+            currentGame.PortalId = PortalId;
             currentGame.Save();
 
             Response.Redirect(GetGameLink(currentGame.GameId));

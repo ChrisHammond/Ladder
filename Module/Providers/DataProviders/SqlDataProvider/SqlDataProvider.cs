@@ -145,7 +145,7 @@ namespace com.christoc.modules.ladder.Providers.DataProviders
                 , new SqlParameter("@lastplayed", t.LastPlayed)
                 , new SqlParameter("@createdbyuserid", t.CreatedByUserId)
                 , new SqlParameter("@lastupdatedbyuserid", t.LastUpdatedByUserId)
-                , new SqlParameter("@moduleid", t.ModuleId)
+                , new SqlParameter("@portalId", t.PortalId)
                 ));
         }
 

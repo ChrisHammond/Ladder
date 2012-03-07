@@ -91,6 +91,7 @@ namespace com.christoc.modules.ladder.Controls
                         var curPlayer = pc.GetPlayer(Convert.ToInt32(li.Value));
                         curTeam.Players.Add(curPlayer);
                     }
+                    curTeam.PortalId = PortalId;
                     tc.SaveTeam(curTeam);
                     Response.Redirect(DotNetNuke.Common.Globals.NavigateURL(TabId));
                 }

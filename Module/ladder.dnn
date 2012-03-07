@@ -1,6 +1,6 @@
 <dotnetnuke type="Package" version="5.0">
   <packages>
-    <package name="ladder" type="Module" version="00.00.04">
+    <package name="ladder" type="Module" version="00.00.05">
       <friendlyName>ladder</friendlyName>
       <description>Christoc.com ladder module</description>
       <owner>
