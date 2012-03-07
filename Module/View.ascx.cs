@@ -118,24 +118,26 @@ namespace com.christoc.modules.ladder
                                                  {
                                                      {
                                                          GetNextActionID(),
-                                                         Localization.GetString("EditModule", this.LocalResourceFile),
-                                                         "", "", "", EditUrl(), false, SecurityAccessLevel.Edit, true,
-                                                         false
-                                                         },
-                                                     {
-                                                         GetNextActionID(),
                                                          Localization.GetString("ManagePlayerList",
-                                                                                this.LocalResourceFile), "", "", "",
+                                                                                LocalResourceFile), "", "", "",
                                                          DotNetNuke.Common.Globals.NavigateURL(TabId, String.Empty,
                                                                                                "df=ManagePlayerList"),
                                                          false, SecurityAccessLevel.Edit, true, false
                                                          },
                                                      {
                                                          GetNextActionID(),
-                                                         Localization.GetString("ManageTeam", this.LocalResourceFile),
+                                                         Localization.GetString("ManageTeam", LocalResourceFile),
                                                          "", "", "",
                                                          DotNetNuke.Common.Globals.NavigateURL(TabId, String.Empty,
                                                                                                "df=ManageTeam"), false,
+                                                         SecurityAccessLevel.Edit, true, false
+                                                         },
+
+                                                          {
+                                                         GetNextActionID(),
+                                                         Localization.GetString("NewGame", LocalResourceFile),
+                                                         "", "", "",
+                                                         GetGameManageLink(), false,
                                                          SecurityAccessLevel.Edit, true, false
                                                          }
                                                  };

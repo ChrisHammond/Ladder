@@ -58,6 +58,9 @@ namespace com.christoc.modules.ladder.Components
         public Game()
         {
             Teams = new List<Team>();
+            PlayedDate = LastUpdatedDate = CreatedDate = DateTime.Now;
+            LastUpdatedByUserId = CreatedByUserId = -1;
+            
         }
 
         public Game Save()
