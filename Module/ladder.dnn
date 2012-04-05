@@ -1,6 +1,6 @@
 <dotnetnuke type="Package" version="5.0">
   <packages>
-    <package name="ladder" type="Module" version="00.00.05">
+    <package name="ladder" type="Module" version="00.00.06">
       <friendlyName>ladder</friendlyName>
       <description>Christoc.com ladder module</description>
       <owner>
@@ -34,10 +34,15 @@
               <name>00.00.03.SqlDataProvider</name>
               <version>00.00.03</version>
             </script>
+            <script type="Install">
+              <path>Providers\DataProviders\SqlDataProvider</path>
+              <name>00.00.06.SqlDataProvider</name>
+              <version>00.00.06</version>
+            </script>
             <script type="UnInstall">
               <path>Providers\DataProviders\SqlDataProvider</path>
               <name>Uninstall.SqlDataProvider</name>
-              <version>00.00.04</version>
+              <version>00.00.06</version>
             </script>
           </scripts>
         </component>

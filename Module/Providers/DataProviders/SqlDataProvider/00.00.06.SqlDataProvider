@@ -1,0 +1,26 @@
+﻿IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'{databaseOwner}[{objectQualifier}Ladder_GetTeams]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	DROP PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetTeams]
+GO
+
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}Ladder_GetTeams]
+		@portalid int
+AS
+
+SELECT [teamid]
+      ,[name]
+      ,[games]
+      ,[wins]
+      ,[losses]
+      ,[firstplayed]
+      ,[lastplayed]
+      ,[createdbyuserid]
+      ,[createddate]
+      ,[lastupdatedbyuserid]
+      ,[lastupdateddate]
+	  , 0 as 'score'
+	  , 'false' as 'home'
+	  ,[portalId]
+  FROM {databaseOwner}[{objectQualifier}Ladder_Team]
+  WHERE
+	[portalid]=@portalid
+GO
