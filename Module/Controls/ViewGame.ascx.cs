@@ -17,14 +17,15 @@ using DotNetNuke.UI.Utilities;
 
 namespace com.christoc.modules.ladder.Controls
 {
+    ///<summary>
+    /// The ViewGame class is used on the View control to see information about a game 
+    ///</summary>
     public partial class ViewGame : LadderModuleBase
     {
         protected void Page_Load(object sender, EventArgs e)
         {
             try
             {
-
-
                 //check if we have a GameId?
                 lbManageGame.NavigateUrl = GetGameManageLink(GameId);
 
@@ -43,7 +44,6 @@ namespace com.christoc.modules.ladder.Controls
                     lblTeam2Link.Text = currentGame.Teams[1].Name;
                     lblTeam2Score.Text = currentGame.Teams[1].Score.ToString();
                 }
-
 
             }
             catch (Exception exc)

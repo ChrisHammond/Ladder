@@ -216,6 +216,7 @@
     </None>
     <None Include="Providers\DataProviders\SqlDataProvider\00.00.02.SqlDataProvider" />
     <None Include="Providers\DataProviders\SqlDataProvider\00.00.03.SqlDataProvider" />
+    <None Include="Providers\DataProviders\SqlDataProvider\00.00.06.SqlDataProvider" />
     <None Include="Providers\DataProviders\SqlDataProvider\Uninstall.SqlDataProvider" />
     <None Include="module.css" />
   </ItemGroup>
