@@ -9,10 +9,10 @@
 ' 
 */
 using System;
-using com.christoc.modules.ladder.Components;
+using Christoc.Com.Modules.Ladder.Components;
 using DotNetNuke.Services.Exceptions;
 
-namespace com.christoc.modules.ladder.Controls
+namespace Christoc.Com.Modules.Ladder.Controls
 {
     public partial class ManageGame : LadderModuleBase
     {

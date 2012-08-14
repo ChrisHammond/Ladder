@@ -13,7 +13,7 @@ using DotNetNuke.Services.Exceptions;
 using DotNetNuke.Entities.Modules;
 
 
-namespace com.christoc.modules.ladder
+namespace Christoc.Com.Modules.Ladder
 {
 
     /// -----------------------------------------------------------------------------

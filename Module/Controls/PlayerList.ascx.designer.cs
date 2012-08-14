@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace com.christoc.modules.ladder.Controls {
+namespace Christoc.Com.Modules.Ladder.Controls {
     
     
     public partial class PlayerList {

@@ -1,5 +1,5 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ManageGame.ascx.cs"
-    Inherits="com.christoc.modules.ladder.Controls.ManageGame" %>
+    Inherits="Christoc.Com.Modules.Ladder.Controls.ManageGame" %>
 <%@ Register TagPrefix="dnn" TagName="label" Src="~/controls/labelcontrol.ascx" %>
 
 

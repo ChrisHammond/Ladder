@@ -16,7 +16,7 @@ using DotNetNuke.Services.Localization;
 using DotNetNuke.Security;
 
 
-namespace com.christoc.modules.ladder
+namespace Christoc.Com.Modules.Ladder
 {
 
     /// -----------------------------------------------------------------------------

@@ -12,7 +12,7 @@
 using System;
 using DotNetNuke.Services.Exceptions;
 
-namespace com.christoc.modules.ladder.Controls
+namespace Christoc.Com.Modules.Ladder.Controls
 {
     public partial class ManagePlayer : LadderModuleBase
     {

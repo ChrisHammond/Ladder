@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace com.christoc.modules.ladder {
+namespace Christoc.Com.Modules.Ladder {
     
     
     public partial class View {

@@ -10,7 +10,7 @@
 */
 using DotNetNuke.Entities.Modules;
 
-namespace com.christoc.modules.ladder
+namespace Christoc.Com.Modules.Ladder
 {
 
     public class LadderSettingsBase : ModuleSettingsBase

@@ -9,10 +9,10 @@
 ' 
 */
 using System.Collections.Generic;
-using com.christoc.modules.ladder.Data;
+using Christoc.Com.Modules.Ladder.Data;
 using DotNetNuke.Common.Utilities;
 
-namespace com.christoc.modules.ladder.Components
+namespace Christoc.Com.Modules.Ladder.Components
 {
     public class PlayerController
     {

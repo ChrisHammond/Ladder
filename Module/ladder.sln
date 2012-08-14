@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ladder", "ladder.csproj", "{62EEF20C-8C85-46F2-89F8-4F898903E66B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ladder", "Ladder.csproj", "{62EEF20C-8C85-46F2-89F8-4F898903E66B}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution

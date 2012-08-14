@@ -1,4 +1,4 @@
-﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="GameList.ascx.cs" Inherits="com.christoc.modules.ladder.Controls.GameList" %>
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="GameList.ascx.cs" Inherits="Christoc.Com.Modules.Ladder.Controls.GameList" %>
 <asp:Repeater ID="rptGames" runat="server" OnItemDataBound="RptGamesOnItemDataBound">
     <HeaderTemplate>
         <ul class="ladder_game">

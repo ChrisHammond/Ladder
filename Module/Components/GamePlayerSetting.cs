@@ -9,7 +9,7 @@
 ' 
 */
 
-namespace com.christoc.modules.ladder.Components
+namespace Christoc.Com.Modules.Ladder.Components
 {
     public class GamePlayerSetting
     {

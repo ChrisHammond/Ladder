@@ -15,7 +15,7 @@ using DotNetNuke.Common.Utilities;
 using DotNetNuke.Entities.Modules;
 using DotNetNuke.Entities.Users;
 
-namespace com.christoc.modules.ladder.Components
+namespace Christoc.Com.Modules.Ladder.Components
 {
     public class Team : IHydratable
     {

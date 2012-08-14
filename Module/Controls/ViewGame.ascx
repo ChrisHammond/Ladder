@@ -1,4 +1,4 @@
-﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ViewGame.ascx.cs" Inherits="com.christoc.modules.ladder.Controls.ViewGame" %>
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ViewGame.ascx.cs" Inherits="Christoc.Com.Modules.Ladder.Controls.ViewGame" %>
 
 <asp:Panel ID="pnlAdmin" runat="server">
     <asp:LinkButton ID="lbDeleteGame" runat="server" resourcekey="lbDeleteGame" 
