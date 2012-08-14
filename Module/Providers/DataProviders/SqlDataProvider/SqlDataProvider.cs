@@ -11,13 +11,13 @@
 using System;
 using System.Data;
 using System.Data.SqlClient;
-using com.christoc.modules.ladder.Data;
+using Christoc.Com.Modules.Ladder.Data;
 using DotNetNuke.Common.Utilities;
 using DotNetNuke.Framework.Providers;
-using com.christoc.modules.ladder.Components;
+using Christoc.Com.Modules.Ladder.Components;
 using Microsoft.ApplicationBlocks.Data;
 
-namespace com.christoc.modules.ladder.Providers.DataProviders
+namespace Christoc.Com.Modules.Ladder.Providers.DataProviders
 {
 
     /// -----------------------------------------------------------------------------

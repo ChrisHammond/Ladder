@@ -1,6 +1,6 @@
 <dotnetnuke type="Package" version="5.0">
   <packages>
-    <package name="ladder" type="Module" version="00.00.06">
+    <package name="ladder" type="Module" version="00.00.07">
       <friendlyName>ladder</friendlyName>
       <description>Christoc.com ladder module</description>
       <owner>
@@ -12,7 +12,7 @@
       <license src="License.txt"></license>
       <releaseNotes src="ReleaseNotes.txt"></releaseNotes>
       <dependencies>
-        <dependency type="CoreVersion">06.01.03</dependency>
+        <dependency type="CoreVersion">06.02.01</dependency>
       </dependencies>
 
       <components>
@@ -106,13 +106,13 @@
             <install>
               <configuration>
                 <nodes>
-                  <node path="/configuration/system.web/httpHandlers" action="update" key="path" collision="overwrite">
-                    <add verb="GET" path="svc/ladder/*" type="com.christoc.modules.ladder.svc.PutHandler, ladder" />
-                    <add verb="PUT" path="svc/ladder/*" type="com.christoc.modules.ladder.svc.PutHandler, ladder" />
+                  <node path="/configuration/system.web/httpHandlers" action="remove" key="path" collision="overwrite">
+                    <add verb="GET" path="svc/ladder/*" type="Christoc.Com.Modules.Ladder.svc.PutHandler, ladder" />
+                    <add verb="PUT" path="svc/ladder/*" type="Christoc.Com.Modules.Ladder.svc.PutHandler, ladder" />
                   </node>
-                  <node path="/configuration/system.webServer/handlers" action="update" key="name" collision="overwrite">
-                    <add name="LadderServicesGethandler" verb="GET" path="svc/ladder/*" type="com.christoc.modules.ladder.svc.PutHandler, ladder" preCondition="integratedMode" />
-                    <add name="LadderServicesPuthandler" verb="PUT" path="svc/ladder/*" type="com.christoc.modules.ladder.svc.PutHandler, ladder" preCondition="integratedMode" />
+                  <node path="/configuration/system.webServer/handlers" action="remove" key="name" collision="overwrite">
+                    <add name="LadderServicesGethandler" verb="GET" path="svc/ladder/*" type="Christoc.Com.Modules.Ladder.svc.PutHandler, ladder" preCondition="integratedMode" />
+                    <add name="LadderServicesPuthandler" verb="PUT" path="svc/ladder/*" type="Christoc.Com.Modules.Ladder.svc.PutHandler, ladder" preCondition="integratedMode" />
                   </node>
                 </nodes>
               </configuration>

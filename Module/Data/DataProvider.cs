@@ -14,10 +14,10 @@ using System.Data;
 using System;
 using DotNetNuke.Common.Utilities;
 using DotNetNuke.Framework.Providers;
-using com.christoc.modules.ladder.Components;
+using Christoc.Com.Modules.Ladder.Components;
 
 
-namespace com.christoc.modules.ladder.Data
+namespace Christoc.Com.Modules.Ladder.Data
 {
 
     /// -----------------------------------------------------------------------------
@@ -37,7 +37,7 @@ namespace com.christoc.modules.ladder.Data
         {
             if (_provider == null)
             {
-                const string assembly = "com.christoc.modules.ladder.Providers.DataProviders.SqlDataProvider,ladder";
+                const string assembly = "Christoc.Com.Modules.Ladder.Providers.DataProviders.SqlDataProvider,ladder";
                 Type objectType = Type.GetType(assembly, true, true);
 
                 _provider = (DataProvider)Activator.CreateInstance(objectType);

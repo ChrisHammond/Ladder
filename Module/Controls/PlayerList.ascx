@@ -1,5 +1,5 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="PlayerList.ascx.cs"
-    Inherits="com.christoc.modules.ladder.Controls.PlayerList" %>
+    Inherits="Christoc.Com.Modules.Ladder.Controls.PlayerList" %>
 <%@ Import Namespace="DotNetNuke.Services.Localization" %>
 <asp:GridView ID="gvListOfNonPlayers" runat="server" AutoGenerateColumns="false"
     OnRowDataBound="gbListOfNonPlayers_OnRowDataBound" OnRowCommand="gbListOfNonPlayers_OnRowCommand">

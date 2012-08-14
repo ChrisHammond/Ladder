@@ -1,5 +1,5 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ManageTeam.ascx.cs"
-    Inherits="com.christoc.modules.ladder.Controls.ManageTeam" %>
+    Inherits="Christoc.Com.Modules.Ladder.Controls.ManageTeam" %>
 <%@ Register TagPrefix="dnn" TagName="label" Src="~/controls/labelcontrol.ascx" %>
 <%@ Register TagPrefix="dnn" TagName="duallist" Src="~/controls/duallistcontrol.ascx" %>
 <div class="dnnForm ladderManageTeam dnnClear" id="ladderManageTeam">

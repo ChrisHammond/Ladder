@@ -12,12 +12,12 @@
 using System;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using com.christoc.modules.ladder.Components;
-using com.christoc.modules.ladder.Data;
+using Christoc.Com.Modules.Ladder.Components;
+using Christoc.Com.Modules.Ladder.Data;
 using DotNetNuke.Services.Exceptions;
 using DotNetNuke.Services.Localization;
 
-namespace com.christoc.modules.ladder.Controls
+namespace Christoc.Com.Modules.Ladder.Controls
 {
     public partial class PlayerList : LadderModuleBase
     {

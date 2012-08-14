@@ -10,12 +10,12 @@
 */
 
 using System;
-using com.christoc.modules.ladder.Components;
+using Christoc.Com.Modules.Ladder.Components;
 using DotNetNuke.Services.Exceptions;
 using DotNetNuke.Services.Localization;
 using DotNetNuke.UI.Utilities;
 
-namespace com.christoc.modules.ladder.Controls
+namespace Christoc.Com.Modules.Ladder.Controls
 {
     ///<summary>
     /// The ViewGame class is used on the View control to see information about a game 
