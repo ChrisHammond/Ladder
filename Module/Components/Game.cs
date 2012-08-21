@@ -16,6 +16,7 @@ using DotNetNuke.Entities.Users;
 
 namespace Christoc.Com.Modules.Ladder.Components
 {
+    [Serializable()]
     public class Game : IHydratable
     {
         public int GameId { get; set; }
