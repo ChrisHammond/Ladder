@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ladder", "Ladder.csproj", "{62EEF20C-8C85-46F2-89F8-4F898903E66B}"
 EndProject
 Global
@@ -9,7 +9,7 @@ Global
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs03
 		SccLocalPath0 = .
-		SccProjectUniqueName1 = ladder.csproj
+		SccProjectUniqueName1 = Ladder.csproj
 		SccLocalPath1 = .
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
