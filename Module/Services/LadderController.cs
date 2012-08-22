@@ -12,12 +12,12 @@ namespace Christoc.Com.Modules.Ladder.Services
 
         //check to make sure we can get/use games
         [DnnAuthorize(AllowAnonymous = true)]
-        public ActionResult ListOfGames(int tabId, int moduleId)
+        public ActionResult ListOfGames()
         {
             try
             {
                 var gc = new GameController();
-                var games = gc.GetGames(PortalSettings.PortalId, true);
+                var games = gc.GetGames(ActiveModule.PortalID, true);
                 return Json(games, JsonRequestBehavior.AllowGet);
             }
             catch (Exception exc)
@@ -33,16 +33,15 @@ namespace Christoc.Com.Modules.Ladder.Services
         [DnnAuthorize(AllowAnonymous = true)]
         [AcceptVerbs(HttpVerbs.Post)]
         //TODO: not bringing over the data correctly
-        public ActionResult SaveGame(string test)
+        public JsonResult SaveGame(string test)
         {
             var jsonGame = string.Empty;
             if (jsonGame != null)
             {
-
                 //deserialize the game
                 var s = new JavaScriptSerializer();
                 var currentGame = (Game)s.DeserializeObject(jsonGame);
-
+                //var currentGame = jsonGame;
                 try
                 {
                     var gc = new GameController();

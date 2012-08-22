@@ -98,6 +98,9 @@
             <assembly>
               <name>ladder.dll</name>
             </assembly>
+            <assembly>
+              <name>microsoft.web.mvc.dll</name>
+            </assembly>
           </assemblies>
         </component>
         <component type="Config">

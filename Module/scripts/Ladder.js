@@ -6,7 +6,7 @@
 
     function game(g) {
         this.GameId = s.GameId;
-        
+
     }
 
     var viewModel = {
@@ -16,14 +16,14 @@
     //get slides on initialization
     this.init = function(element) {
 
-        var data = {};
+        var data = { };
         data.moduleId = moduleId;
         data.tabId = tabId;
         serviceFramework.getAntiForgeryProperty();
         $.ajax({
             type: "POST",
             cache: false,
-            url: baseServicePath + 'GetSlides',
+            url: baseServicePath + 'ListOfGames',
             data: data
         }).done(function(data) {
             viewModel.slides = ko.utils.arrayMap(data, function(s) {
@@ -31,7 +31,8 @@
             });
             ko.applyBindings(viewModel);
             $(element).jmpress();
-        }).fail(function () {
-            Console.Log('Sorry failed to load Slides');
+        }).fail(function() {
+            Console.Log('Sorry failed to load Games');
         });
     };
+}
