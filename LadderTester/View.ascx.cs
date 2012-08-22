@@ -13,7 +13,9 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using DotNetNuke.Services.Exceptions;
 
 
@@ -73,7 +75,7 @@ namespace com.christoc.modules.LadderTester
             //call the webservice 
             txtGameJson.Text = BuildJson();
 
-            CallWebService(txtGameJson.Text);
+            //CallWebService(txtGameJson.Text);
 
         }
 
@@ -103,7 +105,7 @@ namespace com.christoc.modules.LadderTester
             var hwr = WebRequest.Create(address) as HttpWebRequest;
             if (hwr != null)
             {
-                hwr.Method = "PUT";
+                hwr.Method = "Post";
                 hwr.ContentType = "application/json";
                 byte[] byteData = Encoding.UTF8.GetBytes(jsonValue);
                 hwr.ContentLength = byteData.Length;
@@ -128,19 +130,100 @@ namespace com.christoc.modules.LadderTester
                     txtGameId.Text = responseFromServer;
                 }
 
-                // Get response  
-                //using (HttpWebResponse response = hwr.GetResponse() as HttpWebResponse)
-                //{
-                //    // Get the response stream  
-                //    StreamReader reader = new StreamReader(hwr.GetRequestStream());
 
-                //    // Console application output  
-                //    txtResult.Text = reader.ReadToEnd();
-                //}  
 
+                String request = "POST /update HTTP/1.1\n";
+                request += "Host: " + address + "\n";
+                request += "Connection: close\n";
+                //todo: should we have a specific key passed? maybe the field id, to allow the post?
+                //request += "X-DNNFOOSAPIKEY: " + writeAPIKey + "\n";
+                request += "Content-Type: application/json\n";
+                request += "Content-Length: " + jsonValue.Length + "\n\n";
+
+                request += jsonValue;
+
+                try
+                {
+                    //provide the IP for post
+                    //static string tsIP = "184.106.153.149";     // IP Address for the ThingSpeak API
+                    //static Int32 tsPort = 80;                   // Port Number for ThingSpeak
+
+                    String tsReply = sendPOST(address, 80, request);
+                    
+                }
+                catch (SocketException se)
+                {
+
+                }
+                
             }
 
         }
+
+        //methods for the code below based on the ThinkSpeak API/netduino sample http://community.thingspeak.com/tutorials/netduino/create-your-own-web-of-things-using-the-netduino-plus-and-thingspeak/ 
+        private static String sendPOST(String server, Int32 port, String request)
+        {
+            const Int32 c_microsecondsPerSecond = 1000000;
+
+            // Create a socket connection to the specified server and port.
+            using (Socket serverSocket = ConnectSocket(server, port))
+            {
+                // Send request to the server.
+                Byte[] bytesToSend = Encoding.UTF8.GetBytes(request);
+                serverSocket.Send(bytesToSend, bytesToSend.Length, 0);
+
+                // Reusable buffer for receiving chunks of the document.
+                Byte[] buffer = new Byte[1024];
+
+                // Accumulates the received page as it is built from the buffer.
+                String page = String.Empty;
+
+                // Wait up to 30 seconds for initial data to be available.  Throws an exception if the connection is closed with no data sent.
+                DateTime timeoutAt = DateTime.Now.AddSeconds(30);
+                while (serverSocket.Available == 0 && DateTime.Now < timeoutAt)
+                {
+                    System.Threading.Thread.Sleep(100);
+                }
+
+                // Poll for data until 30-second timeout.  Returns true for data and connection closed.
+                while (serverSocket.Poll(30 * c_microsecondsPerSecond, SelectMode.SelectRead))
+                {
+                    // If there are 0 bytes in the buffer, then the connection is closed, or we have timed out.
+                    if (serverSocket.Available == 0) break;
+
+                    // Zero all bytes in the re-usable buffer.
+                    Array.Clear(buffer, 0, buffer.Length);
+
+                    // Read a buffer-sized HTML chunk.
+                    Int32 bytesRead = serverSocket.Receive(buffer);
+
+                    // Append the chunk to the string.
+                    page = page + new String(Encoding.UTF8.GetChars(buffer));
+                }
+
+                // Return the complete string.
+                return page;
+            }
+        }
+
+        // Creates a socket and uses the socket to connect to the server's IP address and port. (From the .NET Micro Framework SDK example)
+        private static Socket ConnectSocket(String server, Int32 port)
+        {
+            // Get server's IP address.
+            IPHostEntry hostEntry = Dns.GetHostEntry(server);
+            // Create socket and connect to the server's IP address and port
+            Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            socket.Connect(new IPEndPoint(hostEntry.AddressList[0], port));
+            return socket;
+        }
+
+        //static void delayLoop(int interval)
+        //{
+        //    long now = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+        //    int offset = (int)(now % interval);
+        //    int delay = interval - offset;
+        //    Thread.Sleep(delay);
+        //}
     }
 
 }
