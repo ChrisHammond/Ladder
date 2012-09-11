@@ -1,5 +1,5 @@
 /*
-' Copyright (c) 2011  Christoc.com
+' Copyright (c) 2012 Christoc.com
 '  All rights reserved.
 ' 
 ' THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -15,7 +15,6 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading;
 using DotNetNuke.Services.Exceptions;
 
 
@@ -55,7 +54,7 @@ namespace com.christoc.modules.LadderTester
             try
             {
                 //"{\"Teams\":[{\"TeamId\":0,\"Name\":\"Home\",\"Score\":\"" + homeTeam.Score + "\",\"Games\":0,\"Wins\":0,\"Losses\":0},{\"TeamId\":1,\"Name\":\"Away\",\"Score\":\"" + awayTeam.Score + "\",\"Games\":0,\"Wins\":0,\"Losses\":0}],\"FieldIdentifier\":\"" + _currentGame.FieldIdentifier + "\"}";
-                if(!Page.IsPostBack)
+                if (!Page.IsPostBack)
                 {
                     txtFieldIdentifier.Text = "00-B0-D0-86-BB-F7";
                     txtHomeTeam.Text = "10";
@@ -75,14 +74,14 @@ namespace com.christoc.modules.LadderTester
             //call the webservice 
             txtGameJson.Text = BuildJson();
 
-            //CallWebService(txtGameJson.Text);
+            CallWebService(txtGameJson.Text);
 
         }
 
         private string BuildJson()
         {
             var sb = new StringBuilder();
-            if(txtGameId.Text.Trim()!=string.Empty)
+            if (txtGameId.Text.Trim() != string.Empty)
                 sb.Append("{\"GameId\":" + txtGameId.Text + ",");
             else
             {
@@ -99,65 +98,38 @@ namespace com.christoc.modules.LadderTester
             return sb.ToString();
         }
 
+        //TODO: this posts to the new 6.2 ladder service with Json
         private void CallWebService(string jsonValue)
         {
             var address = txtServerUrl.Text;
-            var hwr = WebRequest.Create(address) as HttpWebRequest;
-            if (hwr != null)
+            
+            // corrected to WebRequest from HttpWebRequest
+            WebRequest request = WebRequest.Create(address);
+
+            request.Method = "POST";
+            request.ContentType = "application/json; charset=utf-8";
+            string postData = jsonValue; //encode your data 
+            //using the javascript serializer
+
+            //get a reference to the request-stream, and write the postData to it
+            using (Stream s = request.GetRequestStream())
             {
-                hwr.Method = "Post";
-                hwr.ContentType = "application/json";
-                byte[] byteData = Encoding.UTF8.GetBytes(jsonValue);
-                hwr.ContentLength = byteData.Length;
-                Stream putStream = hwr.GetRequestStream();
-
-                putStream.Write(byteData, 0, byteData.Length);
-
-                putStream.Close();
-
-                var response = hwr.GetResponse();
-
-                var data = response.GetResponseStream();
-
-                if (data != null)
-                {
-                    var dataReader = new StreamReader(data);
-                    var responseFromServer = dataReader.ReadToEnd();
-
-                    response.Close();
-
-                    txtResult.Text = responseFromServer;
-                    txtGameId.Text = responseFromServer;
-                }
-
-
-
-                String request = "POST /update HTTP/1.1\n";
-                request += "Host: " + address + "\n";
-                request += "Connection: close\n";
-                //todo: should we have a specific key passed? maybe the field id, to allow the post?
-                //request += "X-DNNFOOSAPIKEY: " + writeAPIKey + "\n";
-                request += "Content-Type: application/json\n";
-                request += "Content-Length: " + jsonValue.Length + "\n\n";
-
-                request += jsonValue;
-
-                try
-                {
-                    //provide the IP for post
-                    //static string tsIP = "184.106.153.149";     // IP Address for the ThingSpeak API
-                    //static Int32 tsPort = 80;                   // Port Number for ThingSpeak
-
-                    String tsReply = sendPOST(address, 80, request);
-                    
-                }
-                catch (SocketException se)
-                {
-
-                }
-                
+                using (var sw = new StreamWriter(s))
+                    sw.Write(postData);
             }
 
+            //get response-stream, and use a streamReader to read the content
+            using (Stream s = request.GetResponse().GetResponseStream())
+            {
+                using (var sr = new StreamReader(s))
+                {
+                    var gameId = sr.ReadToEnd();
+
+                    txtResult.Text = gameId;
+
+                    //decode jsonData with javascript serializer
+                }
+            }
         }
 
         //methods for the code below based on the ThinkSpeak API/netduino sample http://community.thingspeak.com/tutorials/netduino/create-your-own-web-of-things-using-the-netduino-plus-and-thingspeak/ 
