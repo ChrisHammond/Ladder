@@ -31,17 +31,14 @@ namespace Christoc.Com.Modules.Ladder.Services
         //[SupportedModules("Ladder")]
         //[DnnModuleAuthorize(AccessLevel = SecurityAccessLevel.Edit)]
         [DnnAuthorize(AllowAnonymous = true)]
-        [AcceptVerbs(HttpVerbs.Post)]
+        //[AcceptVerbs(HttpVerbs.Post)]
         //TODO: not bringing over the data correctly
-        public JsonResult SaveGame(string test)
+        public ActionResult SaveGame(Game jsonGame)
         {
-            var jsonGame = string.Empty;
+            //todo: jsonGame will never be null, check for something else
             if (jsonGame != null)
             {
-                //deserialize the game
-                var s = new JavaScriptSerializer();
-                var currentGame = (Game)s.DeserializeObject(jsonGame);
-                //var currentGame = jsonGame;
+                var currentGame = jsonGame;
                 try
                 {
                     var gc = new GameController();
