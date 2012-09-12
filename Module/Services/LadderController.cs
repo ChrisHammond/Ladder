@@ -32,7 +32,6 @@ namespace Christoc.Com.Modules.Ladder.Services
         //[DnnModuleAuthorize(AccessLevel = SecurityAccessLevel.Edit)]
         [DnnAuthorize(AllowAnonymous = true)]
         //[AcceptVerbs(HttpVerbs.Post)]
-        //TODO: not bringing over the data correctly
         public ActionResult SaveGame(Game jsonGame)
         {
             //todo: jsonGame will never be null, check for something else

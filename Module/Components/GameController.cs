@@ -23,9 +23,7 @@ namespace Christoc.Com.Modules.Ladder.Components
         //save game
         public Game SaveGame(Game g)
         {
-            bool newGame = true;
-            if (g.GameId > 0)
-                newGame = false;
+            bool newGame = !(g.GameId > 0);
 
             g = g.GameId > 0 ? UpdateGame(g) : CreateGame(g);
 
@@ -43,9 +41,8 @@ namespace Christoc.Com.Modules.Ladder.Components
                 t.LastPlayed = DateTime.Now;
                 t.TeamId = tc.SaveTeam(t).TeamId;
                 //add GameTeam relationship to store the Scores
-                var win = false;
-                if (t.Score >= 10)
-                    win = true;
+                //TODO: figure out how to track wins with a dynamic score total
+                bool win = t.Score >= 5;
 
                 //TODO: figure out how to flag a WIN and HOME team
                 if (newGame)
