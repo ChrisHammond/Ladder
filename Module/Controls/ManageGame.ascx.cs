@@ -29,7 +29,7 @@ namespace Christoc.Com.Modules.Ladder.Controls
                     LoadAvailableTeams();
                     //load the game
                     var gc = new GameController();
-                    if (1 == 1)
+                    if (true)
                     {
                         var currentGame = gc.GetGame(GameId);
                         if (currentGame != null)
