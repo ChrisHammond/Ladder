@@ -28,7 +28,7 @@ namespace com.christoc.netduino.FoosTracker
 
         private static Game _currentGame;
 
-        private const int WinningScore = 10;
+        private const int WinningScore = 5;
 
         //todo: use these two LEDs for LAST SCORED currently not used
         static readonly OutputPort AwayLed = new OutputPort(Pins.GPIO_PIN_D12, false);
@@ -44,7 +44,10 @@ namespace com.christoc.netduino.FoosTracker
         private static long _lastButtonPushed;
 
         //private const string WebServiceUrl = "http://www.dnnfoos.com/svc/ladder/Game";
-        private const string WebServiceUrl = "http://192.168.1.9/svc/ladder/Game";
+        //private const string WebServiceUrl = "http://192.168.1.9/svc/ladder/Game";
+
+        //private const string WebServiceUrl = "http://www.dnnfoos.com/desktopmodules/Ladder/API/Ladder.ashx/SaveGame";
+        private const string WebServiceUrl = "http://192.168.1.9/desktopmodules/Ladder/API/Ladder.ashx/SaveGame";
 
         private static Thread _worker;
         
@@ -118,7 +121,7 @@ namespace com.christoc.netduino.FoosTracker
                 //AwayLed.Write(true);
                 DisplayScores();
                 _lastButtonPushed = DateTime.Now.Ticks;
-                UpdateWebScores();
+                UpdateWebScores(BuildJson());
             }
         }
         private static void awayTeamSubtract_OnInterrupt(uint data1, uint data2, DateTime time)
@@ -139,7 +142,7 @@ namespace com.christoc.netduino.FoosTracker
                 //HomeLed.Write(true);
                 DisplayScores();
                 _lastButtonPushed = DateTime.Now.Ticks;
-                UpdateWebScores();
+                UpdateWebScores(BuildJson());
             }
         }
         private static void homeTeamSubtract_OnInterrupt(uint data1, uint data2, DateTime time)
@@ -153,7 +156,7 @@ namespace com.christoc.netduino.FoosTracker
             }
         }
 
-        private static void UpdateWebScores(bool endGame = false)
+        private static void UpdateWebScores( string jsonString,bool endGame = false)
         {
             //playing around with threading from http://forums.netduino.com/index.php?/topic/319-netduino-tutorial-multithreading-methods-with-parameters/
             
@@ -162,7 +165,7 @@ namespace com.christoc.netduino.FoosTracker
             //TODO: currently isn't calling if endgame is true for some reason and _isCurrent is true
             if (_isCurrent == false || endGame)
             {
-                var jsonString = BuildJson();
+                
                 _worker = new Thread(() => CallWebService(jsonString, WebServiceUrl));
                 _worker.Start();
             }
@@ -191,22 +194,43 @@ namespace com.christoc.netduino.FoosTracker
                 var requestUri = serviceUrl;
                 using (var request = (HttpWebRequest)WebRequest.Create(requestUri))
                 {
-                    request.Method = "PUT";
-                    // headers
-                    request.ContentType = "application/json";
-                    request.ContentLength = buffer.Length;
+                    //request.Method = "PUT";
+                    //// headers
+                    //request.ContentType = "application/json";
+                    //request.ContentLength = buffer.Length;
 
-                    // content
-                    Stream s = request.GetRequestStream();
-                    s.Write(buffer, 0, buffer.Length);
-                    // send request and receive response
+                    //// content
+                    //Stream s = request.GetRequestStream();
+                    //s.Write(buffer, 0, buffer.Length);
+                    //// send request and receive response
+                    //using (var response = (HttpWebResponse)request.
+                    //GetResponse())
+                    //{
+                    //    // consume response
+                    //    HandleResponse(response);
+                    //    Debug.Print("Status code: " + response.StatusCode);
+                    //}
+
+                    request.Method = "POST";
+                    request.ContentType = "application/json; charset=utf-8";
+                    request.ContentLength = buffer.Length;
+                    //string postData = jsonGame; //encode your data 
+                    //using the javascript serializer
+
+                    //get a reference to the request-stream, and write the postData to it
+                    using (Stream s = request.GetRequestStream())
+                    {
+                        s.Write(buffer, 0, buffer.Length);
+                    }
+                    
                     using (var response = (HttpWebResponse)request.
                     GetResponse())
                     {
                         // consume response
                         HandleResponse(response);
-                        Debug.Print("Status code: " + response.StatusCode);
+                        //Debug.Print("Status code: " + response.StatusCode);
                     }
+
                 }
             }
             catch (Exception exc)
@@ -252,7 +276,7 @@ namespace com.christoc.netduino.FoosTracker
             //someone hit 10 points or the Reset button, send the results to the service before clearing and starting a new game
             //only call service if there is a score > 0
             if (_homeTeam.Score > 0 || _awayTeam.Score > 0)
-                UpdateWebScores(true);
+                UpdateWebScores(BuildJson(),true);
         }
 
         private static void NewGame()
@@ -266,13 +290,17 @@ namespace com.christoc.netduino.FoosTracker
             HomeLed.Write(false);
             AwayLed.Write(false);
 
+            _isCurrent = false;
             //call the webservice
-            UpdateWebScores();
+            UpdateWebScores(BuildJson());
             DisplayScores();
         }
 
-        public static string BuildJson()
+        private static string BuildJson()
         {
+            //TODO: currentGame keep returning the old GameID, never creating a new game, FIX FIX FIX
+
+
             //sample json for GAME //"{\"GameId\":0,\"PlayedDate\":\"\\/Date(1327561544141)\\/\",\"CreatedDate\":\"\\/Date(-62135568000000)\\/\",\"LastUpdatedDate\":\"\\/Date(-62135568000000)\\/\",\"PortalId\":0,\"ModuleId\":0,\"Teams\":[{\"TeamId\":0,\"Name\":\"Home\",\"FirstPlayed\":\"\\/Date(-62135568000000)\\/\",\"LastPlayed\":\"\\/Date(-62135568000000)\\/\",\"CreatedDate\":\"\\/Date(-62135568000000)\\/\",\"LastUpdatedDate\":\"\\/Date(-62135568000000)\\/\",\"Score\":4,\"Games\":0,\"Wins\":1,\"Losses\":0,\"ModuleId\":0,\"CreatedByUserId\":0,\"LastUpdatedByUserId\":0,\"PortalId\":0,\"Players\":[],\"CreatedByUser\":\"\",\"LastUpdatedByUser\":\"\"},{\"TeamId\":0,\"Name\":\"Away\",\"FirstPlayed\":\"\\/Date(-62135568000000)\\/\",\"LastPlayed\":\"\\/Date(-62135568000000)\\/\",\"CreatedDate\":\"\\/Date(-62135568000000)\\/\",\"LastUpdatedDate\":\"\\/Date(-62135568000000)\\/\",\"Score\":2,\"Games\":1,\"Wins\":1,\"Losses\":0,\"ModuleId\":0,\"CreatedByUserId\":0,\"LastUpdatedByUserId\":0,\"PortalId\":0,\"Players\":[],\"CreatedByUser\":\"\",\"LastUpdatedByUser\":\"\"}],\"CreatedByUserId\":0,\"LastUpdatedByUserId\":0,\"FieldIdentifier\":\"Test\",\"CreatedByUser\":\"\",\"LastUpdatedByUser\":\"\"}";
             string sb = "{\"GameId\":" + _currentGame.GameId + ",\"Teams\":[{\"TeamId\":0,\"Name\":\"Home\",\"Score\":\"" + _homeTeam.Score + "\",\"Games\":0,\"Wins\":0,\"Losses\":0,\"HomeTeam\":true},{\"TeamId\":0,\"Name\":\"Away\",\"Score\":\"" + _awayTeam.Score + "\",\"Games\":0,\"Wins\":0,\"Losses\":0,\"HomeTeam\":false}],\"FieldIdentifier\":\"" + _currentGame.FieldIdentifier + "\"}";
             return sb;
