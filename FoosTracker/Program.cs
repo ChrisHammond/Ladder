@@ -173,13 +173,14 @@ namespace com.christoc.netduino.FoosTracker
 
         private static void CheckTeamScores()
         {
-            if (_awayTeam.Score < WinningScore && _homeTeam.Score < WinningScore) return;
-            DisplayScores();
-            //game over a team got the winning score points, time to finish
-            GameOver();
+            //commented out for now, no need to automatically post the scores if the game is at the winning score, let the players push new game before a new game
+            //if (_awayTeam.Score < WinningScore && _homeTeam.Score < WinningScore) return;
+            //DisplayScores();
+            ////game over a team got the winning score points, time to finish
+            //GameOver();
 
-            //call NewGame to reset the teams, this will also send the call to the web service
-            NewGame();
+            ////call NewGame to reset the teams, this will also send the call to the web service
+            //NewGame();
         }
 
 
