@@ -1,6 +1,6 @@
 <dotnetnuke type="Package" version="5.0">
   <packages>
-    <package name="ladder" type="Module" version="00.00.07">
+    <package name="ladder" type="Module" version="00.00.08">
       <friendlyName>ladder</friendlyName>
       <description>Christoc.com ladder module</description>
       <owner>
@@ -98,33 +98,11 @@
             <assembly>
               <name>ladder.dll</name>
             </assembly>
-            <assembly>
-              <name>microsoft.web.mvc.dll</name>
-            </assembly>
           </assemblies>
         </component>
         <component type="Config">
           <config>
             <configFile>web.config</configFile>
-            <install>
-              <configuration>
-                <nodes>
-                  <node path="/configuration/system.web/httpHandlers" action="remove" key="path" collision="overwrite">
-                    <add verb="GET" path="svc/ladder/*" type="Christoc.Com.Modules.Ladder.svc.PutHandler, ladder" />
-                    <add verb="PUT" path="svc/ladder/*" type="Christoc.Com.Modules.Ladder.svc.PutHandler, ladder" />
-                  </node>
-                  <node path="/configuration/system.webServer/handlers" action="remove" key="name" collision="overwrite">
-                    <add name="LadderServicesGethandler" verb="GET" path="svc/ladder/*" type="Christoc.Com.Modules.Ladder.svc.PutHandler, ladder" preCondition="integratedMode" />
-                    <add name="LadderServicesPuthandler" verb="PUT" path="svc/ladder/*" type="Christoc.Com.Modules.Ladder.svc.PutHandler, ladder" preCondition="integratedMode" />
-                  </node>
-                </nodes>
-              </configuration>
-            </install>
-            <uninstall>
-              <configuration>
-                <nodes />
-              </configuration>
-            </uninstall>
           </config>
         </component>
       </components>
